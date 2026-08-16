@@ -1,0 +1,12 @@
+{
+  "name": "vendamais",
+  "version": "1.0.0",
+  "description": "VendaMais - E-commerce de demonstracao com catalogo, carrinho e checkout simulado",
+  "private": true,
+  "scripts": {
+    "build": "node build.js"
+  },
+  "devDependencies": {
+    "fs-extra": "^11.2.0"
+  }
+}
