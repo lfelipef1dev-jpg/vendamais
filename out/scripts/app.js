@@ -579,6 +579,11 @@
     });
   }
 
+  function buyNow(productId) {
+    addToCart(productId);
+    window.location.href = 'checkout.html';
+  }
+
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
   } else {
@@ -596,6 +601,6 @@
     demoLogin: demoLogin, logout: logout, getSession: getSession,
     adminLogin: adminLogin, showAdminSection: showAdminSection,
     addToCompare: addToCompare, removeFromCompare: removeFromCompare,
-    showToast: showToast, getCompare: getCompare
+    showToast: showToast, getCompare: getCompare, buyNow: buyNow
   };
 })();

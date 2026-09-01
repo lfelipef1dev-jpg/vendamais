@@ -10,6 +10,7 @@ module.exports = {
       html: T.renderLayout({
         store, data, active: 'sobre', canonical: '/sobre.html',
         title: 'Sobre a VendaMais — Plataforma de E-commerce', description: 'Conheca a VendaMais: plataforma de e-commerce demonstrativa com checkout, conta e admin.',
+        structuredData: T.renderBreadcrumbSchema([{ label: 'Inicio', href: 'index.html' }, { label: 'Sobre nos' }], store.url),
         content: `
         ${T.renderBreadcrumb([{ label: 'Inicio', href: 'index.html' }, { label: 'Sobre nos' }])}
         <section class="section"><div class="container-narrow">
@@ -36,6 +37,7 @@ module.exports = {
       html: T.renderLayout({
         store, data, canonical: '/entrega.html',
         title: 'Entrega e Prazos — Frete Gratis acima de R$ 200', description: 'Modalidades de entrega: normal 3-5 dias, expressa 1-2 dias. Frete gratis acima de R$ 200 (demo).',
+        structuredData: T.renderBreadcrumbSchema([{ label: 'Inicio', href: 'index.html' }, { label: 'Entrega' }], store.url),
         content: `
         ${T.renderBreadcrumb([{ label: 'Inicio', href: 'index.html' }, { label: 'Entrega' }])}
         <section class="section"><div class="container-narrow">
@@ -55,6 +57,7 @@ module.exports = {
       html: T.renderLayout({
         store, data, canonical: '/trocas-devolucoes.html',
         title: 'Trocas e Devolucoes — 30 dias para trocar', description: 'Politica de trocas e devolucoes em 30 dias. Produto original, embalagem intacta (demo).',
+        structuredData: T.renderBreadcrumbSchema([{ label: 'Inicio', href: 'index.html' }, { label: 'Trocas e Devolucoes' }], store.url),
         content: `
         ${T.renderBreadcrumb([{ label: 'Inicio', href: 'index.html' }, { label: 'Trocas e Devolucoes' }])}
         <section class="section"><div class="container-narrow">
@@ -74,6 +77,7 @@ module.exports = {
       html: T.renderLayout({
         store, data, canonical: '/pagamentos.html',
         title: 'Pagamentos — PIX com 5% OFF e Cartao em 12x', description: 'PIX com 5% de desconto e cartao de credito em ate 12x sem juros. Pagamentos simulados (demo).',
+        structuredData: T.renderBreadcrumbSchema([{ label: 'Inicio', href: 'index.html' }, { label: 'Pagamentos' }], store.url),
         content: `
         ${T.renderBreadcrumb([{ label: 'Inicio', href: 'index.html' }, { label: 'Pagamentos' }])}
         <section class="section"><div class="container-narrow">
@@ -102,6 +106,7 @@ module.exports = {
       html: T.renderLayout({
         store, data, canonical: '/faq.html',
         title: 'Perguntas Frequentes — Frete, PIX, Trocas e Mais', description: 'Respostas sobre frete gratis, prazos de entrega, formas de pagamento, trocas e dados demonstrativos.',
+        structuredData: T.renderBreadcrumbSchema([{ label: 'Inicio', href: 'index.html' }, { label: 'FAQ' }], store.url),
         content: `
         ${T.renderBreadcrumb([{ label: 'Inicio', href: 'index.html' }, { label: 'FAQ' }])}
         <section class="section"><div class="container-narrow">
@@ -117,6 +122,7 @@ module.exports = {
       html: T.renderLayout({
         store, data, canonical: '/contato.html',
         title: 'Contato — Fale com a VendaMais (Demo)', description: 'Formulario de contato e informacoes da VendaMais. Ambiente demonstrativo, sem envio real.',
+        structuredData: T.renderBreadcrumbSchema([{ label: 'Inicio', href: 'index.html' }, { label: 'Contato' }], store.url),
         content: `
         ${T.renderBreadcrumb([{ label: 'Inicio', href: 'index.html' }, { label: 'Contato' }])}
         <section class="section"><div class="container-narrow">
@@ -150,6 +156,7 @@ module.exports = {
       html: T.renderLayout({
         store, data, canonical: '/privacidade.html',
         title: 'Politica de Privacidade e LGPD — VendaMais', description: 'Politica de privacidade em conformidade com a LGPD. Nenhum dado pessoal real e coletado (demo).',
+        structuredData: T.renderBreadcrumbSchema([{ label: 'Inicio', href: 'index.html' }, { label: 'Privacidade' }], store.url),
         content: `
         ${T.renderBreadcrumb([{ label: 'Inicio', href: 'index.html' }, { label: 'Privacidade' }])}
         <section class="section"><div class="container-narrow">
@@ -169,6 +176,7 @@ module.exports = {
       html: T.renderLayout({
         store, data, canonical: '/termos.html',
         title: 'Termos de Uso — Plataforma Demonstrativa', description: 'Termos de uso da VendaMais. Site demonstrativo, sem transacoes comerciais reais.',
+        structuredData: T.renderBreadcrumbSchema([{ label: 'Inicio', href: 'index.html' }, { label: 'Termos de Uso' }], store.url),
         content: `
         ${T.renderBreadcrumb([{ label: 'Inicio', href: 'index.html' }, { label: 'Termos de Uso' }])}
         <section class="section"><div class="container-narrow">

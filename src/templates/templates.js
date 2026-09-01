@@ -88,11 +88,10 @@ function renderHead(opts) {
   const store = opts.store;
   const title = opts.title ? opts.title + ' | ' + store.name : store.name + ' — ' + store.tagline;
   const desc = opts.description || store.description;
-  const canonical = store.url + (opts.canonical || '/');
+  const canonical = store.url.replace(/\/$/, '') + (opts.canonical && opts.canonical !== '/' ? opts.canonical.replace(/\.html$/, '') : '');
   const noindex = opts.noindex ? '<meta name="robots" content="noindex, nofollow">' : '<meta name="robots" content="index, follow">';
   const ogType = opts.ogType || 'website';
   const cssFiles = (opts.cssFiles || ['base.css', 'components.css', 'pages.css']).map(f => '<link rel="stylesheet" href="styles/' + f + '">').join('\n  ');
-  const jsFiles = (opts.jsFiles || ['app.js']).map(f => '<script src="scripts/' + f + '" defer></script>').join('\n  ');
   const structuredData = opts.structuredData ? (Array.isArray(opts.structuredData) ? opts.structuredData : [opts.structuredData]).map(s => '<script type="application/ld+json">' + JSON.stringify(s) + '</script>').join('\n  ') : '';
 
   return `<!DOCTYPE html>
@@ -260,6 +259,8 @@ function renderLayout(opts) {
   const announcement = renderAnnouncement(store);
   const header = renderHeader(store, data.categories || [], opts);
   const footer = renderFooter(store);
+  const jsFiles = (opts.jsFiles || ['app.js']).map(f => '<script src="scripts/' + f + '" defer></script>').join('\n  ');
+  const dataScript = '<script>window.VENDAMAIS_PRODUCTS = ' + JSON.stringify(data.products || []).replace(/</g, '\\u003c') + '; window.VENDAMAIS_CATEGORIES = ' + JSON.stringify(data.categories || []).replace(/</g, '\\u003c') + '; window.VENDAMAIS_ORDERS = ' + JSON.stringify(data.orders || []).replace(/</g, '\\u003c') + ';</script>';
 
   return `${head}
 <body>
@@ -271,6 +272,8 @@ function renderLayout(opts) {
   </main>
   ${footer}
   ${opts.scripts || ''}
+  ${dataScript}
+  ${jsFiles}
 </body>
 </html>`;
 }
@@ -290,7 +293,7 @@ function renderBreadcrumb(items) {
 function renderBreadcrumbSchema(items, storeUrl) {
   const base = storeUrl.replace(/\/$/, '');
   const itemListElement = items.map((item, i) => {
-    const url = item.href ? base + '/' + item.href.replace(/^https?:\/\/[^/]+/, '') : '';
+    const url = item.href ? base + '/' + item.href.replace(/^https?:\/\/[^/]+/, '').replace(/\.html$/, '') : '';
     return {
       '@type': 'ListItem',
       position: i + 1,

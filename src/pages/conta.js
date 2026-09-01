@@ -111,6 +111,7 @@ function contaPage(opts) {
     description: opts.description,
     canonical: opts.canonical,
     noindex: true,
+    structuredData: T_REF.renderBreadcrumbSchema(opts.breadcrumb, opts.store.url),
     content: content
   });
 }
@@ -146,6 +147,7 @@ function render(data, T) {
       description: 'Acesse sua conta VendaMais (demonstracao).',
       canonical: '/login.html',
       noindex: true,
+      structuredData: T.renderBreadcrumbSchema([{ label: 'Inicio', href: 'index.html' }, { label: 'Entrar' }], store.url),
       content: T.renderBreadcrumb([
         { label: 'Inicio', href: 'index.html' },
         { label: 'Entrar' }

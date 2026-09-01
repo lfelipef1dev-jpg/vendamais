@@ -49,6 +49,7 @@ function render(data, T) {
     canonical: '/carrinho.html',
     noindex: true,
     active: '',
+    structuredData: T.renderBreadcrumbSchema([{ label: 'Home', href: 'index.html' }, { label: 'Carrinho' }], store.url),
     content: content
   });
 

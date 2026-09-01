@@ -87,7 +87,9 @@ function generateSitemap(pages, data) {
     .filter(p => !p.noindex)
     .map(p => {
       const fname = p.filename.replace(/\.html$/, '');
-      const loc = fname === 'index' ? `${base}/` : `${base}/${p.filename}`;
+      // Cloudflare Pages pretty URLs: /page.html -> /page (308)
+      // Sitemap deve apontar para a URL final (sem .html)
+      const loc = fname === 'index' ? `${base}/` : `${base}/${fname}`;
       if (seen.has(loc)) return null;
       seen.add(loc);
       return `  <url>\n    <loc>${loc}</loc>\n    <lastmod>${today}</lastmod>\n  </url>`;

@@ -157,7 +157,7 @@ function buildStructuredData(product, data, T) {
     'category': categoryName(data, product.category),
     'offers': {
       '@type': 'Offer',
-      'url': store.url + '/produto-' + product.slug + '.html',
+      'url': store.url.replace(/\/$/,'') + '/produto-' + product.slug,
       'priceCurrency': 'BRL',
       'price': Number(product.price).toFixed(2),
       'priceValidUntil': '2026-12-31',

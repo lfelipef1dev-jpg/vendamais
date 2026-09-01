@@ -228,11 +228,12 @@ function buildCheckoutSummary(T) {
 function renderCheckout(data, T) {
   const store = data.store;
 
-  const breadcrumb = T.renderBreadcrumb([
+  const bcItems = [
     { label: 'Home', href: 'index.html' },
     { label: 'Carrinho', href: 'carrinho.html' },
     { label: 'Checkout' }
-  ]);
+  ];
+  const breadcrumb = T.renderBreadcrumb(bcItems);
 
   const content = '<div class="container">' +
     breadcrumb +
@@ -255,6 +256,7 @@ function renderCheckout(data, T) {
     data: data,
     title: 'Checkout',
     description: 'Finalizacao de compra — ' + store.name,
+    structuredData: T.renderBreadcrumbSchema(bcItems, store.url),
     canonical: '/checkout.html',
     noindex: true,
     active: '',
@@ -267,12 +269,13 @@ function renderCheckout(data, T) {
 function renderConfirmation(data, T) {
   const store = data.store;
 
-  const breadcrumb = T.renderBreadcrumb([
+  const bcItems2 = [
     { label: 'Home', href: 'index.html' },
     { label: 'Carrinho', href: 'carrinho.html' },
     { label: 'Checkout', href: 'checkout.html' },
     { label: 'Confirmacao' }
-  ]);
+  ];
+  const breadcrumb = T.renderBreadcrumb(bcItems2);
 
   const successIcon = '<div class="confirmation-icon">' +
     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>' +
@@ -319,6 +322,7 @@ function renderConfirmation(data, T) {
     canonical: '/pedido-confirmado.html',
     noindex: true,
     active: '',
+    structuredData: T.renderBreadcrumbSchema(bcItems2, store.url),
     content: content
   });
 

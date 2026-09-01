@@ -192,7 +192,8 @@ function buildSearch(opts) {
     canonical: '/busca.html',
     active: '',
     content,
-    noindex: true
+    noindex: true,
+    structuredData: T.renderBreadcrumbSchema([{ label: 'Inicio', href: 'index.html' }, { label: 'Busca' }], store.url)
   });
 }
 
