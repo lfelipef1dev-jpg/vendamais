@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout | VendaMais</title>
+  <meta name="description" content="Finalizacao de compra — VendaMais">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="canonical" href="https://vendamais.expostacker.com.br/checkout.html">
+  <meta name="theme-color" content="#0F172A">
+  <meta property="og:title" content="Checkout | VendaMais">
+  <meta property="og:description" content="Finalizacao de compra — VendaMais">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://vendamais.expostacker.com.br/checkout.html">
+  <meta property="og:site_name" content="VendaMais">
+  <meta property="og:locale" content="pt_BR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Checkout | VendaMais">
+  <meta name="twitter:description" content="Finalizacao de compra — VendaMais">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" href="fonts/inter-400-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/inter-700-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/components.css">
+  <link rel="stylesheet" href="styles/pages.css">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  
+</head>
+<body>
+  <a href="#conteudo" class="skip-link">Pular para o conteudo</a>
+  <div class="announcement-bar" role="banner">
+  <div class="container">Frete gratis acima de R$ 200 | Compra segura | Troca facilitada</div>
+</div>
+  <header class="header" role="banner">
+  <div class="container header-inner">
+    <a href="index.html" class="logo" aria-label="VendaMais — Inicio">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+      <span>VendaMais</span>
+    </a>
+    <div class="header-search">
+      <form role="search" action="busca.html" method="get" class="search-form">
+        <input type="search" name="q" placeholder="Buscar produtos..." aria-label="Buscar produtos" class="search-input" autocomplete="off">
+        <button type="submit" class="search-btn" aria-label="Buscar"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></button>
+      </form>
+    </div>
+    <nav class="header-actions" aria-label="Acoes do usuario">
+      <a href="conta.html" class="header-icon-btn" aria-label="Minha conta"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="hide-mobile">Conta</span></a>
+      <a href="favoritos.html" class="header-icon-btn" aria-label="Favoritos"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span class="hide-mobile">Favoritos</span><span class="cart-count" id="fav-count" style="display:none">0</span></a>
+      <button class="header-icon-btn cart-toggle" aria-label="Carrinho" id="cart-toggle"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg><span class="hide-mobile">Carrinho</span><span class="cart-count" id="cart-count" style="display:none">0</span></button>
+      <button class="header-mobile-toggle" aria-label="Menu" aria-expanded="false" aria-controls="mobile-nav"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg></button>
+    </nav>
+  </div>
+  <nav class="header-nav" aria-label="Categorias">
+    <div class="container">
+      <ul class="nav-list"><li><a href="index.html" class="">Inicio</a></li><li><a href="produtos.html" class="">Produtos</a></li><li><a href="ofertas.html" class="">Ofertas</a></li><li><a href="lancamentos.html" class="">Lancamentos</a></li><li><a href="sobre.html" class="">Sobre</a></li><li class="nav-dropdown"><a href="produtos.html" class="">Categorias <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></a><ul class="dropdown-menu"><li><a href="categoria-eletronicos.html">Eletronicos</a></li><li><a href="categoria-casa.html">Casa</a></li><li><a href="categoria-moda.html">Moda</a></li><li><a href="categoria-acessorios.html">Acessorios</a></li></ul></li></ul>
+    </div>
+  </nav>
+</header>
+<div class="mobile-nav" id="mobile-nav" hidden>
+  <button class="mobile-nav-close" aria-label="Fechar menu"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+  <ul>
+    <li><a href="index.html">Inicio</a></li>
+    <li><a href="produtos.html">Produtos</a></li>
+    <li><a href="ofertas.html">Ofertas</a></li>
+    <li><a href="lancamentos.html">Lancamentos</a></li>
+    <li><a href="categoria-eletronicos.html">Eletronicos</a></li><li><a href="categoria-casa.html">Casa</a></li><li><a href="categoria-moda.html">Moda</a></li><li><a href="categoria-acessorios.html">Acessorios</a></li>
+    <li><a href="sobre.html">Sobre</a></li>
+    <li><a href="conta.html">Minha conta</a></li>
+    <li><a href="favoritos.html">Favoritos</a></li>
+  </ul>
+</div>
+<div class="cart-drawer" id="cart-drawer" hidden>
+  <div class="cart-drawer-head">
+    <h2>Carrinho</h2>
+    <button class="cart-drawer-close" aria-label="Fechar carrinho"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+  </div>
+  <div class="cart-drawer-body" id="cart-drawer-body"></div>
+  <div class="cart-drawer-foot" id="cart-drawer-foot"></div>
+</div>
+<div class="overlay" id="overlay" hidden></div>
+  <main id="conteudo" role="main">
+    <div class="container"><nav class="breadcrumb" aria-label="Navegacao"><ol class="breadcrumb-list"><li><a href="index.html">Home</a></li><li><a href="carrinho.html">Carrinho</a></li><li aria-current="page">Checkout</li></ol></nav><h1>Finalizar compra</h1><div class="checkout-layout"><div><div class="checkout-steps" role="tablist" aria-label="Etapas do checkout"><div class="checkout-step active" data-step="1"><span class="checkout-step-num">1</span><span>Identificacao</span></div><div class="checkout-step" data-step="2"><span class="checkout-step-num">2</span><span>Entrega</span></div><div class="checkout-step" data-step="3"><span class="checkout-step-num">3</span><span>Pagamento</span></div><div class="checkout-step" data-step="4"><span class="checkout-step-num">4</span><span>Revisao</span></div></div><div class="checkout-content" id="step-1"><h2>Identificacao</h2><div class="field"><label class="label" for="ck-name">Nome completo</label><input type="text" class="input" id="ck-name" placeholder="Seu nome completo" autocomplete="name"></div><div class="field"><label class="label" for="ck-cpf">CPF <span class="badge badge-status confirmed">Demo</span></label><input type="text" class="input" id="ck-cpf" placeholder="000.000.000-00" inputmode="numeric" maxlength="14" autocomplete="cpf"></div><div class="form-grid-2"><div class="field"><label class="label" for="ck-email">E-mail</label><input type="email" class="input" id="ck-email" placeholder="seu@email.com" autocomplete="email"></div><div class="field"><label class="label" for="ck-phone">Telefone</label><input type="tel" class="input" id="ck-phone" placeholder="(00) 00000-0000" inputmode="tel" autocomplete="tel"></div></div></div><div class="checkout-content" id="step-2" hidden><h2>Entrega</h2><div class="form-grid-2"><div class="field"><label class="label" for="ck-cep">CEP</label><input type="text" class="input" id="ck-cep" placeholder="00000-000" inputmode="numeric" maxlength="9" autocomplete="postal-code"></div><div class="field"><label class="label" for="ck-number">Numero</label><input type="text" class="input" id="ck-number" placeholder="123" inputmode="numeric" autocomplete="address-line2"></div></div><div class="field"><label class="label" for="ck-address">Endereco</label><input type="text" class="input" id="ck-address" placeholder="Rua, avenida..." autocomplete="address-line1"></div><div class="field"><label class="label" for="ck-complement">Complemento</label><input type="text" class="input" id="ck-complement" placeholder="Apto, bloco... (opcional)" autocomplete="address-line2"></div><div class="form-grid-2"><div class="field"><label class="label" for="ck-district">Bairro</label><input type="text" class="input" id="ck-district" placeholder="Seu bairro"></div><div class="field"><label class="label" for="ck-city">Cidade</label><input type="text" class="input" id="ck-city" placeholder="Sua cidade" autocomplete="address-level2"></div></div><div class="field"><label class="label" for="ck-state">Estado</label><select class="select" id="ck-state" autocomplete="address-level1"><option value="">Selecione...</option><option value="AC">Acre</option><option value="AL">Alagoas</option><option value="AP">Amapa</option><option value="AM">Amazonas</option><option value="BA">Bahia</option><option value="CE">Ceara</option><option value="DF">Distrito Federal</option><option value="ES">Espirito Santo</option><option value="GO">Goias</option><option value="MA">Maranhao</option><option value="MT">Mato Grosso</option><option value="MS">Mato Grosso do Sul</option><option value="MG">Minas Gerais</option><option value="PA">Para</option><option value="PB">Paraiba</option><option value="PR">Parana</option><option value="PE">Pernambuco</option><option value="PI">Piaui</option><option value="RJ">Rio de Janeiro</option><option value="RN">Rio Grande do Norte</option><option value="RS">Rio Grande do Sul</option><option value="RO">Rondonia</option><option value="RR">Roraima</option><option value="SC">Santa Catarina</option><option value="SP">Sao Paulo</option><option value="SE">Sergipe</option><option value="TO">Tocantins</option></select></div><h3 style="margin-top:var(--space-6);margin-bottom:var(--space-3);">Forma de envio</h3><label class="card card-hover" style="display:flex;align-items:center;gap:var(--space-3);margin-bottom:var(--space-3);cursor:pointer;"><input type="radio" name="shipping" value="normal" checked style="width:18px;height:18px;accent-color:var(--accent);"><div style="flex:1;"><strong>Entrega Normal</strong><div style="font-size:var(--fs-xs);color:var(--text-muted);">3-5 dias uteis</div></div><span class="cart-item-price">Gratis</span></label><label class="card card-hover" style="display:flex;align-items:center;gap:var(--space-3);margin-bottom:var(--space-3);cursor:pointer;"><input type="radio" name="shipping" value="express" style="width:18px;height:18px;accent-color:var(--accent);"><div style="flex:1;"><strong>Entrega Expressa</strong><div style="font-size:var(--fs-xs);color:var(--text-muted);">1-2 dias uteis</div></div><span class="cart-item-price">R$ 19,90</span></label></div><div class="checkout-content" id="step-3" hidden><h2>Pagamento</h2><div class="tabs" role="tablist"><button type="button" class="tab active" role="tab" data-pay-tab="pix"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2 2 12l10 10 10-10z"/><path d="M7 7l5 5 5-5"/><path d="M7 17l5-5 5 5"/></svg> PIX</button><button type="button" class="tab" role="tab" data-pay-tab="card"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg> Cartao</button></div><div id="pay-pix"><div class="pix-box"><h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2 2 12l10 10 10-10z"/><path d="M7 7l5 5 5-5"/><path d="M7 17l5-5 5 5"/></svg> Pague com PIX</h3><div class="pix-qr"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect width="100" height="100" fill="white"/><rect x="5" y="5" width="25" height="25" fill="black"/><rect x="10" y="10" width="15" height="15" fill="white"/><rect x="13" y="13" width="9" height="9" fill="black"/><rect x="70" y="5" width="25" height="25" fill="black"/><rect x="75" y="10" width="15" height="15" fill="white"/><rect x="78" y="13" width="9" height="9" fill="black"/><rect x="5" y="70" width="25" height="25" fill="black"/><rect x="10" y="75" width="15" height="15" fill="white"/><rect x="13" y="78" width="9" height="9" fill="black"/><rect x="40" y="5" width="8" height="8" fill="black"/><rect x="52" y="5" width="8" height="8" fill="black"/><rect x="40" y="17" width="8" height="8" fill="black"/><rect x="60" y="17" width="8" height="8" fill="black"/><rect x="5" y="40" width="8" height="8" fill="black"/><rect x="17" y="40" width="8" height="8" fill="black"/><rect x="29" y="40" width="8" height="8" fill="black"/><rect x="40" y="40" width="8" height="8" fill="black"/><rect x="52" y="40" width="8" height="8" fill="black"/><rect x="64" y="40" width="8" height="8" fill="black"/><rect x="76" y="40" width="8" height="8" fill="black"/><rect x="88" y="40" width="8" height="8" fill="black"/><rect x="40" y="52" width="8" height="8" fill="black"/><rect x="52" y="52" width="8" height="8" fill="black"/><rect x="64" y="52" width="8" height="8" fill="black"/><rect x="76" y="52" width="8" height="8" fill="black"/><rect x="40" y="64" width="8" height="8" fill="black"/><rect x="52" y="64" width="8" height="8" fill="black"/><rect x="64" y="64" width="8" height="8" fill="black"/><rect x="76" y="64" width="8" height="8" fill="black"/><rect x="88" y="64" width="8" height="8" fill="black"/><rect x="40" y="76" width="8" height="8" fill="black"/><rect x="52" y="76" width="8" height="8" fill="black"/><rect x="64" y="76" width="8" height="8" fill="black"/><rect x="76" y="76" width="8" height="8" fill="black"/><rect x="40" y="88" width="8" height="8" fill="black"/><rect x="52" y="88" width="8" height="8" fill="black"/><rect x="64" y="88" width="8" height="8" fill="black"/><rect x="76" y="88" width="8" height="8" fill="black"/><rect x="88" y="88" width="8" height="8" fill="black"/></svg></div><div class="pix-code" id="pix-code">00020126580014BR.GOV.BCB.PIX0136vendamais-demo-qr-code-5204000053039865802BR5913VendaMais Demo6009Sao Paulo62070503***6304A1B2</div><button type="button" class="btn btn-ghost btn-sm btn-block" onclick="navigator.clipboard.writeText(document.getElementById('pix-code').textContent)">Copiar codigo PIX</button><div class="pix-timer" id="pix-timer">30:00</div><button type="button" class="btn btn-success btn-block" id="pix-simulate-btn">Simular pagamento</button></div></div><div id="pay-card" hidden><div><div class="card-visual" id="card-visual"><div class="card-visual-brand">VISA</div><div class="card-visual-number" id="card-visual-number">**** **** **** ****</div><div style="display:flex;justify-content:space-between;"><div class="card-visual-name" id="card-visual-name">NOME DO TITULAR</div><div class="card-visual-exp" id="card-visual-exp">MM/AA</div></div></div><div class="field"><label class="label" for="ck-card-number">Numero do cartao</label><input type="text" class="input" id="ck-card-number" placeholder="0000 0000 0000 0000" inputmode="numeric" maxlength="19" autocomplete="cc-number"></div><div class="field"><label class="label" for="ck-card-name">Nome impresso no cartao</label><input type="text" class="input" id="ck-card-name" placeholder="Como impresso no cartao" autocomplete="cc-name"></div><div class="form-grid-2"><div class="field"><label class="label" for="ck-card-exp">Validade</label><input type="text" class="input" id="ck-card-exp" placeholder="MM/AA" inputmode="numeric" maxlength="5" autocomplete="cc-exp"></div><div class="field"><label class="label" for="ck-card-cvv">CVV</label><input type="text" class="input" id="ck-card-cvv" placeholder="123" inputmode="numeric" maxlength="4" autocomplete="cc-csc"></div></div><div style="display:flex;gap:var(--space-3);flex-wrap:wrap;"><button type="button" class="btn btn-success" id="card-approve-btn">Simular aprovacao</button><button type="button" class="btn btn-danger" id="card-reject-btn">Simular recusa</button></div></div></div></div><div class="checkout-content" id="step-4" hidden><h2>Revisao do pedido</h2><div class="card" style="margin-bottom:var(--space-4);"><h3>Dados do comprador</h3><div id="review-customer" style="font-size:var(--fs-sm);color:var(--text-secondary);"></div></div><div class="card" style="margin-bottom:var(--space-4);"><h3>Endereco de entrega</h3><div id="review-address" style="font-size:var(--fs-sm);color:var(--text-secondary);"></div></div><div class="card" style="margin-bottom:var(--space-4);"><h3>Itens do pedido</h3><div id="review-items"></div></div><button type="button" class="btn btn-primary btn-lg btn-block" id="checkout-finish-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Finalizar pedido</button></div><div style="display:flex;justify-content:space-between;gap:var(--space-3);margin-top:var(--space-6);"><button type="button" class="btn btn-ghost" id="ck-prev" style="visibility:hidden;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m19 12-7-7-7 7"/></svg> Voltar</button><button type="button" class="btn btn-primary" id="ck-next">Continuar <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button></div></div><aside class="checkout-summary"><h3>Resumo do pedido</h3><div id="checkout-items-list" style="margin-bottom:var(--space-3);font-size:var(--fs-sm);"></div><div class="cart-summary-row"><span>Subtotal</span><span id="ck-subtotal">R$ 0,00</span></div><div class="cart-summary-row"><span>Frete</span><span id="ck-shipping">R$ 0,00</span></div><div class="cart-summary-row"><span>Desconto</span><span id="ck-discount">R$ 0,00</span></div><div class="cart-summary-row total"><span>Total</span><span id="ck-total">R$ 0,00</span></div></aside></div></div>
+  </main>
+  <footer class="footer" role="contentinfo">
+  <div class="container footer-grid">
+    <div class="footer-col">
+      <div class="footer-logo">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <span>VendaMais</span>
+      </div>
+      <p class="footer-tagline">Tecnologia, casa e lifestyle em um so lugar</p>
+      <p class="footer-disclaimer">Ambiente demonstrativo — produtos, clientes, pedidos, avaliacoes e metricas ficticios.</p>
+    </div>
+    <div class="footer-col">
+      <h3>Loja</h3>
+      <ul>
+        <li><a href="produtos.html">Todos os produtos</a></li>
+        <li><a href="ofertas.html">Ofertas</a></li>
+        <li><a href="lancamentos.html">Lancamentos</a></li>
+        <li><a href="mais-vendidos.html">Mais vendidos</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h3>Ajuda</h3>
+      <ul>
+        <li><a href="entrega.html">Entrega</a></li>
+        <li><a href="trocas-devolucoes.html">Trocas e devolucoes</a></li>
+        <li><a href="pagamentos.html">Pagamentos</a></li>
+        <li><a href="faq.html">FAQ</a></li>
+        <li><a href="contato.html">Contato</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h3>Institucional</h3>
+      <ul>
+        <li><a href="sobre.html">Sobre nos</a></li>
+        <li><a href="privacidade.html">Privacidade</a></li>
+        <li><a href="termos.html">Termos de uso</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h3>Contato</h3>
+      <ul>
+        <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg> (13) 3333-4444</li>
+        <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-10 5L2 7"/></svg> contato@vendamais.expostacker.com.br</li>
+        <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg> Av. Demonstracao, 1000 — Sao Paulo — SP</li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="container">
+      <p>&copy; 2026 VendaMais — Demonstracao. Dados ficticios. Nao utilizar para compras reais.</p>
+    </div>
+  </div>
+</footer>
+  
+</body>
+</html>

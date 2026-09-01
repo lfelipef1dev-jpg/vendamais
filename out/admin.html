@@ -1,0 +1,633 @@
+<!DOCTYPE html><html lang="pt-BR"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>VendaMais Admin | VendaMais</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="stylesheet" href="styles/base.css"><link rel="stylesheet" href="styles/components.css"><link rel="stylesheet" href="styles/pages.css">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+</head><body>
+<div class="admin-login-gate" id="admin-login-gate" style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:var(--bg)">
+  <div class="card" style="max-width:400px;width:90%;text-align:center">
+    <div style="margin-bottom:16px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg></div>
+    <h1 style="font-size:1.5rem;margin-bottom:8px">VendaMais Admin</h1>
+    <p class="text-muted text-sm mb-6">Ambiente demonstrativo — senha: admin</p>
+    <form id="admin-login-form">
+      <div class="field"><input type="password" class="input" id="admin-password" placeholder="Senha" aria-label="Senha"></div>
+      <button type="submit" class="btn btn-primary btn-block btn-lg">Entrar</button>
+    </form>
+  </div>
+</div>
+<div id="admin-content" style="display:none">
+  <div class="admin-topbar" style="background:var(--surface);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100">
+    <div style="display:flex;align-items:center;gap:12px"><strong>VendaMais Admin</strong><span class="demo-badge">DEMO</span></div>
+    <a href="index.html" class="btn btn-ghost btn-sm">Sair</a>
+  </div>
+  <div class="admin-layout">
+    <aside class="admin-sidebar">
+      <h3>Menu</h3>
+      <ul class="admin-menu">
+        <li><a href="#dashboard" class="active" onclick="VendaMais.showAdminSection('dashboard')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg> Dashboard</a></li>
+        <li><a href="#pedidos" onclick="VendaMais.showAdminSection('pedidos')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg> Pedidos</a></li>
+        <li><a href="#produtos" onclick="VendaMais.showAdminSection('produtos')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg> Produtos</a></li>
+        <li><a href="#estoque" onclick="VendaMais.showAdminSection('estoque')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r=".5" fill="currentColor"/></svg> Estoque</a></li>
+        <li><a href="#clientes" onclick="VendaMais.showAdminSection('clientes')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> Clientes</a></li>
+        <li><a href="#cupons" onclick="VendaMais.showAdminSection('cupons')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r=".5" fill="currentColor"/></svg> Cupons</a></li>
+        <li><a href="#analytics" onclick="VendaMais.showAdminSection('analytics')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg> Analytics</a></li>
+        <li><a href="#configuracoes" onclick="VendaMais.showAdminSection('configuracoes')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg> Configuracoes</a></li>
+      </ul>
+    </aside>
+    <main class="admin-content">
+      <section id="admin-dashboard" class="admin-section">
+        <h2 style="font-size:1.5rem;margin-bottom:24px">Dashboard</h2>
+        <div class="admin-kpi-grid"><div class="admin-kpi"><div class="admin-kpi-label">Pedidos hoje</div><div class="admin-kpi-value">48</div><div class="admin-kpi-change up">+12%</div></div><div class="admin-kpi"><div class="admin-kpi-label">Receita (demo)</div><div class="admin-kpi-value">R$ 18420,50</div><div class="admin-kpi-change up">+8%</div></div><div class="admin-kpi"><div class="admin-kpi-label">Ticket medio (demo)</div><div class="admin-kpi-value">R$ 383,76</div><div class="admin-kpi-change up">+3%</div></div><div class="admin-kpi"><div class="admin-kpi-label">Conversao (demo)</div><div class="admin-kpi-value">3.8%</div><div class="admin-kpi-change down">-0.2%</div></div></div>
+        <div class="admin-chart"><h3>Receita — ultimos 30 dias (demo)</h3><div class="chart-bar"><div class="chart-bar-item" style="height:23%" data-value="1"></div><div class="chart-bar-item" style="height:21%" data-value="2"></div><div class="chart-bar-item" style="height:28%" data-value="3"></div><div class="chart-bar-item" style="height:25%" data-value="4"></div><div class="chart-bar-item" style="height:28%" data-value="5"></div><div class="chart-bar-item" style="height:26%" data-value="6"></div><div class="chart-bar-item" style="height:33%" data-value="7"></div><div class="chart-bar-item" style="height:30%" data-value="8"></div><div class="chart-bar-item" style="height:31%" data-value="9"></div><div class="chart-bar-item" style="height:34%" data-value="10"></div><div class="chart-bar-item" style="height:32%" data-value="11"></div><div class="chart-bar-item" style="height:35%" data-value="12"></div><div class="chart-bar-item" style="height:33%" data-value="13"></div><div class="chart-bar-item" style="height:37%" data-value="14"></div><div class="chart-bar-item" style="height:39%" data-value="15"></div><div class="chart-bar-item" style="height:35%" data-value="16"></div><div class="chart-bar-item" style="height:39%" data-value="17"></div><div class="chart-bar-item" style="height:40%" data-value="18"></div><div class="chart-bar-item" style="height:37%" data-value="19"></div><div class="chart-bar-item" style="height:41%" data-value="20"></div><div class="chart-bar-item" style="height:44%" data-value="21"></div><div class="chart-bar-item" style="height:42%" data-value="22"></div><div class="chart-bar-item" style="height:46%" data-value="23"></div><div class="chart-bar-item" style="height:45%" data-value="24"></div><div class="chart-bar-item" style="height:48%" data-value="25"></div><div class="chart-bar-item" style="height:46%" data-value="26"></div><div class="chart-bar-item" style="height:49%" data-value="27"></div><div class="chart-bar-item" style="height:48%" data-value="28"></div><div class="chart-bar-item" style="height:51%" data-value="29"></div><div class="chart-bar-item" style="height:100%" data-value="30"></div></div></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+          <div class="admin-chart"><h3>Pedidos por status</h3><div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)"><span>new</span><span class="badge-status new">8</span></div><div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)"><span>paid</span><span class="badge-status paid">12</span></div><div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)"><span>separating</span><span class="badge-status separating">6</span></div><div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)"><span>in transit</span><span class="badge-status in_transit">9</span></div><div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)"><span>delivered</span><span class="badge-status delivered">145</span></div><div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)"><span>cancelled</span><span class="badge-status cancelled">3</span></div></div>
+          <div class="admin-chart"><h3>Carrinhos abandonados</h3><div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--border)"><div><strong>Mariana D.</strong><br><span class="text-xs text-muted">2h atrás · R$ 349,90</span></div><button class="btn btn-secondary btn-sm" onclick="VendaMais.showToast('Recuperacao simulada (demo)','info')">Simular recuperacao</button></div><div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--border)"><div><strong>Carlos D.</strong><br><span class="text-xs text-muted">5h atrás · R$ 580,80</span></div><button class="btn btn-secondary btn-sm" onclick="VendaMais.showToast('Recuperacao simulada (demo)','info')">Simular recuperacao</button></div><div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--border)"><div><strong>Visitante</strong><br><span class="text-xs text-muted">8h atrás · R$ 1299,90</span></div><button class="btn btn-secondary btn-sm" onclick="VendaMais.showToast('Recuperacao simulada (demo)','info')">Simular recuperacao</button></div><div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--border)"><div><strong>Juliana D.</strong><br><span class="text-xs text-muted">12h atrás · R$ 249,90</span></div><button class="btn btn-secondary btn-sm" onclick="VendaMais.showToast('Recuperacao simulada (demo)','info')">Simular recuperacao</button></div></div>
+        </div>
+      </section>
+      <section id="admin-pedidos" class="admin-section" style="display:none">
+        <h2 style="font-size:1.5rem;margin-bottom:24px">Pedidos</h2>
+        <div class="table-wrap"><table class="table"><thead><tr><th>Pedido</th><th>Cliente</th><th>Data</th><th>Pagamento</th><th>Total</th><th>Status</th><th>Acoes</th></tr></thead><tbody>
+      <tr>
+        <td><strong>VM-2026-10482</strong></td>
+        <td>Mariana Demonstracao</td>
+        <td>2026-08-28</td>
+        <td>PIX</td>
+        <td>R$ 299,90</td>
+        <td><span class="badge-status in_transit">in transit</span></td>
+        <td><button class="link-btn" onclick="VendaMais.showToast('Detalhes do pedido (demo)','info')">Ver</button></td>
+      </tr>
+      <tr>
+        <td><strong>VM-2026-10491</strong></td>
+        <td>Ricardo Demonstracao</td>
+        <td>2026-08-30</td>
+        <td>Cartao</td>
+        <td>R$ 1169,90</td>
+        <td><span class="badge-status separating">separating</span></td>
+        <td><button class="link-btn" onclick="VendaMais.showToast('Detalhes do pedido (demo)','info')">Ver</button></td>
+      </tr>
+      <tr>
+        <td><strong>VM-2026-10391</strong></td>
+        <td>Carlos Demonstracao</td>
+        <td>2026-08-12</td>
+        <td>PIX</td>
+        <td>R$ 349,90</td>
+        <td><span class="badge-status delivered">delivered</span></td>
+        <td><button class="link-btn" onclick="VendaMais.showToast('Detalhes do pedido (demo)','info')">Ver</button></td>
+      </tr>
+      <tr>
+        <td><strong>VM-2026-10375</strong></td>
+        <td>Juliana Demonstracao</td>
+        <td>2026-08-22</td>
+        <td>Cartao</td>
+        <td>R$ 1149,80</td>
+        <td><span class="badge-status delivered">delivered</span></td>
+        <td><button class="link-btn" onclick="VendaMais.showToast('Detalhes do pedido (demo)','info')">Ver</button></td>
+      </tr>
+      <tr>
+        <td><strong>VM-2026-10350</strong></td>
+        <td>Fernanda Demonstracao</td>
+        <td>2026-07-20</td>
+        <td>PIX</td>
+        <td>R$ 296,80</td>
+        <td><span class="badge-status delivered">delivered</span></td>
+        <td><button class="link-btn" onclick="VendaMais.showToast('Detalhes do pedido (demo)','info')">Ver</button></td>
+      </tr>
+      <tr>
+        <td><strong>VM-2026-10320</strong></td>
+        <td>Pedro Demonstracao</td>
+        <td>2026-08-05</td>
+        <td>Cartao</td>
+        <td>R$ 1299,90</td>
+        <td><span class="badge-status delivered">delivered</span></td>
+        <td><button class="link-btn" onclick="VendaMais.showToast('Detalhes do pedido (demo)','info')">Ver</button></td>
+      </tr></tbody></table></div>
+      </section>
+      <section id="admin-produtos" class="admin-section" style="display:none">
+        <h2 style="font-size:1.5rem;margin-bottom:24px">Produtos</h2>
+        <div class="table-wrap"><table class="table"><thead><tr><th>SKU</th><th>Nome</th><th>Categoria</th><th>Preco</th><th>Estoque</th><th>Status</th><th>Acoes</th></tr></thead><tbody>
+      <tr>
+        <td>VM-EL-001</td>
+        <td>Fone Bluetooth Pro X1</td>
+        <td>eletronicos</td>
+        <td>R$ 299,90</td>
+        <td>47</td>
+        <td><span class="badge-status delivered">Normal</span></td>
+        <td><button class="link-btn" onclick="VendaMais.showToast('Edicao de produto (demo)','info')">Editar</button></td>
+      </tr>
+      <tr>
+        <td>VM-EL-002</td>
+        <td>Smartwatch Ultra Fit</td>
+        <td>eletronicos</td>
+        <td>R$ 499,90</td>
+        <td>32</td>
+        <td><span class="badge-status delivered">Normal</span></td>
+        <td><button class="link-btn" onclick="VendaMais.showToast('Edicao de produto (demo)','info')">Editar</button></td>
+      </tr>
+      <tr>
+        <td>VM-MO-001</td>
+        <td>Camiseta Tech DryFit</td>
+        <td>moda</td>
+        <td>R$ 89,90</td>
+        <td>120</td>
+        <td><span class="badge-status delivered">Normal</span></td>
+        <td><button class="link-btn" onclick="VendaMais.showToast('Edicao de produto (demo)','info')">Editar</button></td>
+      </tr>
+      <tr>
+        <td>VM-MO-002</td>
+        <td>Tenis Runner Air Max</td>
+        <td>moda</td>
+        <td>R$ 349,90</td>
+        <td>58</td>
+        <td><span class="badge-status delivered">Normal</span></td>
+        <td><button class="link-btn" onclick="VendaMais.showToast('Edicao de produto (demo)','info')">Editar</button></td>
+      </tr>
+      <tr>
+        <td>VM-AC-001</td>
+        <td>Mochila Anti-Furto Pro</td>
+        <td>acessorios</td>
+        <td>R$ 199,90</td>
+        <td>75</td>
+        <td><span class="badge-status delivered">Normal</span></td>
+        <td><button class="link-btn" onclick="VendaMais.showToast('Edicao de produto (demo)','info')">Editar</button></td>
+      </tr>
+      <tr>
+        <td>VM-EL-003</td>
+        <td>Powerbank Ultra 20.000mAh</td>
+        <td>eletronicos</td>
+        <td>R$ 149,90</td>
+        <td>90</td>
+        <td><span class="badge-status delivered">Normal</span></td>
+        <td><button class="link-btn" onclick="VendaMais.showToast('Edicao de produto (demo)','info')">Editar</button></td>
+      </tr>
+      <tr>
+        <td>VM-CA-001</td>
+        <td>Cafeteira Smart WiFi</td>
+        <td>casa</td>
+        <td>R$ 899,90</td>
+        <td>18</td>
+        <td><span class="badge-status delivered">Normal</span></td>
+        <td><button class="link-btn" onclick="VendaMais.showToast('Edicao de produto (demo)','info')">Editar</button></td>
+      </tr>
+      <tr>
+        <td>VM-AC-002</td>
+        <td>Oculos Polarizados UV400</td>
+        <td>acessorios</td>
+        <td>R$ 179,90</td>
+        <td>65</td>
+        <td><span class="badge-status delivered">Normal</span></td>
+        <td><button class="link-btn" onclick="VendaMais.showToast('Edicao de produto (demo)','info')">Editar</button></td>
+      </tr>
+      <tr>
+        <td>VM-AC-003</td>
+        <td>Mochila Executiva Premium</td>
+        <td>acessorios</td>
+        <td>R$ 249,90</td>
+        <td>42</td>
+        <td><span class="badge-status delivered">Normal</span></td>
+        <td><button class="link-btn" onclick="VendaMais.showToast('Edicao de produto (demo)','info')">Editar</button></td>
+      </tr>
+      <tr>
+        <td>VM-EL-004</td>
+        <td>Tablet 10 4GB RAM 64GB</td>
+        <td>eletronicos</td>
+        <td>R$ 799,90</td>
+        <td>25</td>
+        <td><span class="badge-status delivered">Normal</span></td>
+        <td><button class="link-btn" onclick="VendaMais.showToast('Edicao de produto (demo)','info')">Editar</button></td>
+      </tr>
+      <tr>
+        <td>VM-AC-004</td>
+        <td>Relogio Minimalista</td>
+        <td>acessorios</td>
+        <td>R$ 349,90</td>
+        <td>38</td>
+        <td><span class="badge-status delivered">Normal</span></td>
+        <td><button class="link-btn" onclick="VendaMais.showToast('Edicao de produto (demo)','info')">Editar</button></td>
+      </tr>
+      <tr>
+        <td>VM-CA-002</td>
+        <td>Cadeira Ergonomica Home</td>
+        <td>casa</td>
+        <td>R$ 1299,90</td>
+        <td>15</td>
+        <td><span class="badge-status delivered">Normal</span></td>
+        <td><button class="link-btn" onclick="VendaMais.showToast('Edicao de produto (demo)','info')">Editar</button></td>
+      </tr>
+      <tr>
+        <td>VM-EL-005</td>
+        <td>Teclado Mecanico RGB Gamer</td>
+        <td>eletronicos</td>
+        <td>R$ 349,90</td>
+        <td>53</td>
+        <td><span class="badge-status delivered">Normal</span></td>
+        <td><button class="link-btn" onclick="VendaMais.showToast('Edicao de produto (demo)','info')">Editar</button></td>
+      </tr>
+      <tr>
+        <td>VM-EL-006</td>
+        <td>Monitor 27 Full HD 165Hz</td>
+        <td>eletronicos</td>
+        <td>R$ 1299,90</td>
+        <td>22</td>
+        <td><span class="badge-status delivered">Normal</span></td>
+        <td><button class="link-btn" onclick="VendaMais.showToast('Edicao de produto (demo)','info')">Editar</button></td>
+      </tr>
+      <tr>
+        <td>VM-MO-003</td>
+        <td>Calca Jeans Slim Fit</td>
+        <td>moda</td>
+        <td>R$ 199,90</td>
+        <td>88</td>
+        <td><span class="badge-status delivered">Normal</span></td>
+        <td><button class="link-btn" onclick="VendaMais.showToast('Edicao de produto (demo)','info')">Editar</button></td>
+      </tr>
+      <tr>
+        <td>VM-MO-004</td>
+        <td>Jaqueta Corta-Vento Leve</td>
+        <td>moda</td>
+        <td>R$ 179,90</td>
+        <td>60</td>
+        <td><span class="badge-status delivered">Normal</span></td>
+        <td><button class="link-btn" onclick="VendaMais.showToast('Edicao de produto (demo)','info')">Editar</button></td>
+      </tr>
+      <tr>
+        <td>VM-MO-005</td>
+        <td>Shorts Esportivo Elite</td>
+        <td>moda</td>
+        <td>R$ 79,90</td>
+        <td>150</td>
+        <td><span class="badge-status delivered">Normal</span></td>
+        <td><button class="link-btn" onclick="VendaMais.showToast('Edicao de produto (demo)','info')">Editar</button></td>
+      </tr>
+      <tr>
+        <td>VM-MO-006</td>
+        <td>Meia Esportiva Anti-Odor (3 pares)</td>
+        <td>moda</td>
+        <td>R$ 49,90</td>
+        <td>200</td>
+        <td><span class="badge-status delivered">Normal</span></td>
+        <td><button class="link-btn" onclick="VendaMais.showToast('Edicao de produto (demo)','info')">Editar</button></td>
+      </tr>
+      <tr>
+        <td>VM-AC-005</td>
+        <td>Carteira Couro Premium RFID</td>
+        <td>acessorios</td>
+        <td>R$ 129,90</td>
+        <td>95</td>
+        <td><span class="badge-status delivered">Normal</span></td>
+        <td><button class="link-btn" onclick="VendaMais.showToast('Edicao de produto (demo)','info')">Editar</button></td>
+      </tr>
+      <tr>
+        <td>VM-AC-006</td>
+        <td>Cinto Social Couro</td>
+        <td>acessorios</td>
+        <td>R$ 89,90</td>
+        <td>110</td>
+        <td><span class="badge-status delivered">Normal</span></td>
+        <td><button class="link-btn" onclick="VendaMais.showToast('Edicao de produto (demo)','info')">Editar</button></td>
+      </tr>
+      <tr>
+        <td>VM-CA-003</td>
+        <td>Liquidificador 12 Velocidades 1400W</td>
+        <td>casa</td>
+        <td>R$ 349,90</td>
+        <td>40</td>
+        <td><span class="badge-status delivered">Normal</span></td>
+        <td><button class="link-btn" onclick="VendaMais.showToast('Edicao de produto (demo)','info')">Editar</button></td>
+      </tr>
+      <tr>
+        <td>VM-CA-004</td>
+        <td>Aspirador Vertical Sem Fio</td>
+        <td>casa</td>
+        <td>R$ 599,90</td>
+        <td>28</td>
+        <td><span class="badge-status delivered">Normal</span></td>
+        <td><button class="link-btn" onclick="VendaMais.showToast('Edicao de produto (demo)','info')">Editar</button></td>
+      </tr>
+      <tr>
+        <td>VM-CA-005</td>
+        <td>Luminaria LED Smart WiFi</td>
+        <td>casa</td>
+        <td>R$ 249,90</td>
+        <td>55</td>
+        <td><span class="badge-status delivered">Normal</span></td>
+        <td><button class="link-btn" onclick="VendaMais.showToast('Edicao de produto (demo)','info')">Editar</button></td>
+      </tr>
+      <tr>
+        <td>VM-CA-006</td>
+        <td>Panela Eletrica Multiuso 5L</td>
+        <td>casa</td>
+        <td>R$ 399,90</td>
+        <td>35</td>
+        <td><span class="badge-status delivered">Normal</span></td>
+        <td><button class="link-btn" onclick="VendaMais.showToast('Edicao de produto (demo)','info')">Editar</button></td>
+      </tr></tbody></table></div>
+      </section>
+      <section id="admin-estoque" class="admin-section" style="display:none">
+        <h2 style="font-size:1.5rem;margin-bottom:24px">Estoque</h2>
+        <div class="admin-kpi-grid" style="margin-bottom:24px">
+          <div class="admin-kpi"><div class="admin-kpi-label">Total unidades</div><div class="admin-kpi-value">1561</div></div>
+          <div class="admin-kpi"><div class="admin-kpi-label">Estoque baixo</div><div class="admin-kpi-value">0</div></div>
+          <div class="admin-kpi"><div class="admin-kpi-label">Esgotados</div><div class="admin-kpi-value">0</div></div>
+        </div>
+        <div class="table-wrap"><table class="table"><thead><tr><th>SKU</th><th>Produto</th><th>Disponivel</th><th>Reservado</th><th>Minimo</th><th>Status</th></tr></thead><tbody>
+      <tr>
+        <td>VM-EL-001</td>
+        <td>Fone Bluetooth Pro X1</td>
+        <td>47</td>
+        <td>5</td>
+        <td>10</td>
+        <td><span class="badge-status delivered">Normal</span></td>
+      </tr>
+      <tr>
+        <td>VM-EL-002</td>
+        <td>Smartwatch Ultra Fit</td>
+        <td>32</td>
+        <td>3</td>
+        <td>8</td>
+        <td><span class="badge-status delivered">Normal</span></td>
+      </tr>
+      <tr>
+        <td>VM-MO-001</td>
+        <td>Camiseta Tech DryFit</td>
+        <td>120</td>
+        <td>12</td>
+        <td>20</td>
+        <td><span class="badge-status delivered">Normal</span></td>
+      </tr>
+      <tr>
+        <td>VM-MO-002</td>
+        <td>Tenis Runner Air Max</td>
+        <td>58</td>
+        <td>6</td>
+        <td>12</td>
+        <td><span class="badge-status delivered">Normal</span></td>
+      </tr>
+      <tr>
+        <td>VM-AC-001</td>
+        <td>Mochila Anti-Furto Pro</td>
+        <td>75</td>
+        <td>8</td>
+        <td>15</td>
+        <td><span class="badge-status delivered">Normal</span></td>
+      </tr>
+      <tr>
+        <td>VM-EL-003</td>
+        <td>Powerbank Ultra 20.000mAh</td>
+        <td>90</td>
+        <td>9</td>
+        <td>20</td>
+        <td><span class="badge-status delivered">Normal</span></td>
+      </tr>
+      <tr>
+        <td>VM-CA-001</td>
+        <td>Cafeteira Smart WiFi</td>
+        <td>18</td>
+        <td>2</td>
+        <td>5</td>
+        <td><span class="badge-status delivered">Normal</span></td>
+      </tr>
+      <tr>
+        <td>VM-AC-002</td>
+        <td>Oculos Polarizados UV400</td>
+        <td>65</td>
+        <td>7</td>
+        <td>15</td>
+        <td><span class="badge-status delivered">Normal</span></td>
+      </tr>
+      <tr>
+        <td>VM-AC-003</td>
+        <td>Mochila Executiva Premium</td>
+        <td>42</td>
+        <td>4</td>
+        <td>10</td>
+        <td><span class="badge-status delivered">Normal</span></td>
+      </tr>
+      <tr>
+        <td>VM-EL-004</td>
+        <td>Tablet 10 4GB RAM 64GB</td>
+        <td>25</td>
+        <td>3</td>
+        <td>6</td>
+        <td><span class="badge-status delivered">Normal</span></td>
+      </tr>
+      <tr>
+        <td>VM-AC-004</td>
+        <td>Relogio Minimalista</td>
+        <td>38</td>
+        <td>4</td>
+        <td>8</td>
+        <td><span class="badge-status delivered">Normal</span></td>
+      </tr>
+      <tr>
+        <td>VM-CA-002</td>
+        <td>Cadeira Ergonomica Home</td>
+        <td>15</td>
+        <td>2</td>
+        <td>4</td>
+        <td><span class="badge-status delivered">Normal</span></td>
+      </tr>
+      <tr>
+        <td>VM-EL-005</td>
+        <td>Teclado Mecanico RGB Gamer</td>
+        <td>53</td>
+        <td>5</td>
+        <td>12</td>
+        <td><span class="badge-status delivered">Normal</span></td>
+      </tr>
+      <tr>
+        <td>VM-EL-006</td>
+        <td>Monitor 27 Full HD 165Hz</td>
+        <td>22</td>
+        <td>2</td>
+        <td>5</td>
+        <td><span class="badge-status delivered">Normal</span></td>
+      </tr>
+      <tr>
+        <td>VM-MO-003</td>
+        <td>Calca Jeans Slim Fit</td>
+        <td>88</td>
+        <td>9</td>
+        <td>18</td>
+        <td><span class="badge-status delivered">Normal</span></td>
+      </tr>
+      <tr>
+        <td>VM-MO-004</td>
+        <td>Jaqueta Corta-Vento Leve</td>
+        <td>60</td>
+        <td>6</td>
+        <td>12</td>
+        <td><span class="badge-status delivered">Normal</span></td>
+      </tr>
+      <tr>
+        <td>VM-MO-005</td>
+        <td>Shorts Esportivo Elite</td>
+        <td>150</td>
+        <td>15</td>
+        <td>30</td>
+        <td><span class="badge-status delivered">Normal</span></td>
+      </tr>
+      <tr>
+        <td>VM-MO-006</td>
+        <td>Meia Esportiva Anti-Odor (3 pares)</td>
+        <td>200</td>
+        <td>20</td>
+        <td>40</td>
+        <td><span class="badge-status delivered">Normal</span></td>
+      </tr>
+      <tr>
+        <td>VM-AC-005</td>
+        <td>Carteira Couro Premium RFID</td>
+        <td>95</td>
+        <td>10</td>
+        <td>20</td>
+        <td><span class="badge-status delivered">Normal</span></td>
+      </tr>
+      <tr>
+        <td>VM-AC-006</td>
+        <td>Cinto Social Couro</td>
+        <td>110</td>
+        <td>11</td>
+        <td>25</td>
+        <td><span class="badge-status delivered">Normal</span></td>
+      </tr>
+      <tr>
+        <td>VM-CA-003</td>
+        <td>Liquidificador 12 Velocidades 1400W</td>
+        <td>40</td>
+        <td>4</td>
+        <td>8</td>
+        <td><span class="badge-status delivered">Normal</span></td>
+      </tr>
+      <tr>
+        <td>VM-CA-004</td>
+        <td>Aspirador Vertical Sem Fio</td>
+        <td>28</td>
+        <td>3</td>
+        <td>6</td>
+        <td><span class="badge-status delivered">Normal</span></td>
+      </tr>
+      <tr>
+        <td>VM-CA-005</td>
+        <td>Luminaria LED Smart WiFi</td>
+        <td>55</td>
+        <td>6</td>
+        <td>12</td>
+        <td><span class="badge-status delivered">Normal</span></td>
+      </tr>
+      <tr>
+        <td>VM-CA-006</td>
+        <td>Panela Eletrica Multiuso 5L</td>
+        <td>35</td>
+        <td>4</td>
+        <td>8</td>
+        <td><span class="badge-status delivered">Normal</span></td>
+      </tr></tbody></table></div>
+      </section>
+      <section id="admin-clientes" class="admin-section" style="display:none">
+        <h2 style="font-size:1.5rem;margin-bottom:24px">Clientes</h2>
+        <div class="table-wrap"><table class="table"><thead><tr><th>Nome</th><th>Pedidos</th><th>Total gasto</th><th>Ultima compra</th><th>Status</th></tr></thead><tbody>
+      <tr>
+        <td>Mariana Demonstracao</td>
+        <td>3</td>
+        <td>R$ 839,70</td>
+        <td>2026-08-28</td>
+        <td><span class="badge-status paid">ativo</span></td>
+      </tr>
+      <tr>
+        <td>Carlos Demonstracao</td>
+        <td>5</td>
+        <td>R$ 2149,50</td>
+        <td>2026-08-12</td>
+        <td><span class="badge-status paid">ativo</span></td>
+      </tr>
+      <tr>
+        <td>Fernanda Demonstracao</td>
+        <td>2</td>
+        <td>R$ 549,80</td>
+        <td>2026-07-20</td>
+        <td><span class="badge-status paid">ativo</span></td>
+      </tr>
+      <tr>
+        <td>Pedro Demonstracao</td>
+        <td>1</td>
+        <td>R$ 1299,90</td>
+        <td>2026-08-05</td>
+        <td><span class="badge-status separating">novo</span></td>
+      </tr>
+      <tr>
+        <td>Juliana Demonstracao</td>
+        <td>4</td>
+        <td>R$ 1289,60</td>
+        <td>2026-08-22</td>
+        <td><span class="badge-status paid">ativo</span></td>
+      </tr>
+      <tr>
+        <td>Ricardo Demonstracao</td>
+        <td>7</td>
+        <td>R$ 3459,30</td>
+        <td>2026-08-30</td>
+        <td><span class="badge-status delivered">vip</span></td>
+      </tr></tbody></table></div>
+      </section>
+      <section id="admin-cupons" class="admin-section" style="display:none">
+        <h2 style="font-size:1.5rem;margin-bottom:24px">Cupons</h2>
+        <div class="table-wrap"><table class="table"><thead><tr><th>Codigo</th><th>Tipo</th><th>Valor</th><th>Descricao</th><th>Usos</th><th>Status</th><th>Validade</th></tr></thead><tbody>
+      <tr>
+        <td><strong>EXPO10</strong></td>
+        <td>percent</td>
+        <td>10%</td>
+        <td>10% de desconto em todo o site</td>
+        <td>47</td>
+        <td><span class="badge-status delivered">Ativo</span></td>
+        <td>2026-12-31</td>
+      </tr>
+      <tr>
+        <td><strong>FRETEGRATIS</strong></td>
+        <td>shipping</td>
+        <td>Gratis</td>
+        <td>Frete gratis em qualquer compra</td>
+        <td>89</td>
+        <td><span class="badge-status delivered">Ativo</span></td>
+        <td>2026-12-31</td>
+      </tr>
+      <tr>
+        <td><strong>BEMVINDO15</strong></td>
+        <td>percent</td>
+        <td>15%</td>
+        <td>15% de desconto na primeira compra</td>
+        <td>23</td>
+        <td><span class="badge-status delivered">Ativo</span></td>
+        <td>2026-12-31</td>
+      </tr>
+      <tr>
+        <td><strong>BLACK50</strong></td>
+        <td>fixed</td>
+        <td>R$ 50,00</td>
+        <td>R$ 50 de desconto em compras acima de R$ 500</td>
+        <td>12</td>
+        <td><span class="badge-status cancelled">Inativo</span></td>
+        <td>2026-11-30</td>
+      </tr></tbody></table></div>
+      </section>
+      <section id="admin-analytics" class="admin-section" style="display:none">
+        <h2 style="font-size:1.5rem;margin-bottom:24px">Analytics</h2>
+        <div class="admin-chart"><h3>Funil de conversao (demo)</h3><div class="admin-funnel"><div class="funnel-step"><div class="funnel-label">Visitas</div><div class="funnel-bar" style="width:100%">12840</div></div><div class="funnel-step"><div class="funnel-label">Visualizaram produto</div><div class="funnel-bar" style="width:33%">4230</div></div><div class="funnel-step"><div class="funnel-label">Adicionaram ao carrinho</div><div class="funnel-bar" style="width:14%">1820</div></div><div class="funnel-step"><div class="funnel-label">Iniciaram checkout</div><div class="funnel-bar" style="width:8%">980</div></div><div class="funnel-step"><div class="funnel-label">Pedidos simulados</div><div class="funnel-bar" style="width:5%">612</div></div></div></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+          <div class="admin-chart"><h3>Produtos mais vistos</h3><div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)"><span>1. Fone Bluetooth Pro X1</span><span><strong>89</strong> vendas · 1240 views</span></div><div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)"><span>2. Tenis Runner Air Max</span><span><strong>76</strong> vendas · 1180 views</span></div><div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)"><span>3. Cadeira Ergonomica Home</span><span><strong>45</strong> vendas · 980 views</span></div><div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)"><span>4. Cafeteira Smart WiFi</span><span><strong>38</strong> vendas · 870 views</span></div><div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)"><span>5. Panela Eletrica Multiuso 5L</span><span><strong>52</strong> vendas · 760 views</span></div></div>
+          <div class="admin-chart"><h3>Origem de trafego</h3><div style="margin-bottom:12px"><div style="display:flex;justify-content:space-between;font-size:.875rem;margin-bottom:4px"><span>Busca organica</span><strong>5240</strong></div><div style="height:8px;background:var(--bg);border-radius:4px;overflow:hidden"><div style="height:100%;width:40.8%;background:var(--accent);border-radius:4px"></div></div></div><div style="margin-bottom:12px"><div style="display:flex;justify-content:space-between;font-size:.875rem;margin-bottom:4px"><span>Direto</span><strong>3120</strong></div><div style="height:8px;background:var(--bg);border-radius:4px;overflow:hidden"><div style="height:100%;width:24.3%;background:var(--accent);border-radius:4px"></div></div></div><div style="margin-bottom:12px"><div style="display:flex;justify-content:space-between;font-size:.875rem;margin-bottom:4px"><span>Social</span><strong>2180</strong></div><div style="height:8px;background:var(--bg);border-radius:4px;overflow:hidden"><div style="height:100%;width:17%;background:var(--accent);border-radius:4px"></div></div></div><div style="margin-bottom:12px"><div style="display:flex;justify-content:space-between;font-size:.875rem;margin-bottom:4px"><span>Email</span><strong>1340</strong></div><div style="height:8px;background:var(--bg);border-radius:4px;overflow:hidden"><div style="height:100%;width:10.4%;background:var(--accent);border-radius:4px"></div></div></div><div style="margin-bottom:12px"><div style="display:flex;justify-content:space-between;font-size:.875rem;margin-bottom:4px"><span>Referencia</span><strong>960</strong></div><div style="height:8px;background:var(--bg);border-radius:4px;overflow:hidden"><div style="height:100%;width:7.5%;background:var(--accent);border-radius:4px"></div></div></div></div>
+        </div>
+      </section>
+      <section id="admin-configuracoes" class="admin-section" style="display:none">
+        <h2 style="font-size:1.5rem;margin-bottom:24px">Configuracoes</h2>
+        <div class="card" style="max-width:600px">
+          <div class="field"><label class="label">Nome da loja</label><input class="input" value="VendaMais"></div>
+          <div class="field"><label class="label">E-mail de contato</label><input class="input" value="contato@vendamais.expostacker.com.br"></div>
+          <div class="field"><label class="label">Telefone</label><input class="input" value="(13) 3333-4444"></div>
+          <div class="field"><label class="label">Frete gratis acima de</label><input class="input" value="R$ 200,00"></div>
+          <button class="btn btn-primary" onclick="VendaMais.showToast('Configuracoes salvas (demo)','success')">Salvar</button>
+        </div>
+      </section>
+    </main>
+  </div>
+</div><script src="scripts/app.js" defer></script></body></html>

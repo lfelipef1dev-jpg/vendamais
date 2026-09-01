@@ -1,0 +1,54 @@
+{
+  "kpis": {
+    "ordersToday": 48,
+    "revenue": 18420.50,
+    "avgTicket": 383.76,
+    "conversion": 3.8,
+    "abandonedCarts": 17,
+    "newCustomers": 12,
+    "returningCustomers": 36,
+    "pageViews": 12840
+  },
+  "revenue30d": [4200, 3800, 5100, 4600, 5200, 4800, 6100, 5500, 5800, 6200, 5900, 6400, 6100, 6800, 7200, 6500, 7100, 7400, 6900, 7600, 8100, 7800, 8400, 8200, 8900, 8500, 9100, 8800, 9400, 18420],
+  "ordersByStatus": {
+    "new": 8,
+    "paid": 12,
+    "separating": 6,
+    "in_transit": 9,
+    "delivered": 145,
+    "cancelled": 3
+  },
+  "ordersByCategory": {
+    "eletronicos": 42,
+    "casa": 28,
+    "moda": 35,
+    "acessorios": 22
+  },
+  "funnel": {
+    "visits": 12840,
+    "productViews": 4230,
+    "addToCart": 1820,
+    "checkoutStart": 980,
+    "ordersCompleted": 612
+  },
+  "topProducts": [
+    { "id": "p01", "name": "Fone Bluetooth Pro X1", "views": 1240, "sales": 89 },
+    { "id": "p04", "name": "Tenis Runner Air Max", "views": 1180, "sales": 76 },
+    { "id": "p12", "name": "Cadeira Ergonomica Home", "views": 980, "sales": 45 },
+    { "id": "p07", "name": "Cafeteira Smart WiFi", "views": 870, "sales": 38 },
+    { "id": "p24", "name": "Panela Eletrica Multiuso 5L", "views": 760, "sales": 52 }
+  ],
+  "trafficSources": [
+    { "source": "Busca organica", "visits": 5240, "pct": 40.8 },
+    { "source": "Direto", "visits": 3120, "pct": 24.3 },
+    { "source": "Social", "visits": 2180, "pct": 17.0 },
+    { "source": "Email", "visits": 1340, "pct": 10.4 },
+    { "source": "Referencia", "visits": 960, "pct": 7.5 }
+  ],
+  "abandonedCarts": [
+    { "customer": "Mariana D.", "value": 349.90, "items": 1, "timeAgo": "2h", "productId": "p01" },
+    { "customer": "Carlos D.", "value": 580.80, "items": 2, "timeAgo": "5h", "productId": "p13" },
+    { "customer": "Visitante", "value": 1299.90, "items": 1, "timeAgo": "8h", "productId": "p14" },
+    { "customer": "Juliana D.", "value": 249.90, "items": 1, "timeAgo": "12h", "productId": "p23" }
+  ]
+}
