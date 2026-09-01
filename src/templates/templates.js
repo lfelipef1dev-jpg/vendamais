@@ -93,7 +93,7 @@ function renderHead(opts) {
   const ogType = opts.ogType || 'website';
   const cssFiles = (opts.cssFiles || ['base.css', 'components.css', 'pages.css']).map(f => '<link rel="stylesheet" href="styles/' + f + '">').join('\n  ');
   const jsFiles = (opts.jsFiles || ['app.js']).map(f => '<script src="scripts/' + f + '" defer></script>').join('\n  ');
-  const structuredData = opts.structuredData ? '<script type="application/ld+json">' + JSON.stringify(opts.structuredData) + '</script>' : '';
+  const structuredData = opts.structuredData ? (Array.isArray(opts.structuredData) ? opts.structuredData : [opts.structuredData]).map(s => '<script type="application/ld+json">' + JSON.stringify(s) + '</script>').join('\n  ') : '';
 
   return `<!DOCTYPE html>
 <html lang="pt-BR">
@@ -286,6 +286,21 @@ function renderBreadcrumb(items) {
   return '<nav class="breadcrumb" aria-label="Navegacao"><ol class="breadcrumb-list">' + list + '</ol></nav>';
 }
 
+/* ---------- BreadcrumbList schema (JSON-LD) ---------- */
+function renderBreadcrumbSchema(items, storeUrl) {
+  const base = storeUrl.replace(/\/$/, '');
+  const itemListElement = items.map((item, i) => {
+    const url = item.href ? base + '/' + item.href.replace(/^https?:\/\/[^/]+/, '') : '';
+    return {
+      '@type': 'ListItem',
+      position: i + 1,
+      name: item.label,
+      ...(url ? { item: url } : {})
+    };
+  });
+  return { '@type': 'BreadcrumbList', itemListElement };
+}
+
 /* ---------- Product card ---------- */
 function renderProductCard(p) {
   const href = 'produto-' + p.slug + '.html';
@@ -325,5 +340,6 @@ module.exports = {
   renderFooter,
   renderLayout,
   renderBreadcrumb,
+  renderBreadcrumbSchema,
   renderProductCard
 };

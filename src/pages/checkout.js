@@ -261,7 +261,7 @@ function renderCheckout(data, T) {
     content: content
   });
 
-  return { filename: 'checkout.html', html: html };
+  return { filename: 'checkout.html', slug: 'checkout', noindex: true, html: html };
 }
 
 function renderConfirmation(data, T) {
@@ -322,7 +322,7 @@ function renderConfirmation(data, T) {
     content: content
   });
 
-  return { filename: 'pedido-confirmado.html', html: html };
+  return { filename: 'pedido-confirmado.html', slug: 'pedido-confirmado', noindex: true, html: html };
 }
 
 function render(data, T) {

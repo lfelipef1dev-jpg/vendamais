@@ -216,16 +216,21 @@ function renderProductPage(product, data, T) {
   const html = T.renderLayout({
     store: store,
     data: data,
-    title: product.name,
-    description: product.shortDesc || product.description || '',
+    title: product.name + ' — Comprar com PIX e Cartao',
+    description: (product.shortDesc || product.description || '').substring(0, 155),
     canonical: '/produto-' + product.slug + '.html',
     ogType: 'product',
     active: 'produtos',
-    structuredData: buildStructuredData(product, data, T),
+    structuredData: [buildStructuredData(product, data, T), T.renderBreadcrumbSchema([
+      { label: 'Home', href: 'index.html' },
+      { label: 'Produtos', href: 'produtos.html' },
+      { label: catName, href: 'categoria-' + catSlug + '.html' },
+      { label: product.name }
+    ], store.url)],
     content: content
   });
 
-  return { filename: 'produto-' + product.slug + '.html', html: html };
+  return { filename: 'produto-' + product.slug + '.html', slug: 'produto-' + product.slug, noindex: false, html: html };
 }
 
 function render(data, T) {

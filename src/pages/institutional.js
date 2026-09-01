@@ -9,7 +9,7 @@ module.exports = {
       filename: 'sobre.html', slug: 'sobre', noindex: false,
       html: T.renderLayout({
         store, data, active: 'sobre', canonical: '/sobre.html',
-        title: 'Sobre nos', description: 'Conheca a VendaMais — plataforma de e-commerce demonstrativa.',
+        title: 'Sobre a VendaMais — Plataforma de E-commerce', description: 'Conheca a VendaMais: plataforma de e-commerce demonstrativa com checkout, conta e admin.',
         content: `
         ${T.renderBreadcrumb([{ label: 'Inicio', href: 'index.html' }, { label: 'Sobre nos' }])}
         <section class="section"><div class="container-narrow">
@@ -35,7 +35,7 @@ module.exports = {
       filename: 'entrega.html', slug: 'entrega', noindex: false,
       html: T.renderLayout({
         store, data, canonical: '/entrega.html',
-        title: 'Entrega', description: 'Informacoes sobre modalidades de entrega demonstrativas.',
+        title: 'Entrega e Prazos — Frete Gratis acima de R$ 200', description: 'Modalidades de entrega: normal 3-5 dias, expressa 1-2 dias. Frete gratis acima de R$ 200 (demo).',
         content: `
         ${T.renderBreadcrumb([{ label: 'Inicio', href: 'index.html' }, { label: 'Entrega' }])}
         <section class="section"><div class="container-narrow">
@@ -54,7 +54,7 @@ module.exports = {
       filename: 'trocas-devolucoes.html', slug: 'trocas-devolucoes', noindex: false,
       html: T.renderLayout({
         store, data, canonical: '/trocas-devolucoes.html',
-        title: 'Trocas e Devolucoes', description: 'Politica demonstrativa de trocas e devolucoes.',
+        title: 'Trocas e Devolucoes — 30 dias para trocar', description: 'Politica de trocas e devolucoes em 30 dias. Produto original, embalagem intacta (demo).',
         content: `
         ${T.renderBreadcrumb([{ label: 'Inicio', href: 'index.html' }, { label: 'Trocas e Devolucoes' }])}
         <section class="section"><div class="container-narrow">
@@ -73,7 +73,7 @@ module.exports = {
       filename: 'pagamentos.html', slug: 'pagamentos', noindex: false,
       html: T.renderLayout({
         store, data, canonical: '/pagamentos.html',
-        title: 'Pagamentos', description: 'Formas de pagamento simuladas: PIX e cartao.',
+        title: 'Pagamentos — PIX com 5% OFF e Cartao em 12x', description: 'PIX com 5% de desconto e cartao de credito em ate 12x sem juros. Pagamentos simulados (demo).',
         content: `
         ${T.renderBreadcrumb([{ label: 'Inicio', href: 'index.html' }, { label: 'Pagamentos' }])}
         <section class="section"><div class="container-narrow">
@@ -101,7 +101,7 @@ module.exports = {
       filename: 'faq.html', slug: 'faq', noindex: false,
       html: T.renderLayout({
         store, data, canonical: '/faq.html',
-        title: 'FAQ', description: 'Perguntas frequentes sobre a VendaMais.',
+        title: 'Perguntas Frequentes — Frete, PIX, Trocas e Mais', description: 'Respostas sobre frete gratis, prazos de entrega, formas de pagamento, trocas e dados demonstrativos.',
         content: `
         ${T.renderBreadcrumb([{ label: 'Inicio', href: 'index.html' }, { label: 'FAQ' }])}
         <section class="section"><div class="container-narrow">
@@ -116,7 +116,7 @@ module.exports = {
       filename: 'contato.html', slug: 'contato', noindex: false,
       html: T.renderLayout({
         store, data, canonical: '/contato.html',
-        title: 'Contato', description: 'Entre em contato com a VendaMais.',
+        title: 'Contato — Fale com a VendaMais (Demo)', description: 'Formulario de contato e informacoes da VendaMais. Ambiente demonstrativo, sem envio real.',
         content: `
         ${T.renderBreadcrumb([{ label: 'Inicio', href: 'index.html' }, { label: 'Contato' }])}
         <section class="section"><div class="container-narrow">
@@ -149,7 +149,7 @@ module.exports = {
       filename: 'privacidade.html', slug: 'privacidade', noindex: false,
       html: T.renderLayout({
         store, data, canonical: '/privacidade.html',
-        title: 'Politica de Privacidade', description: 'Politica de privacidade e LGPD.',
+        title: 'Politica de Privacidade e LGPD — VendaMais', description: 'Politica de privacidade em conformidade com a LGPD. Nenhum dado pessoal real e coletado (demo).',
         content: `
         ${T.renderBreadcrumb([{ label: 'Inicio', href: 'index.html' }, { label: 'Privacidade' }])}
         <section class="section"><div class="container-narrow">
@@ -168,7 +168,7 @@ module.exports = {
       filename: 'termos.html', slug: 'termos', noindex: false,
       html: T.renderLayout({
         store, data, canonical: '/termos.html',
-        title: 'Termos de Uso', description: 'Termos de uso da plataforma demonstrativa.',
+        title: 'Termos de Uso — Plataforma Demonstrativa', description: 'Termos de uso da VendaMais. Site demonstrativo, sem transacoes comerciais reais.',
         content: `
         ${T.renderBreadcrumb([{ label: 'Inicio', href: 'index.html' }, { label: 'Termos de Uso' }])}
         <section class="section"><div class="container-narrow">

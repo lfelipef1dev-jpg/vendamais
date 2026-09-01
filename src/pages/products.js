@@ -128,7 +128,7 @@ function emptyState(message) {
 /* ---------- PLP page builder ---------- */
 
 function buildPLP(opts) {
-  const { T, store, data, title, description, canonical, active, products, breadcrumb, showCategoryFilter, noindex, heading } = opts;
+  const { T, store, data, title, description, canonical, active, products, breadcrumb, showCategoryFilter, noindex, heading, breadcrumbItems } = opts;
   const categories = data.categories || [];
   const count = products.length;
 
@@ -147,6 +147,8 @@ function buildPLP(opts) {
   </div>
 </div>`;
 
+  const structuredData = breadcrumbItems ? T.renderBreadcrumbSchema(breadcrumbItems, store.url) : null;
+
   return T.renderLayout({
     store,
     data,
@@ -155,7 +157,8 @@ function buildPLP(opts) {
     canonical,
     active,
     content,
-    noindex
+    noindex,
+    structuredData
   });
 }
 
@@ -202,21 +205,20 @@ function render(data, T) {
   const pages = [];
 
   // produtos.html — todos os produtos
+  const produtosItems = [{ label: 'Inicio', href: 'index.html' }, { label: 'Produtos' }];
   pages.push({
     filename: 'produtos.html',
     slug: 'produtos',
     noindex: false,
     html: buildPLP({
       T, store, data,
-      title: 'Produtos',
-      description: 'Todos os produtos da ' + store.name + ' — tecnologia, casa, moda e acessorios.',
+      title: 'Todos os Produtos — Tecnologia, Casa e Moda',
+      description: 'Catalogo completo da VendaMais: eletronicos, casa inteligente, moda e acessorios com PIX e cartao.',
       canonical: '/produtos.html',
       active: 'produtos',
       products,
-      breadcrumb: T.renderBreadcrumb([
-        { label: 'Inicio', href: 'index.html' },
-        { label: 'Produtos' }
-      ]),
+      breadcrumb: T.renderBreadcrumb(produtosItems),
+      breadcrumbItems: produtosItems,
       showCategoryFilter: true,
       heading: 'Todos os produtos'
     })
@@ -225,22 +227,20 @@ function render(data, T) {
   // categoria-{slug}.html — por categoria
   categories.forEach(cat => {
     const catProducts = products.filter(p => p.category === cat.id);
+    const catItems = [{ label: 'Inicio', href: 'index.html' }, { label: 'Produtos', href: 'produtos.html' }, { label: cat.name }];
     pages.push({
       filename: 'categoria-' + cat.slug + '.html',
       slug: 'categoria-' + cat.slug,
       noindex: false,
       html: buildPLP({
         T, store, data,
-        title: cat.name,
-        description: cat.description,
+        title: cat.name + ' — Comprar Online com PIX',
+        description: (cat.description || '').substring(0, 155),
         canonical: '/categoria-' + cat.slug + '.html',
         active: 'categorias',
         products: catProducts,
-        breadcrumb: T.renderBreadcrumb([
-          { label: 'Inicio', href: 'index.html' },
-          { label: 'Produtos', href: 'produtos.html' },
-          { label: cat.name }
-        ]),
+        breadcrumb: T.renderBreadcrumb(catItems),
+        breadcrumbItems: catItems,
         showCategoryFilter: false,
         heading: cat.name
       })
@@ -248,6 +248,7 @@ function render(data, T) {
   });
 
   // ofertas.html
+  const offersItems = [{ label: 'Inicio', href: 'index.html' }, { label: 'Ofertas' }];
   const offers = products.filter(p => p.isOffer);
   pages.push({
     filename: 'ofertas.html',
@@ -255,21 +256,20 @@ function render(data, T) {
     noindex: false,
     html: buildPLP({
       T, store, data,
-      title: 'Ofertas',
-      description: 'Produtos em promocao com desconto na ' + store.name + '.',
+      title: 'Ofertas e Promocoes — Ate 40% OFF',
+      description: 'Produtos em promocao com desconto na VendaMais. Eletronicos, casa e moda com PIX e cartao.',
       canonical: '/ofertas.html',
       active: 'ofertas',
       products: offers,
-      breadcrumb: T.renderBreadcrumb([
-        { label: 'Inicio', href: 'index.html' },
-        { label: 'Ofertas' }
-      ]),
+      breadcrumb: T.renderBreadcrumb(offersItems),
+      breadcrumbItems: offersItems,
       showCategoryFilter: false,
-      heading: 'Ofertas'
+      heading: 'Ofertas da semana'
     })
   });
 
   // lancamentos.html
+  const lancItems = [{ label: 'Inicio', href: 'index.html' }, { label: 'Lancamentos' }];
   const launches = products.filter(p => p.isNew);
   pages.push({
     filename: 'lancamentos.html',
@@ -277,21 +277,20 @@ function render(data, T) {
     noindex: false,
     html: buildPLP({
       T, store, data,
-      title: 'Lancamentos',
-      description: 'Novidades que acabaram de chegar na ' + store.name + '.',
+      title: 'Lancamentos — Novidades que acabaram de chegar',
+      description: 'Novidades que acabaram de chegar na VendaMais. Tecnologia, casa e moda em primeira mao.',
       canonical: '/lancamentos.html',
       active: 'lancamentos',
       products: launches,
-      breadcrumb: T.renderBreadcrumb([
-        { label: 'Inicio', href: 'index.html' },
-        { label: 'Lancamentos' }
-      ]),
+      breadcrumb: T.renderBreadcrumb(lancItems),
+      breadcrumbItems: lancItems,
       showCategoryFilter: false,
       heading: 'Lancamentos'
     })
   });
 
   // mais-vendidos.html
+  const bestItems = [{ label: 'Inicio', href: 'index.html' }, { label: 'Mais vendidos' }];
   const bestsellers = products.filter(p => p.badge === 'bestseller');
   pages.push({
     filename: 'mais-vendidos.html',
@@ -299,15 +298,13 @@ function render(data, T) {
     noindex: false,
     html: buildPLP({
       T, store, data,
-      title: 'Mais vendidos',
-      description: 'Os produtos mais vendidos da ' + store.name + '.',
+      title: 'Mais Vendidos — Os queridinhos dos clientes',
+      description: 'Os produtos mais vendidos da VendaMais. Eletronicos, casa e moda que mais saem do estoque.',
       canonical: '/mais-vendidos.html',
       active: '',
       products: bestsellers,
-      breadcrumb: T.renderBreadcrumb([
-        { label: 'Inicio', href: 'index.html' },
-        { label: 'Mais vendidos' }
-      ]),
+      breadcrumb: T.renderBreadcrumb(bestItems),
+      breadcrumbItems: bestItems,
       showCategoryFilter: false,
       heading: 'Mais vendidos'
     })

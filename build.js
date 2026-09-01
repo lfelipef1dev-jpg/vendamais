@@ -80,13 +80,19 @@ function copyAssets() {
 
 /* ---------- Gerar sitemap ---------- */
 function generateSitemap(pages, data) {
-  const base = data.store.url;
+  const base = data.store.url.replace(/\/$/, '');
+  const today = new Date().toISOString().split('T')[0];
+  const seen = new Set();
   const urls = pages
     .filter(p => !p.noindex)
     .map(p => {
-      const loc = p.slug === 'index' ? `${base}/` : `${base}/${p.slug}.html`;
-      return `  <url>\n    <loc>${loc}</loc>\n    <lastmod>2026-09-01</lastmod>\n  </url>`;
+      const fname = p.filename.replace(/\.html$/, '');
+      const loc = fname === 'index' ? `${base}/` : `${base}/${p.filename}`;
+      if (seen.has(loc)) return null;
+      seen.add(loc);
+      return `  <url>\n    <loc>${loc}</loc>\n    <lastmod>${today}</lastmod>\n  </url>`;
     })
+    .filter(Boolean)
     .join('\n');
   const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>`;
   fs.writeFileSync(path.join(OUT, 'sitemap.xml'), xml);
