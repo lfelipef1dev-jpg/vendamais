@@ -72,6 +72,16 @@ function copyAssets() {
     fs.copyFileSync(path.join(ROOT, 'favicon.svg'), path.join(OUT, 'favicon.svg'));
   }
 
+  // brand assets
+  const brandDir = path.join(ROOT, 'brand');
+  if (fs.existsSync(brandDir)) {
+    const outBrand = path.join(OUT, 'brand');
+    if (!fs.existsSync(outBrand)) fs.mkdirSync(outBrand, { recursive: true });
+    fs.readdirSync(brandDir).forEach(f => {
+      fs.copyFileSync(path.join(brandDir, f), path.join(outBrand, f));
+    });
+  }
+
   // _headers
   if (fs.existsSync(path.join(ROOT, '_headers'))) {
     fs.copyFileSync(path.join(ROOT, '_headers'), path.join(OUT, '_headers'));

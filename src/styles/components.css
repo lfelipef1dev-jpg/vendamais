@@ -39,6 +39,12 @@
 }
 .logo:hover { color: var(--accent); }
 .logo svg { color: var(--accent); }
+.logo-img { height: 40px; width: auto; display: block; }
+.logo-img-footer { height: 44px; }
+@media (max-width: 768px) {
+  .logo-img { height: 34px; }
+  .logo-img-footer { height: 38px; }
+}
 
 .header-search { flex: 1; max-width: 600px; }
 .search-form {

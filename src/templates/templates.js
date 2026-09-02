@@ -110,15 +110,20 @@ function renderHead(opts) {
   <meta property="og:url" content="${canonical}">
   <meta property="og:site_name" content="${store.name}">
   <meta property="og:locale" content="pt_BR">
+  <meta property="og:image" content="${store.url}/og-image.png">
+  <meta property="og:image:width" content="1536">
+  <meta property="og:image:height" content="1024">
+  <meta property="og:image:alt" content="${escapeHtml(store.name)}">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="${escapeHtml(title)}">
   <meta name="twitter:description" content="${escapeHtml(desc)}">
+  <meta name="twitter:image" content="${store.url}/og-image.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preload" href="fonts/inter-400-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="fonts/inter-700-latin.woff2" as="font" type="font/woff2" crossorigin>
   ${cssFiles}
-  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="icon" type="image/png" href="favicon.png" sizes="1254x1254">
   ${structuredData}
 </head>`;
 }
@@ -149,8 +154,7 @@ function renderHeader(store, categories, opts) {
   return `<header class="header" role="banner">
   <div class="container header-inner">
     <a href="index.html" class="logo" aria-label="${store.name} — Inicio">
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-      <span>${store.name}</span>
+      <img src="brand/vendamais-logo.png" alt="VendaMais" width="160" height="53" class="logo-img" />
     </a>
     <div class="header-search">
       <form role="search" action="busca.html" method="get" class="search-form">
@@ -201,8 +205,7 @@ function renderFooter(store) {
   <div class="container footer-grid">
     <div class="footer-col">
       <div class="footer-logo">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-        <span>${store.name}</span>
+        <img src="brand/vendamais-logo.png" alt="VendaMais" width="150" height="50" class="logo-img logo-img-footer" />
       </div>
       <p class="footer-tagline">${escapeHtml(store.tagline)}</p>
       <p class="footer-disclaimer">${escapeHtml(store.demoDisclaimer)}</p>

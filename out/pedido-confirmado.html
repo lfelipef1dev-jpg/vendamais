@@ -14,9 +14,14 @@
   <meta property="og:url" content="https://vendamais.expostacker.com.br/pedido-confirmado">
   <meta property="og:site_name" content="VendaMais">
   <meta property="og:locale" content="pt_BR">
+  <meta property="og:image" content="https://vendamais.expostacker.com.br/og-image.png">
+  <meta property="og:image:width" content="1536">
+  <meta property="og:image:height" content="1024">
+  <meta property="og:image:alt" content="VendaMais">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Pedido confirmado | VendaMais">
   <meta name="twitter:description" content="Confirmacao de pedido — VendaMais">
+  <meta name="twitter:image" content="https://vendamais.expostacker.com.br/og-image.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preload" href="fonts/inter-400-latin.woff2" as="font" type="font/woff2" crossorigin>
@@ -24,7 +29,7 @@
   <link rel="stylesheet" href="styles/base.css">
   <link rel="stylesheet" href="styles/components.css">
   <link rel="stylesheet" href="styles/pages.css">
-  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="icon" type="image/png" href="favicon.png" sizes="1254x1254">
   <script type="application/ld+json">{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://vendamais.expostacker.com.br/index"},{"@type":"ListItem","position":2,"name":"Carrinho","item":"https://vendamais.expostacker.com.br/carrinho"},{"@type":"ListItem","position":3,"name":"Checkout","item":"https://vendamais.expostacker.com.br/checkout"},{"@type":"ListItem","position":4,"name":"Confirmacao"}]}</script>
 </head>
 <body>
@@ -35,8 +40,7 @@
   <header class="header" role="banner">
   <div class="container header-inner">
     <a href="index.html" class="logo" aria-label="VendaMais — Inicio">
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-      <span>VendaMais</span>
+      <img src="brand/vendamais-logo.png" alt="VendaMais" width="160" height="53" class="logo-img" />
     </a>
     <div class="header-search">
       <form role="search" action="busca.html" method="get" class="search-form">
@@ -80,14 +84,13 @@
 </div>
 <div class="overlay" id="overlay" hidden></div>
   <main id="conteudo" role="main">
-    <div class="container"><nav class="breadcrumb" aria-label="Navegacao"><ol class="breadcrumb-list"><li><a href="index.html">Home</a></li><li><a href="carrinho.html">Carrinho</a></li><li><a href="checkout.html">Checkout</a></li><li aria-current="page">Confirmacao</li></ol></nav><div class="confirmation"><div class="confirmation-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><h1>Pedido confirmado!</h1><p>Obrigado pela sua compra. Seu pedido foi processado com sucesso.</p><div class="confirmation-order"><div class="cart-summary-row"><span>Numero do pedido</span><strong id="conf-order-id">VM-DEMO-0000</strong></div><div class="cart-summary-row"><span>Data</span><span id="conf-date">01/09/2026</span></div><div class="cart-summary-row"><span>Pagamento</span><span id="conf-payment">PIX (simulado)</span></div><div class="cart-summary-row"><span>Status</span><span class="badge badge-status confirmed">Confirmado</span></div><div class="cart-summary-row total"><span>Total</span><span id="conf-total">R$ 0,00</span></div><div style="margin-top:var(--space-4);"><h4 style="font-size:var(--fs-sm);margin-bottom:var(--space-2);">Itens</h4><div id="conf-items" style="font-size:var(--fs-sm);color:var(--text-secondary);"></div></div></div><div style="display:flex;gap:var(--space-3);flex-wrap:wrap;justify-content:center;"><a href="conta-pedido.html" class="btn btn-primary btn-lg"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg> Acompanhar pedido</a><a href="index.html" class="btn btn-secondary btn-lg">Continuar comprando</a></div><p style="font-size:var(--fs-xs);color:var(--text-muted);margin-top:var(--space-6);">Ambiente demonstrativo — produtos, clientes, pedidos, avaliacoes e metricas ficticios.</p></div></div>
+    <div class="container"><nav class="breadcrumb" aria-label="Navegacao"><ol class="breadcrumb-list"><li><a href="index.html">Home</a></li><li><a href="carrinho.html">Carrinho</a></li><li><a href="checkout.html">Checkout</a></li><li aria-current="page">Confirmacao</li></ol></nav><div class="confirmation"><div class="confirmation-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><h1>Pedido confirmado!</h1><p>Obrigado pela sua compra. Seu pedido foi processado com sucesso.</p><div class="confirmation-order"><div class="cart-summary-row"><span>Numero do pedido</span><strong id="conf-order-id">VM-DEMO-0000</strong></div><div class="cart-summary-row"><span>Data</span><span id="conf-date">02/09/2026</span></div><div class="cart-summary-row"><span>Pagamento</span><span id="conf-payment">PIX (simulado)</span></div><div class="cart-summary-row"><span>Status</span><span class="badge badge-status confirmed">Confirmado</span></div><div class="cart-summary-row total"><span>Total</span><span id="conf-total">R$ 0,00</span></div><div style="margin-top:var(--space-4);"><h4 style="font-size:var(--fs-sm);margin-bottom:var(--space-2);">Itens</h4><div id="conf-items" style="font-size:var(--fs-sm);color:var(--text-secondary);"></div></div></div><div style="display:flex;gap:var(--space-3);flex-wrap:wrap;justify-content:center;"><a href="conta-pedido.html" class="btn btn-primary btn-lg"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg> Acompanhar pedido</a><a href="index.html" class="btn btn-secondary btn-lg">Continuar comprando</a></div><p style="font-size:var(--fs-xs);color:var(--text-muted);margin-top:var(--space-6);">Ambiente demonstrativo — produtos, clientes, pedidos, avaliacoes e metricas ficticios.</p></div></div>
   </main>
   <footer class="footer" role="contentinfo">
   <div class="container footer-grid">
     <div class="footer-col">
       <div class="footer-logo">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-        <span>VendaMais</span>
+        <img src="brand/vendamais-logo.png" alt="VendaMais" width="150" height="50" class="logo-img logo-img-footer" />
       </div>
       <p class="footer-tagline">Tecnologia, casa e lifestyle em um so lugar</p>
       <p class="footer-disclaimer">Ambiente demonstrativo — produtos, clientes, pedidos, avaliacoes e metricas ficticios.</p>
