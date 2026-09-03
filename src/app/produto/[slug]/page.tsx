@@ -4,7 +4,7 @@ import Link from "next/link";
 import { SiteLayout } from "@/components/site-layout";
 import { ProductCard } from "@/components/product-card";
 import { products, getProductBySlug, getProductsByCategory, formatBRL, calcDiscount } from "@/lib/catalog";
-import { ChevronRight, Star, Heart, ShoppingCart, Truck, Store, Shield } from "lucide-react";
+import { ChevronRight, Heart, ShoppingCart, Truck, Store, Shield, Scale } from "lucide-react";
 import { ProductActions } from "./product-actions";
 
 export function generateStaticParams() {
@@ -62,63 +62,64 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             <p className="text-sm font-medium text-[#94a3b8] uppercase tracking-wide">{product.brand}</p>
             <h1 className="mt-1 text-2xl font-black text-[#0f172a] sm:text-3xl">{product.name}</h1>
 
-            {product.rating && (
-              <div className="mt-2 flex items-center gap-2">
-                <div className="flex" aria-label={`Avaliação ${product.rating} de 5`}>
-                  {[1,2,3,4,5].map((s) => (
-                    <Star
-                      key={s}
-                      className={s <= Math.round(product.rating!) ? "h-4 w-4 fill-[#f59e0b] text-[#f59e0b]" : "h-4 w-4 text-[#e2e8f0]"}
-                    />
-                  ))}
-                </div>
-                <span className="text-sm text-[#475569]">{product.rating.toFixed(1)} ({product.ratingCount} avaliações)</span>
-              </div>
-            )}
-
             <p className="mt-3 text-sm text-[#475569]">{product.weight} · {product.subcategory}</p>
 
-            {/* Price */}
+            {/* Price block */}
             <div className="mt-4 rounded-xl bg-[#fef9f0] p-4">
               {product.previousPrice && (
                 <p className="text-sm text-[#94a3b8] line-through">{formatBRL(product.previousPrice)}</p>
               )}
+              {/* Preço principal */}
               <div className="flex items-baseline gap-2">
                 <span className="text-3xl font-black text-[#e11d48]">{formatBRL(product.price)}</span>
                 {discount > 0 && <span className="text-sm font-bold text-[#e11d48]">-{discount}%</span>}
               </div>
-              <p className="mt-1 text-sm font-medium text-[#16a34a]">{product.unitPrice}</p>
-              {product.byWeight && (
-                <p className="mt-2 text-xs text-[#94a3b8]">
-                  ⚖️ Produto vendido por peso. Valor final pode variar conforme o peso efetivamente separado.
-                </p>
+
+              {/* Produto por peso — separar preço/kg de valor estimado */}
+              {product.byWeight && product.pricePerKg ? (
+                <div className="mt-2 space-y-1">
+                  <p className="text-sm font-medium text-[#16a34a]">
+                    Preço por kg: {formatBRL(product.pricePerKg)}
+                  </p>
+                  {product.approxWeight && (
+                    <p className="text-xs text-[#475569]">
+                      Peso aproximado: {product.approxWeight} kg · Valor estimado: {formatBRL(product.price)}
+                    </p>
+                  )}
+                  <p className="mt-2 flex items-start gap-1.5 text-xs text-[#94a3b8]">
+                    <Scale className="h-3.5 w-3.5 mt-0.5 flex-shrink-0" />
+                    O valor final pode variar conforme o peso efetivamente separado para você.
+                  </p>
+                </div>
+              ) : (
+                <p className="mt-1 text-sm font-medium text-[#475569]">{product.unitPrice}</p>
               )}
             </div>
 
             {/* Actions (client) */}
             <ProductActions product={product} />
 
-            {/* Delivery info */}
+            {/* Delivery info — sem claims operacionais falsos */}
             <div className="mt-6 space-y-3 rounded-xl border border-[#e2e8f0] p-4">
               <div className="flex items-center gap-3 text-sm">
                 <Truck className="h-5 w-5 text-[#16a34a]" />
                 <div>
-                  <p className="font-semibold text-[#0f172a]">Entrega em casa</p>
-                  <p className="text-xs text-[#94a3b8]">Em até 2h ou agende seu horário</p>
+                  <p className="font-semibold text-[#0f172a]">Entrega</p>
+                  <p className="text-xs text-[#94a3b8]">Disponibilidade e prazos conforme seu CEP</p>
                 </div>
               </div>
               <div className="flex items-center gap-3 text-sm">
                 <Store className="h-5 w-5 text-[#e11d48]" />
                 <div>
                   <p className="font-semibold text-[#0f172a]">Retire na loja</p>
-                  <p className="text-xs text-[#94a3b8]">Pronto em 1h, sem fila</p>
+                  <p className="text-xs text-[#94a3b8]">Disponível após confirmação do pedido</p>
                 </div>
               </div>
               <div className="flex items-center gap-3 text-sm">
                 <Shield className="h-5 w-5 text-[#1e40af]" />
                 <div>
                   <p className="font-semibold text-[#0f172a]">Compra segura</p>
-                  <p className="text-xs text-[#94a3b8]">Pagamento protegido</p>
+                  <p className="text-xs text-[#94a3b8]">Pagamento em ambiente protegido</p>
                 </div>
               </div>
             </div>

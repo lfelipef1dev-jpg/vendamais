@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { ProductCard } from "./product-card";
+import { CategoryIcon } from "./category-icon";
 import type { Product, Category } from "@/lib/catalog";
 
 /* === SECTION HEADER === */
@@ -28,7 +29,20 @@ export function SectionHeader({
   );
 }
 
-/* === PRODUCT GRID === */
+/* === PRODUCT RAIL — scroll horizontal, não grid completo === */
+export function ProductRail({ products }: { products: Product[] }) {
+  return (
+    <div className="flex gap-3 overflow-x-auto no-scrollbar pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 snap-x">
+      {products.map((p) => (
+        <div key={p.id} className="w-40 flex-shrink-0 snap-start sm:w-48 md:w-52">
+          <ProductCard product={p} />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/* === PRODUCT GRID — para páginas de categoria/listagem === */
 export function ProductGrid({ products }: { products: Product[] }) {
   return (
     <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
@@ -37,32 +51,24 @@ export function ProductGrid({ products }: { products: Product[] }) {
   );
 }
 
-/* === CATEGORY CIRCLE === */
-export function CategoryCircle({ category }: { category: Category }) {
+/* === CATEGORY CARD — SVG icon, não emoji === */
+export function CategoryCard({ category }: { category: Category }) {
   return (
     <Link
       href={`/categoria/${category.slug}`}
-      className="group flex flex-col items-center gap-2 flex-shrink-0"
+      className="group flex flex-col items-center gap-2 rounded-xl p-3 transition-all hover:bg-[#f8fafc]"
       aria-label={`Ver ${category.name}`}
     >
       <div
-        className="flex h-20 w-20 items-center justify-center rounded-full border-2 text-3xl transition-all group-hover:scale-105 group-hover:border-[#e11d48] sm:h-24 sm:w-24"
-        style={{ borderColor: category.color + "40", backgroundColor: category.color + "10" }}
+        className="flex h-14 w-14 items-center justify-center rounded-full border-2 transition-all group-hover:scale-105 sm:h-16 sm:w-16"
+        style={{ borderColor: category.color + "30", backgroundColor: category.color + "0a" }}
       >
-        <span aria-hidden="true">{category.icon}</span>
+        <CategoryIcon name={category.iconName} className="h-6 w-6 sm:h-7 sm:w-7" />
+        <span className="sr-only">{category.name}</span>
       </div>
-      <span className="text-xs font-semibold text-[#0f172a] text-center max-w-[80px] leading-tight sm:text-sm">
+      <span className="text-xs font-semibold text-[#0f172a] text-center leading-tight sm:text-sm">
         {category.name}
       </span>
     </Link>
-  );
-}
-
-/* === HORIZONTAL SCROLL === */
-export function HorizontalScroll({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="flex gap-4 overflow-x-auto no-scrollbar pb-2 -mx-4 px-4 sm:mx-0 sm:px-0">
-      {children}
-    </div>
   );
 }

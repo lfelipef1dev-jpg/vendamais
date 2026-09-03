@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Heart, Plus, Minus, ShoppingCart, Star } from "lucide-react";
+import { Heart, Plus, Minus, ShoppingCart } from "lucide-react";
 import type { Product } from "@/lib/catalog";
 import { formatBRL, calcDiscount } from "@/lib/catalog";
 import { useCartStore, cn } from "@/lib/store";
@@ -28,11 +28,6 @@ export function ProductCard({ product }: { product: Product }) {
         {discount > 0 && (
           <span className="rounded-md bg-[#e11d48] px-2 py-0.5 text-xs font-bold text-white shadow-sm">
             -{discount}%
-          </span>
-        )}
-        {product.tags?.includes("fresco") && (
-          <span className="rounded-md bg-[#16a34a] px-2 py-0.5 text-xs font-bold text-white shadow-sm">
-            Fresco
           </span>
         )}
         {product.byWeight && (
@@ -84,30 +79,26 @@ export function ProductCard({ product }: { product: Product }) {
           {product.name}
         </h3>
 
-        {/* Rating */}
-        {product.rating && (
-          <div className="mt-1 flex items-center gap-1">
-            <Star className="h-3.5 w-3.5 fill-[#f59e0b] text-[#f59e0b]" aria-hidden="true" />
-            <span className="text-xs font-medium text-[#475569]">{product.rating.toFixed(1)}</span>
-            <span className="text-xs text-[#94a3b8]">({product.ratingCount})</span>
-          </div>
-        )}
-
-        {/* Peso */}
+        {/* Peso / tipo de venda */}
         <p className="mt-1 text-xs text-[#94a3b8]">{product.weight}</p>
 
         {/* Preço */}
-        <div className="mt-2 flex items-end gap-2">
-          {product.previousPrice && (
-            <span className="text-xs text-[#94a3b8] line-through">{formatBRL(product.previousPrice)}</span>
-          )}
-        </div>
+        {product.previousPrice && (
+          <p className="mt-2 text-xs text-[#94a3b8] line-through">{formatBRL(product.previousPrice)}</p>
+        )}
         <div className="flex items-baseline gap-1">
           <span className={cn("text-lg font-bold", discount > 0 ? "text-[#e11d48]" : "text-[#0f172a]")}>
             {formatBRL(product.price)}
           </span>
         </div>
-        <p className="text-xs text-[#16a34a] font-medium">{product.unitPrice}</p>
+        {/* Preço por kg — separado do preço total */}
+        {product.byWeight && product.pricePerKg ? (
+          <p className="text-xs text-[#16a34a] font-medium">
+            Preço por kg: {formatBRL(product.pricePerKg)}
+          </p>
+        ) : (
+          <p className="text-xs text-[#475569] font-medium">{product.unitPrice}</p>
+        )}
 
         {/* Controles */}
         <div className="mt-3 flex-1" />

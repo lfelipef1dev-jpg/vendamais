@@ -5,14 +5,14 @@ import { categories } from "@/lib/catalog";
 export function Footer() {
   return (
     <footer className="mt-auto border-t border-[#e2e8f0] bg-white">
-      {/* Benefits bar */}
+      {/* Benefits bar — sem claims operacionais falsos */}
       <div className="border-b border-[#e2e8f0]">
         <div className="mx-auto grid max-w-7xl grid-cols-2 gap-4 px-4 py-8 md:grid-cols-4 lg:px-8">
           {[
-            { icon: Truck, title: "Frete grátis", desc: "Acima de R$ 200" },
-            { icon: Shield, title: "Compra segura", desc: "Ambiente protegido" },
-            { icon: RefreshCw, title: "Troca facilitada", desc: "30 dias para trocar" },
-            { icon: CreditCard, title: "PIX com 5% off", desc: "Ou 12x sem juros" },
+            { icon: Truck, title: "Entrega e retirada", desc: "Escolha como receber" },
+            { icon: Shield, title: "Compra segura", desc: "Pagamento protegido" },
+            { icon: RefreshCw, title: "Trocas e devoluções", desc: "Conforme o CDC" },
+            { icon: CreditCard, title: "Pagamento", desc: "PIX e cartão" },
           ].map((b) => (
             <div key={b.title} className="flex items-center gap-3">
               <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl bg-[#fef9f0]">
@@ -37,17 +37,14 @@ export function Footer() {
               <span className="text-xl font-black text-[#16a34a]">Mais</span>
             </Link>
             <p className="mt-3 text-sm text-[#475569] max-w-xs">
-              Seu hipermercado completo, onde você estiver. Frescor, economia e conveniência em um só lugar.
+              Seu hipermercado completo, onde você estiver. Tudo que sua casa precisa em um só lugar.
             </p>
             <div className="mt-4 space-y-2 text-sm">
-              <a href="tel:1313334444" className="flex items-center gap-2 text-[#475569] hover:text-[#e11d48]">
+              <p className="flex items-center gap-2 text-[#475569]">
                 <Phone className="h-4 w-4" /> (13) 3333-4444
-              </a>
-              <a href="mailto:contato@vendamais.expostacker.com.br" className="flex items-center gap-2 text-[#475569] hover:text-[#e11d48]">
-                <Mail className="h-4 w-4" /> contato@vendamais
-              </a>
-              <p className="flex items-start gap-2 text-[#475569]">
-                <MapPin className="h-4 w-4 mt-0.5" /> Av. Demonstração, 1000 — São Paulo — SP
+              </p>
+              <p className="flex items-center gap-2 text-[#475569]">
+                <Mail className="h-4 w-4" /> contato@vendamais.com.br
               </p>
             </div>
           </div>
@@ -71,10 +68,10 @@ export function Footer() {
             <h3 className="text-sm font-bold text-[#0f172a] uppercase tracking-wide">Institucional</h3>
             <ul className="mt-3 space-y-2" role="list">
               <li><Link href="/sobre" className="text-sm text-[#475569] hover:text-[#e11d48]">Sobre o VendaMais</Link></li>
-              <li><Link href="/entrega" className="text-sm text-[#475569] hover:text-[#e11d48]">Entrega e retirada</Link></li>
-              <li><Link href="/pagamentos" className="text-sm text-[#475569] hover:text-[#e11d48]">Formas de pagamento</Link></li>
-              <li><Link href="/trocas-devolucoes" className="text-sm text-[#475569] hover:text-[#e11d48]">Trocas e devoluções</Link></li>
-              <li><Link href="/faq" className="text-sm text-[#475569] hover:text-[#e11d48]">Perguntas frequentes</Link></li>
+              <li><Link href="/sobre" className="text-sm text-[#475569] hover:text-[#e11d48]">Entrega e retirada</Link></li>
+              <li><Link href="/sobre" className="text-sm text-[#475569] hover:text-[#e11d48]">Formas de pagamento</Link></li>
+              <li><Link href="/sobre" className="text-sm text-[#475569] hover:text-[#e11d48]">Trocas e devoluções</Link></li>
+              <li><Link href="/sobre" className="text-sm text-[#475569] hover:text-[#e11d48]">Perguntas frequentes</Link></li>
             </ul>
           </div>
 
@@ -103,9 +100,8 @@ export function Footer() {
       {/* Bottom bar */}
       <div className="border-t border-[#e2e8f0] bg-[#f8fafc]">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 py-4 text-xs text-[#94a3b8] sm:flex-row lg:px-8">
-          <p>© {new Date().getFullYear()} VendaMais — Ambiente demonstrativo. Produtos e preços fictícios.</p>
+          <p>© {new Date().getFullYear()} VendaMais · CNPJ 00.000.000/0001-00</p>
           <div className="flex items-center gap-3">
-            <span>🔒 SSL</span>
             <span>PIX</span>
             <span>Visa</span>
             <span>Mastercard</span>

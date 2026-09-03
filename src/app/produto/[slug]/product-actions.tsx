@@ -6,13 +6,15 @@ import type { Product } from "@/lib/catalog";
 import { useCartStore, cn } from "@/lib/store";
 
 export function ProductActions({ product }: { product: Product }) {
-  const { addToCart, toggleFavorite, isFavorite, items, updateQuantity } = useCartStore();
+  const { addToCart, toggleFavorite, isFavorite, items } = useCartStore();
   const [qty, setQty] = useState(1);
   const [loading, setLoading] = useState(false);
   const fav = isFavorite(product.id);
   const cartItem = items.find((i) => i.product.id === product.id);
+  const outOfStock = product.stock === 0;
 
   const handleAdd = () => {
+    if (outOfStock) return;
     setLoading(true);
     addToCart(product, qty);
     setTimeout(() => setLoading(false), 400);
@@ -46,11 +48,13 @@ export function ProductActions({ product }: { product: Product }) {
       <div className="flex gap-3">
         <button
           onClick={handleAdd}
-          disabled={loading}
+          disabled={loading || outOfStock}
           className="flex h-12 flex-1 items-center justify-center gap-2 rounded-xl bg-[#e11d48] text-base font-bold text-white transition-colors hover:bg-[#be123c] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#e11d48] disabled:opacity-50"
         >
           {loading ? (
             <span className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
+          ) : outOfStock ? (
+            "Indisponível"
           ) : (
             <>
               <ShoppingCart className="h-5 w-5" /> Adicionar ao carrinho

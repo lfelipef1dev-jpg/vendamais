@@ -31,6 +31,9 @@ export default function CheckoutPage() {
             Seu pedido foi recebido. Em breve você receberá a confirmação por e-mail.
           </p>
           <p className="mt-4 text-2xl font-bold text-[#e11d48]">{formatBRL(total)}</p>
+          <p className="mt-3 text-xs text-[#94a3b8]">
+            Ambiente demonstrativo — pedido fictício, nenhuma transação real foi processada.
+          </p>
           <Link href="/" className="mt-8 inline-flex h-12 items-center gap-2 rounded-xl bg-[#e11d48] px-8 text-base font-bold text-white hover:bg-[#be123c]">
             Continuar comprando
           </Link>
@@ -124,13 +127,13 @@ export default function CheckoutPage() {
                   <button onClick={() => setPayment("pix")} className={`flex items-center justify-between rounded-xl border-2 p-4 transition-colors ${payment === "pix" ? "border-[#e11d48] bg-[#fef2f2]" : "border-[#e2e8f0] hover:border-[#cbd5e1]"}`}>
                     <div className="flex items-center gap-3">
                       <span className="text-xl">⚡</span>
-                      <div><p className="font-semibold text-[#0f172a]">PIX — 5% de desconto</p><p className="text-xs text-[#94a3b8]">Aprovação imediata</p></div>
+                      <div><p className="font-semibold text-[#0f172a]">PIX — 5% de desconto <span className="text-xs font-normal text-[#94a3b8]">(demo)</span></p><p className="text-xs text-[#94a3b8]">Aprovação imediata</p></div>
                     </div>
                     <span className="font-bold text-[#16a34a]">-{formatBRL(pixDiscount)}</span>
                   </button>
                   <button onClick={() => setPayment("cartao")} className={`flex items-center gap-3 rounded-xl border-2 p-4 transition-colors ${payment === "cartao" ? "border-[#e11d48] bg-[#fef2f2]" : "border-[#e2e8f0] hover:border-[#cbd5e1]"}`}>
                     <CreditCard className="h-6 w-6 text-[#1e40af]" />
-                    <div><p className="font-semibold text-[#0f172a]">Cartão de crédito</p><p className="text-xs text-[#94a3b8]">Em até 12x sem juros</p></div>
+                    <div><p className="font-semibold text-[#0f172a]">Cartão de crédito <span className="text-xs font-normal text-[#94a3b8]">(demo)</span></p><p className="text-xs text-[#94a3b8]">Em até 12x sem juros</p></div>
                   </button>
                 </div>
                 <div className="flex gap-3">

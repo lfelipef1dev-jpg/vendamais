@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
+import Link from "next/link";
 import { ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
 import { cn } from "@/lib/store";
 
@@ -124,31 +125,17 @@ export function HeroCarousel() {
               fetchPriority={idx === 0 ? "high" : "low"}
               className="h-full w-full object-cover"
             />
-            <div className={cn("absolute inset-0 bg-gradient-to-r to-transparent", theme.bg)} />
-            <div className="absolute inset-0 flex items-center">
-              <div className="mx-auto w-full max-w-7xl px-6 lg:px-8">
-                <div className={cn("max-w-lg", slide.align === "center" && "mx-auto text-center")}>
-                  <span className={cn("inline-block rounded-full bg-white/20 px-3 py-1 text-xs font-bold uppercase tracking-wider backdrop-blur-sm", theme.text)}>
-                    {slide.eyebrow}
-                  </span>
-                  <h3 className={cn("mt-3 text-2xl font-black leading-tight sm:text-3xl md:text-4xl lg:text-5xl text-balance", theme.text)}>
-                    {slide.title}
-                  </h3>
-                  <p className={cn("mt-2 text-sm sm:text-base md:text-lg max-w-md", theme.text, "opacity-90")}>
-                    {slide.subtitle}
-                  </p>
-                  <a
-                    href={slide.href}
-                    className={cn(
-                      "mt-4 inline-flex h-11 items-center gap-2 rounded-xl px-6 text-sm font-bold text-white transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white",
-                      theme.btn
-                    )}
-                  >
-                    {slide.cta}
-                    <ChevronRight className="h-4 w-4" />
-                  </a>
-                </div>
-              </div>
+            {/* Overlay sutil apenas para legibilidade do CTA */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+            {/* CTA discreto no canto inferior — banner já tem comunicação própria */}
+            <div className="absolute bottom-4 left-4 sm:bottom-6 sm:left-6 lg:bottom-8 lg:left-8">
+              <Link
+                href={slide.href}
+                className="inline-flex h-10 items-center gap-2 rounded-xl bg-white/95 px-5 text-sm font-bold text-[#0f172a] shadow-lg backdrop-blur-sm transition-all hover:bg-white hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+              >
+                {slide.cta}
+                <ChevronRight className="h-4 w-4" />
+              </Link>
             </div>
           </div>
         ))}

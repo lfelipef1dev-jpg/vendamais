@@ -43,8 +43,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
                 <li aria-current="page" className="text-white font-medium">{cat.name}</li>
               </ol>
             </nav>
-            <h1 className="text-3xl font-black text-white sm:text-4xl flex items-center gap-3">
-              <span aria-hidden="true">{cat.icon}</span>
+            <h1 className="text-3xl font-black text-white sm:text-4xl">
               {cat.name}
             </h1>
             <p className="mt-1 text-sm text-white/90">

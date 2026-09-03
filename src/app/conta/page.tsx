@@ -52,14 +52,11 @@ export default function ContaPage() {
           ))}
         </div>
 
-        <div className="mt-8 rounded-xl border border-[#e2e8f0] bg-[#fef9f0] p-6 text-center">
-          <h2 className="font-bold text-[#0f172a]">Venda+ Benefícios</h2>
+        <div className="mt-8 rounded-xl border-2 border-dashed border-[#f59e0b] bg-[#fef9f0] p-4 text-center">
+          <p className="text-xs font-bold uppercase tracking-wide text-[#d97706]">Ambiente demonstrativo</p>
           <p className="mt-1 text-sm text-[#475569]">
-            Ainda não assinante? Tenha preços exclusivos, cupons e ofertas personalizadas.
+            Pedidos, pagamentos e entregas são fictícios. Nenhuma transação real é processada.
           </p>
-          <button className="mt-4 inline-flex h-10 items-center gap-2 rounded-lg bg-[#e11d48] px-5 text-sm font-bold text-white hover:bg-[#be123c]">
-            Conhecer Venda+
-          </button>
         </div>
       </div>
     </SiteLayout>
