@@ -1,0 +1,13 @@
+Catalogo com 393 imagens reais (Openverse + Atacadao + Carrefour + ChatGPT)
+
+- 70 imagens Openverse (hortifruti/acougue/padaria frescos)
+- 173 imagens Atacadao (mercearia/bebidas/limpeza/etc)
+- 121 imagens Carrefour (packshots embalados)
+- 29 imagens ChatGPT HD 1254x1254 (SKUs sem fonte publica)
+- 14 SKUs pendentes (rate limit ChatGPT)
+- Manifest em data/catalog-image-manifest.json
+- QA page em public/catalog-qa.html
+
+Generated with [Devin](https://devin.ai)
+
+Co-Authored-By: Devin <158243242+devin-ai-integration[bot]@users.noreply.github.com>
