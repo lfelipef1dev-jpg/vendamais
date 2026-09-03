@@ -19,7 +19,7 @@ interface Slide {
 const slides: Slide[] = [
   {
     id: "feira",
-    image: "https://images.unsplash.com/photo-1542838132-25c8eb958dd2?w=1600&h=700&fit=crop&q=80",
+    image: "/images/hero/hero-01.webp",
     eyebrow: "Hortifruti",
     title: "Frescor que dá gosto de levar",
     subtitle: "Frutas, legumes e verduras selecionados todos os dias direto do produtor.",
@@ -30,7 +30,7 @@ const slides: Slide[] = [
   },
   {
     id: "mes",
-    image: "https://images.unsplash.com/photo-1604719312566-8912e9227c6a?w=1600&h=700&fit=crop&q=80",
+    image: "/images/hero/hero-02.webp",
     eyebrow: "Economia",
     title: "Encha o carrinho. Economize de verdade.",
     subtitle: "Ofertas imperdíveis em tudo que sua casa precisa. Compre do mês com até 40% OFF.",
@@ -41,7 +41,7 @@ const slides: Slide[] = [
   },
   {
     id: "churrasco",
-    image: "https://images.unsplash.com/photo-1607623814075-e51dfba4d609?w=1600&h=700&fit=crop&q=80",
+    image: "/images/hero/hero-03.webp",
     eyebrow: "Churrasco",
     title: "Seu churrasco começa aqui",
     subtitle: "Carnes premium, acompanhamentos e tudo para o seu final de semana perfeito.",
