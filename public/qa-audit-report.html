@@ -1,0 +1,3744 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Auditoria de Imagens - VendaMais</title>
+<style>
+body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
+h1, h2 { color: #333; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin: 20px 0; }
+.stat { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: center; }
+.stat .number { font-size: 32px; font-weight: bold; color: #2563eb; }
+.stat .label { color: #666; font-size: 14px; }
+.stat.warning .number { color: #dc2626; }
+.filter { margin: 15px 0; }
+.filter button { padding: 8px 15px; margin-right: 10px; border: none; border-radius: 5px; background: #2563eb; color: white; cursor: pointer; }
+.filter button.active { background: #1e40af; }
+table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-top: 20px; }
+th { background: #3730a3; color: white; padding: 12px; text-align: left; font-size: 12px; }
+td { padding: 10px 12px; border-bottom: 1px solid #eee; font-size: 12px; }
+tr:hover { background: #f9fafb; }
+tr.suspicious { background: #fef2f2; }
+tr.missing { background: #fff7ed; }
+tr.duplicate { background: #fef9c3; }
+.img-thumb { width: 60px; height: 60px; object-fit: contain; background: #f3f4f6; border-radius: 4px; }
+.badge { padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: bold; }
+.badge-chatgpt { background: #dbeafe; color: #1e40af; }
+.badge-carrefour { background: #dcfce7; color: #166534; }
+.badge-atacadao { background: #fef3c7; color: #92400e; }
+.badge-openverse { background: #f3e8ff; color: #6b21a8; }
+.badge-na { background: #e5e7eb; color: #374151; }
+.score-low { color: #dc2626; font-weight: bold; }
+.score-ok { color: #16a34a; }
+</style>
+<script>
+function filterTable(type) {
+    const rows = document.querySelectorAll('tbody tr');
+    rows.forEach(row => {
+        if (type === 'all') row.style.display = '';
+        else if (type === 'suspicious' && row.classList.contains('suspicious')) row.style.display = '';
+        else if (type === 'missing' && row.classList.contains('missing')) row.style.display = '';
+        else if (type === 'duplicate' && row.classList.contains('duplicate')) row.style.display = '';
+        else if (type === 'chatgpt' && row.getAttribute('data-source') === 'chatgpt') row.style.display = '';
+        else row.style.display = 'none';
+    });
+}
+</script>
+</head>
+<body>
+<h1>Auditoria de Imagens do Catálogo</h1>
+<div class="stats">
+<div class="stat"><div class="number">407</div><div class="label">Total de produtos</div></div>
+<div class="stat"><div class="number">407</div><div class="label">Entradas no manifesto</div></div>
+<div class="stat warning"><div class="number">2</div><div class="label">Suspeitas de imagem trocada</div></div>
+<div class="stat warning"><div class="number">0</div><div class="label">Arquivos faltando</div></div>
+<div class="stat warning"><div class="number">0</div><div class="label">Fora do manifesto</div></div>
+<div class="stat warning"><div class="number">0</div><div class="label">Grupos de duplicatas</div></div>
+</div><div class="filter">
+<button onclick="filterTable('all')">Todas</button>
+<button onclick="filterTable('suspicious')">Suspeitas</button>
+<button onclick="filterTable('missing')">Faltando arquivo</button>
+<button onclick="filterTable('duplicate')">Duplicatas</button>
+<button onclick="filterTable('chatgpt')">ChatGPT</button>
+</div>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Imagem</th>
+<th>Produto</th>
+<th>Categoria</th>
+<th>Fonte</th>
+<th>Origem / Similaridade</th>
+<th>Problema</th>
+</tr>
+</thead>
+<tbody>
+<tr class="" data-source="openverse">
+<td>h001</td>
+<td><img src="/images/catalog/products/hortifruti/banana-prata.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Banana Prata</td>
+<td>hortifruti<br><small>Frutas</small></td>
+<td><span class="badge badge-openverse">openverse</span></td>
+<td>Fresh Bananas and Lemons<br><span class="score-low">similaridade: 44%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>h002</td>
+<td><img src="/images/catalog/products/hortifruti/maca-gala.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Maca Gala</td>
+<td>hortifruti<br><small>Frutas</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 10%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="openverse">
+<td>h003</td>
+<td><img src="/images/catalog/products/hortifruti/tomate-de-mesa.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Tomate de Mesa</td>
+<td>hortifruti<br><small>Legumes</small></td>
+<td><span class="badge badge-openverse">openverse</span></td>
+<td>tomatoes squaredcircle<br><span class="score-low">similaridade: 48%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>h004</td>
+<td><img src="/images/catalog/products/hortifruti/alface-americana-1maco.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Alface Americana</td>
+<td>hortifruti<br><small>Verduras</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 30%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>h005</td>
+<td><img src="/images/catalog/products/hortifruti/cenoura.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Cenoura</td>
+<td>hortifruti<br><small>Legumes</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 42%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>h006</td>
+<td><img src="/images/catalog/products/hortifruti/laranja-pera.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Laranja Pera</td>
+<td>hortifruti<br><small>Frutas</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 35%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="openverse">
+<td>h007</td>
+<td><img src="/images/catalog/products/hortifruti/mamao-formosa.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Mamao Formosa</td>
+<td>hortifruti<br><small>Frutas</small></td>
+<td><span class="badge badge-openverse">openverse</span></td>
+<td>Fruits For Sale!<br><span class="score-low">similaridade: 40%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>h008</td>
+<td><img src="/images/catalog/products/hortifruti/uva-rubi.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Uva Rubi</td>
+<td>hortifruti<br><small>Frutas</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 11%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>h009</td>
+<td><img src="/images/catalog/products/hortifruti/morango-fresco-300g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Morango Fresco</td>
+<td>hortifruti<br><small>Frutas</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 24%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>h010</td>
+<td><img src="/images/catalog/products/hortifruti/abacaxi-perola-1unidade.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Abacaxi Perola</td>
+<td>hortifruti<br><small>Frutas</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 32%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="openverse">
+<td>h011</td>
+<td><img src="/images/catalog/products/hortifruti/manga-tommy.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Manga Tommy</td>
+<td>hortifruti<br><small>Frutas</small></td>
+<td><span class="badge badge-openverse">openverse</span></td>
+<td>mango & kiwi juice<br><span class="score-low">similaridade: 42%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>h012</td>
+<td><img src="/images/catalog/products/hortifruti/limao-taiti.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Limao Taiti</td>
+<td>hortifruti<br><small>Frutas</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 18%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>h013</td>
+<td><img src="/images/catalog/products/hortifruti/pera-williams.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Pera Williams</td>
+<td>hortifruti<br><small>Frutas</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 33%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>h014</td>
+<td><img src="/images/catalog/products/hortifruti/melancia.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Melancia</td>
+<td>hortifruti<br><small>Frutas</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 20%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="openverse">
+<td>h015</td>
+<td><img src="/images/catalog/products/hortifruti/batata-inglesa.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Batata Inglesa</td>
+<td>hortifruti<br><small>Legumes</small></td>
+<td><span class="badge badge-openverse">openverse</span></td>
+<td>Patsy and the Pasty.<br><span class="score-low">similaridade: 41%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>h016</td>
+<td><img src="/images/catalog/products/hortifruti/cebola.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Cebola</td>
+<td>hortifruti<br><small>Legumes</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 22%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>h017</td>
+<td><img src="/images/catalog/products/hortifruti/alho.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Alho</td>
+<td>hortifruti<br><small>Temperos</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 12%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>h018</td>
+<td><img src="/images/catalog/products/hortifruti/pimentao-verde.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Pimentao Verde</td>
+<td>hortifruti<br><small>Legumes</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 48%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>h019</td>
+<td><img src="/images/catalog/products/hortifruti/abobrinha.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Abobrinha</td>
+<td>hortifruti<br><small>Legumes</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 10%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>h020</td>
+<td><img src="/images/catalog/products/hortifruti/chuchu.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Chuchu</td>
+<td>hortifruti<br><small>Legumes</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 0%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>h021</td>
+<td><img src="/images/catalog/products/hortifruti/pepino.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Pepino</td>
+<td>hortifruti<br><small>Legumes</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 33%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>h022</td>
+<td><img src="/images/catalog/products/hortifruti/couve-1maco.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Couve</td>
+<td>hortifruti<br><small>Verduras</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 12%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>h023</td>
+<td><img src="/images/catalog/products/hortifruti/espinafre-1maco.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Espinafre</td>
+<td>hortifruti<br><small>Verduras</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 38%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>h024</td>
+<td><img src="/images/catalog/products/hortifruti/brocolis-300g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Brocolis</td>
+<td>hortifruti<br><small>Verduras</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 10%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>h025</td>
+<td><img src="/images/catalog/products/hortifruti/repolho-verde-1unidade.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Repolho Verde</td>
+<td>hortifruti<br><small>Verduras</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 33%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>h026</td>
+<td><img src="/images/catalog/products/hortifruti/cebolinha-1maco.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Cebolinha</td>
+<td>hortifruti<br><small>Temperos</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 29%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>h027</td>
+<td><img src="/images/catalog/products/hortifruti/salsinha-1maco.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Salsinha</td>
+<td>hortifruti<br><small>Temperos</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 10%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="openverse">
+<td>h028</td>
+<td><img src="/images/catalog/products/hortifruti/coentro-1maco.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Coentro</td>
+<td>hortifruti<br><small>Temperos</small></td>
+<td><span class="badge badge-openverse">openverse</span></td>
+<td>Coriander<br><span class="score-low">similaridade: 50%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="openverse">
+<td>h029</td>
+<td><img src="/images/catalog/products/hortifruti/gengibre.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Gengibre</td>
+<td>hortifruti<br><small>Temperos</small></td>
+<td><span class="badge badge-openverse">openverse</span></td>
+<td>Gingerbread<br><span class="score-low">similaridade: 53%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="openverse">
+<td>h030</td>
+<td><img src="/images/catalog/products/hortifruti/banana-organica.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Banana Organica</td>
+<td>hortifruti<br><small>Organicos</small></td>
+<td><span class="badge badge-openverse">openverse</span></td>
+<td>Banana - Isolated black<br><span class="score-low">similaridade: 55%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>h031</td>
+<td><img src="/images/catalog/products/hortifruti/tomate-organico.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Tomate Organico</td>
+<td>hortifruti<br><small>Organicos</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 31%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>h032</td>
+<td><img src="/images/catalog/products/hortifruti/maca-organica.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Maca Organica</td>
+<td>hortifruti<br><small>Organicos</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 8%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>h033</td>
+<td><img src="/images/catalog/products/hortifruti/ovos-brancos-12un.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Ovos Brancos 12un</td>
+<td>hortifruti<br><small>Ovos</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 15%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>h034</td>
+<td><img src="/images/catalog/products/hortifruti/ovos-caipira-12un.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Ovos Caipira 12un</td>
+<td>hortifruti<br><small>Ovos</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 22%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>h035</td>
+<td><img src="/images/catalog/products/hortifruti/ovos-brancos-18un.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Ovos Brancos 18un</td>
+<td>hortifruti<br><small>Ovos</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 15%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>a036</td>
+<td><img src="/images/catalog/products/acougue/picanha-bovina.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Picanha Bovina</td>
+<td>acougue<br><small>Bovinos</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 16%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>a037</td>
+<td><img src="/images/catalog/products/acougue/contrafile.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Contrafile</td>
+<td>acougue<br><small>Bovinos</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 36%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>a038</td>
+<td><img src="/images/catalog/products/acougue/maminha.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Maminha</td>
+<td>acougue<br><small>Bovinos</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 11%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>a039</td>
+<td><img src="/images/catalog/products/acougue/alcatra.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Alcatra</td>
+<td>acougue<br><small>Bovinos</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 21%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>a040</td>
+<td><img src="/images/catalog/products/acougue/acem.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Acem</td>
+<td>acougue<br><small>Bovinos</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 25%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>a041</td>
+<td><img src="/images/catalog/products/acougue/patinho.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Patinho</td>
+<td>acougue<br><small>Bovinos</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 32%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>a042</td>
+<td><img src="/images/catalog/products/acougue/cupim.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Cupim</td>
+<td>acougue<br><small>Bovinos</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 12%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>a043</td>
+<td><img src="/images/catalog/products/acougue/costela-bovina.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Costela Bovina</td>
+<td>acougue<br><small>Bovinos</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 16%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>a044</td>
+<td><img src="/images/catalog/products/acougue/linguica-toscana.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Linguica Toscana</td>
+<td>acougue<br><small>Linguicas</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 22%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>a045</td>
+<td><img src="/images/catalog/products/acougue/linguica-calabresa.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Linguica Calabresa</td>
+<td>acougue<br><small>Linguicas</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 21%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>a046</td>
+<td><img src="/images/catalog/products/acougue/barriga-suina.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Barriga Suina</td>
+<td>acougue<br><small>Suinos</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 8%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>a047</td>
+<td><img src="/images/catalog/products/acougue/lombo-suino.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Lombo Suino</td>
+<td>acougue<br><small>Suinos</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 9%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>a048</td>
+<td><img src="/images/catalog/products/acougue/costelinha-suina.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Costelinha Suina</td>
+<td>acougue<br><small>Suinos</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 15%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>a049</td>
+<td><img src="/images/catalog/products/acougue/frango-inteiro-caipira.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Frango Inteiro Caipira</td>
+<td>acougue<br><small>Frango</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 25%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>a050</td>
+<td><img src="/images/catalog/products/acougue/peito-de-frango.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Peito de Frango</td>
+<td>acougue<br><small>Frango</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 40%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>a051</td>
+<td><img src="/images/catalog/products/acougue/coxa-de-frango.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Coxa de Frango</td>
+<td>acougue<br><small>Frango</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 25%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>a052</td>
+<td><img src="/images/catalog/products/acougue/sobrecoxa-de-frango.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Sobrecoxa de Frango</td>
+<td>acougue<br><small>Frango</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 28%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>a053</td>
+<td><img src="/images/catalog/products/acougue/asa-de-frango.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Asa de Frango</td>
+<td>acougue<br><small>Frango</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 26%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>a054</td>
+<td><img src="/images/catalog/products/acougue/file-de-frango.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>File de Frango</td>
+<td>acougue<br><small>Frango</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 17%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>a055</td>
+<td><img src="/images/catalog/products/acougue/file-de-tilapia.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>File de Tilapia</td>
+<td>acougue<br><small>Peixes</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 16%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>a056</td>
+<td><img src="/images/catalog/products/acougue/file-de-salmao.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>File de Salmao</td>
+<td>acougue<br><small>Peixes</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 17%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>a057</td>
+<td><img src="/images/catalog/products/acougue/atum-fresco.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Atum Fresco</td>
+<td>acougue<br><small>Peixes</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 27%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>a058</td>
+<td><img src="/images/catalog/products/acougue/sardinha-fresca.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Sardinha Fresca</td>
+<td>acougue<br><small>Peixes</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 15%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>a059</td>
+<td><img src="/images/catalog/products/acougue/linguica-de-frango.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Linguica de Frango</td>
+<td>acougue<br><small>Linguicas</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 29%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>a060</td>
+<td><img src="/images/catalog/products/acougue/hamburguer-bovino-120g-4un480g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Hamburguer Bovino 120g</td>
+<td>acougue<br><small>Bovinos</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 19%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>a061</td>
+<td><img src="/images/catalog/products/acougue/carne-moida-bovina.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Carne Moida Bovina</td>
+<td>acougue<br><small>Bovinos</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 21%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>a062</td>
+<td><img src="/images/catalog/products/acougue/pernil-suino.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Pernil Suino</td>
+<td>acougue<br><small>Suinos</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 26%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>a063</td>
+<td><img src="/images/catalog/products/acougue/bacon-defumado.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Bacon Defumado</td>
+<td>acougue<br><small>Suinos</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 16%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>p064</td>
+<td><img src="/images/catalog/products/padaria/pao-frances.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Pao Frances</td>
+<td>padaria<br><small>Paes</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 36%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>p065</td>
+<td><img src="/images/catalog/products/padaria/pao-de-forma-integral-500g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Pao de Forma Integral</td>
+<td>padaria<br><small>Paes</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 27%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>p066</td>
+<td><img src="/images/catalog/products/padaria/pao-de-forma-branco-500g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Pao de Forma Branco</td>
+<td>padaria<br><small>Paes</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 29%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>p067</td>
+<td><img src="/images/catalog/products/padaria/bolo-de-chocolate-800g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Bolo de Chocolate</td>
+<td>padaria<br><small>Bolos</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 30%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="openverse">
+<td>p068</td>
+<td><img src="/images/catalog/products/padaria/croissant-de-manteiga-60g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Croissant de Manteiga</td>
+<td>padaria<br><small>Croissants</small></td>
+<td><span class="badge badge-openverse">openverse</span></td>
+<td>#117 Croissant<br><span class="score-low">similaridade: 58%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>p069</td>
+<td><img src="/images/catalog/products/padaria/pao-frances-6un.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Pao Frances 6un</td>
+<td>padaria<br><small>Paes</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 32%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>p070</td>
+<td><img src="/images/catalog/products/padaria/pao-de-queijo-500g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Pao de Queijo</td>
+<td>padaria<br><small>Paes</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 26%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>p071</td>
+<td><img src="/images/catalog/products/padaria/bolo-de-fuba-600g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Bolo de Fuba</td>
+<td>padaria<br><small>Bolos</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 9%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>p072</td>
+<td><img src="/images/catalog/products/padaria/torta-de-frango-1kg.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Torta de Frango</td>
+<td>padaria<br><small>Tortas</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 32%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>p073</td>
+<td><img src="/images/catalog/products/padaria/coxinha-6un-6un300g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Coxinha 6un</td>
+<td>padaria<br><small>Salgados</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 18%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>p074</td>
+<td><img src="/images/catalog/products/padaria/esfiha-aberta-6un-6un300g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Esfiha Aberta 6un</td>
+<td>padaria<br><small>Salgados</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 30%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>p075</td>
+<td><img src="/images/catalog/products/padaria/baguete-200g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Baguete</td>
+<td>padaria<br><small>Paes</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 32%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>p076</td>
+<td><img src="/images/catalog/products/padaria/pao-sourdough-400g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Pao Sourdough</td>
+<td>padaria<br><small>Paes</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 25%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="openverse">
+<td>p077</td>
+<td><img src="/images/catalog/products/padaria/croissant-de-chocolate-70g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Croissant de Chocolate</td>
+<td>padaria<br><small>Croissants</small></td>
+<td><span class="badge badge-openverse">openverse</span></td>
+<td>chocolate croissant top down shot<br><span class="score-low">similaridade: 53%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>p078</td>
+<td><img src="/images/catalog/products/padaria/bolo-de-cenoura-700g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Bolo de Cenoura</td>
+<td>padaria<br><small>Bolos</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 32%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="openverse">
+<td>p079</td>
+<td><img src="/images/catalog/products/padaria/pao-de-batata-100g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Pao de Batata</td>
+<td>padaria<br><small>Paes</small></td>
+<td><span class="badge badge-openverse">openverse</span></td>
+<td>Potato Bread<br><span class="score-low">similaridade: 55%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>p080</td>
+<td><img src="/images/catalog/products/padaria/rosca-doce-300g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Rosca Doce</td>
+<td>padaria<br><small>Paes</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 29%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>p081</td>
+<td><img src="/images/catalog/products/padaria/biscoito-polvilho-200g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Biscoito Polvilho</td>
+<td>padaria<br><small>Paes</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 7%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>p082</td>
+<td><img src="/images/catalog/products/padaria/torta-de-limao-1kg.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Torta de Limao</td>
+<td>padaria<br><small>Tortas</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 33%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>p083</td>
+<td><img src="/images/catalog/products/padaria/empada-4un-4un200g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Empada 4un</td>
+<td>padaria<br><small>Salgados</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 29%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>p084</td>
+<td><img src="/images/catalog/products/padaria/pao-integral-400g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Pao Integral</td>
+<td>padaria<br><small>Paes</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 35%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>p085</td>
+<td><img src="/images/catalog/products/padaria/muffin-de-chocolate-80g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Muffin de Chocolate</td>
+<td>padaria<br><small>Bolos</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 34%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>f086</td>
+<td><img src="/images/catalog/products/frios/queijo-mussarela-fatiado.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Queijo Mussarela Fatiado</td>
+<td>frios<br><small>Queijos</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Queijo Mussarela Tirol Fatiado 300g<br><span class="score-ok">similaridade: 83%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>f087</td>
+<td><img src="/images/catalog/products/frios/presunto-fatiado-200g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Presunto Fatiado</td>
+<td>frios<br><small>Presunto</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Presunto Sadia Fatiado 180g<br><span class="score-ok">similaridade: 77%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>f088</td>
+<td><img src="/images/catalog/products/frios/salame-italiano-150g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Salame Italiano</td>
+<td>frios<br><small>Salame</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>SALAME ITALIANO AURORA kg<br><span class="score-ok">similaridade: 100%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>f089</td>
+<td><img src="/images/catalog/products/frios/peito-de-peru-fatiado-200g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Peito de Peru Fatiado</td>
+<td>frios<br><small>Peito de Peru</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Peito de Peru Sadia Fatiado 200g<br><span class="score-ok">similaridade: 80%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>f090</td>
+<td><img src="/images/catalog/products/frios/mortadela-fatiada-200g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Mortadela Fatiada</td>
+<td>frios<br><small>Mortadela</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Mortadela Fatiada Seara quilo<br><span class="score-ok">similaridade: 100%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>f091</td>
+<td><img src="/images/catalog/products/frios/queijo-prato.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Queijo Prato</td>
+<td>frios<br><small>Queijos</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Queijo Prato Tirolez 500g<br><span class="score-ok">similaridade: 100%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>f092</td>
+<td><img src="/images/catalog/products/frios/queijo-parmesao.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Queijo Parmesao</td>
+<td>frios<br><small>Queijos</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 23%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>f093</td>
+<td><img src="/images/catalog/products/frios/queijo-gorgonzola.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Queijo Gorgonzola</td>
+<td>frios<br><small>Queijos</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>QUEIJO TIPO GORGONZOLA VIGOR<br><span class="score-ok">similaridade: 78%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>f094</td>
+<td><img src="/images/catalog/products/frios/queijo-coalho.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Queijo Coalho</td>
+<td>frios<br><small>Queijos</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Queijo Coalho Natville 2kg<br><span class="score-ok">similaridade: 100%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>f095</td>
+<td><img src="/images/catalog/products/frios/queijo-minas-frescal.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Queijo Minas Frescal</td>
+<td>frios<br><small>Queijos</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Creme de Queijo Tirolez Minas Frescal 150g<br><span class="score-ok">similaridade: 67%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>f096</td>
+<td><img src="/images/catalog/products/frios/presunto-cru-100g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Presunto Cru</td>
+<td>frios<br><small>Presunto</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Presunto Cru RAR Fatiado 80g<br><span class="score-ok">similaridade: 100%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>f097</td>
+<td><img src="/images/catalog/products/frios/salame-tipo-hamburgues-200g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Salame Tipo Hamburgues</td>
+<td>frios<br><small>Salame</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Salame Sadia Tipo Hamburguês peça<br><span class="score-ok">similaridade: 81%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>f098</td>
+<td><img src="/images/catalog/products/frios/blanquet-de-peru-200g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Blanquet de Peru</td>
+<td>frios<br><small>Peito de Peru</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Embutido Blanquet de Peru Sadia Preço por quilo na peça<br><span class="score-ok">similaridade: 100%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>f099</td>
+<td><img src="/images/catalog/products/frios/queijo-provolone.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Queijo Provolone</td>
+<td>frios<br><small>Queijos</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Queijo Provolone Tania 500g<br><span class="score-ok">similaridade: 100%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>f100</td>
+<td><img src="/images/catalog/products/frios/cream-cheese-150g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Cream Cheese</td>
+<td>frios<br><small>Queijos</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Cream Cheese Danubio 1kg<br><span class="score-ok">similaridade: 100%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>f101</td>
+<td><img src="/images/catalog/products/frios/presunto-defumado-200g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Presunto Defumado</td>
+<td>frios<br><small>Presunto</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Presunto Defumado Ceratti Fatiado 100g<br><span class="score-ok">similaridade: 100%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>f102</td>
+<td><img src="/images/catalog/products/frios/mortadela-defumada-200g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Mortadela Defumada</td>
+<td>frios<br><small>Mortadela</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Mortadela Defumada Boua 200g<br><span class="score-ok">similaridade: 100%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>f103</td>
+<td><img src="/images/catalog/products/frios/queijo-edam.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Queijo Edam</td>
+<td>frios<br><small>Queijos</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Queijo Edam Tirolez Aprox. 220g<br><span class="score-ok">similaridade: 100%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>f104</td>
+<td><img src="/images/catalog/products/frios/queijo-emmental.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Queijo Emmental</td>
+<td>frios<br><small>Queijos</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Queijo Emmental Nacional 400g<br><span class="score-ok">similaridade: 100%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>f105</td>
+<td><img src="/images/catalog/products/frios/pate-de-figado-150g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Pate de Figado</td>
+<td>frios<br><small>Pates</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 42%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>f106</td>
+<td><img src="/images/catalog/products/frios/pate-de-camarao-150g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Pate de Camarao</td>
+<td>frios<br><small>Pates</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 40%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>f107</td>
+<td><img src="/images/catalog/products/frios/azeitona-portuguesa-300g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Azeitona Portuguesa</td>
+<td>frios<br><small>Fatiados</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 13%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>l108</td>
+<td><img src="/images/catalog/products/laticinios/leite-integral-1l.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Leite Integral 1L</td>
+<td>laticinios<br><small>Leites</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 22%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>l109</td>
+<td><img src="/images/catalog/products/laticinios/iogurte-natural-170g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Iogurte Natural</td>
+<td>laticinios<br><small>Iogurtes</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Iogurte Vigor Natural 150g<br><span class="score-ok">similaridade: 76%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>l110</td>
+<td><img src="/images/catalog/products/laticinios/manteiga-com-sal-200g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Manteiga com Sal</td>
+<td>laticinios<br><small>Manteigas</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Manteiga Turvo Com Sal 200g<br><span class="score-ok">similaridade: 76%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>l111</td>
+<td><img src="/images/catalog/products/laticinios/leite-desnatado-1l.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Leite Desnatado 1L</td>
+<td>laticinios<br><small>Leites</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Leite Condensado Semi Desnatado Camponesa 395g Embaré<br><span class="score-low">similaridade: 45%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>l112</td>
+<td><img src="/images/catalog/products/laticinios/leite-sem-lactose-1l.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Leite Sem Lactose 1L</td>
+<td>laticinios<br><small>Leites</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Leite Fermentado Frutap Zero Lactose 170g<br><span class="score-low">similaridade: 57%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>l113</td>
+<td><img src="/images/catalog/products/laticinios/iogurte-grego-150g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Iogurte Grego</td>
+<td>laticinios<br><small>Iogurtes</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Iogurte Grego Vigor Pistache 90g<br><span class="score-ok">similaridade: 100%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>l114</td>
+<td><img src="/images/catalog/products/laticinios/iogurte-de-morango-170g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Iogurte de Morango</td>
+<td>laticinios<br><small>Iogurtes</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Chocolate Ritter Sport Iogurte De Morango 100g<br><span class="score-ok">similaridade: 100%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>l115</td>
+<td><img src="/images/catalog/products/laticinios/iogurte-liquido-1l.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Iogurte Liquido 1L</td>
+<td>laticinios<br><small>Iogurtes</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Iogurte Líquido Itambé Nolac Frutas Vermelhas 170g<br><span class="score-low">similaridade: 48%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>l116</td>
+<td><img src="/images/catalog/products/laticinios/requeijao-cremoso-200g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Requeijao Cremoso</td>
+<td>laticinios<br><small>Requeijao</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Requeijão Cremoso Scala 380g<br><span class="score-ok">similaridade: 75%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="openverse">
+<td>l117</td>
+<td><img src="/images/catalog/products/laticinios/creme-de-leite-200g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Creme de Leite</td>
+<td>laticinios<br><small>Creme de leite</small></td>
+<td><span class="badge badge-openverse">openverse</span></td>
+<td>Creme de aspargos com amêndoas torradas e creme de leite<br><span class="score-ok">similaridade: 100%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>l118</td>
+<td><img src="/images/catalog/products/laticinios/creme-de-leite-fresco-500ml.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Creme de Leite Fresco</td>
+<td>laticinios<br><small>Creme de leite</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 20%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>l119</td>
+<td><img src="/images/catalog/products/laticinios/leite-condensado-395g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Leite Condensado</td>
+<td>laticinios<br><small>Leites</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Pudim de Leite Condensado Swift 90g<br><span class="score-ok">similaridade: 100%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>l120</td>
+<td><img src="/images/catalog/products/laticinios/queijo-cottage-150g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Queijo Cottage</td>
+<td>laticinios<br><small>Queijos</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Queijo Cottage Quatá 400g<br><span class="score-ok">similaridade: 100%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>l121</td>
+<td><img src="/images/catalog/products/laticinios/leite-de-cabra-1l.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Leite de Cabra 1L</td>
+<td>laticinios<br><small>Leites</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 31%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>l122</td>
+<td><img src="/images/catalog/products/laticinios/manteiga-sem-sal-200g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Manteiga Sem Sal</td>
+<td>laticinios<br><small>Manteigas</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Manteiga Kunzler Sem sal 200g<br><span class="score-ok">similaridade: 72%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>l123</td>
+<td><img src="/images/catalog/products/laticinios/margarina-500g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Margarina</td>
+<td>laticinios<br><small>Manteigas</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Margarina Soya 15kg<br><span class="score-ok">similaridade: 100%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>l124</td>
+<td><img src="/images/catalog/products/laticinios/iogurte-com-granola-170g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Iogurte com Granola</td>
+<td>laticinios<br><small>Iogurtes</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Iogurte Vigor Mix Granola com Castanhas 140g<br><span class="score-low">similaridade: 58%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>l125</td>
+<td><img src="/images/catalog/products/laticinios/bebida-lactea-morango-200ml.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Bebida Lactea Morango</td>
+<td>laticinios<br><small>Bebidas lacteas</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Bebida Láctea Dinelly Morango 800g<br><span class="score-ok">similaridade: 75%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>l126</td>
+<td><img src="/images/catalog/products/laticinios/leite-integral-caixa-6un-6l.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Leite Integral Caixa 6un</td>
+<td>laticinios<br><small>Leites</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 18%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>l127</td>
+<td><img src="/images/catalog/products/laticinios/iogurte-grego-mel-150g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Iogurte Grego Mel</td>
+<td>laticinios<br><small>Iogurtes</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Iogurte Grego Batavo Mel 100g<br><span class="score-ok">similaridade: 75%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>l128</td>
+<td><img src="/images/catalog/products/laticinios/requeijao-trio-450g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Requeijao Trio</td>
+<td>laticinios<br><small>Requeijao</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Requeijão Roseli Cremoso 400g<br><span class="score-low">similaridade: 58%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>l129</td>
+<td><img src="/images/catalog/products/laticinios/creme-de-leite-caixinha-200g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Creme de Leite Caixinha</td>
+<td>laticinios<br><small>Creme de leite</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 19%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>l130</td>
+<td><img src="/images/catalog/products/laticinios/leite-em-po-400g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Leite em Po 400g</td>
+<td>laticinios<br><small>Leites</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 24%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>l131</td>
+<td><img src="/images/catalog/products/laticinios/doce-de-leite-laticinio-395g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Doce de Leite Laticinio</td>
+<td>laticinios<br><small>Creme de leite</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Donuts Swift Doce de leite 140g<br><span class="score-low">similaridade: 48%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>l132</td>
+<td><img src="/images/catalog/products/laticinios/queijo-ricota-300g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Queijo Ricota</td>
+<td>laticinios<br><small>Queijos</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Queijo Ricota Toya Fracionado quilo<br><span class="score-ok">similaridade: 100%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>l133</td>
+<td><img src="/images/catalog/products/laticinios/iogurte-proteina-150g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Iogurte Proteina</td>
+<td>laticinios<br><small>Iogurtes</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Iogurte Danone YoPro 23g Proteína Morango 250g<br><span class="score-low">similaridade: 52%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>l134</td>
+<td><img src="/images/catalog/products/laticinios/leite-fermentado-4un-4un80g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Leite Fermentado 4un</td>
+<td>laticinios<br><small>Bebidas lacteas</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Leite Fermentado Frutap 90g<br><span class="score-ok">similaridade: 76%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>l135</td>
+<td><img src="/images/catalog/products/laticinios/mussarela-bolinha-300g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Mussarela Bolinha</td>
+<td>laticinios<br><small>Queijos</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Queijo Mussarela Bolinha Scala 340g<br><span class="score-ok">similaridade: 100%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>b136</td>
+<td><img src="/images/catalog/products/bebidas/agua-mineral-500ml.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Agua Mineral 500ml</td>
+<td>bebidas<br><small>Agua</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Água Mineral Sem Gás Na Caixa Crystal 500ml<br><span class="score-ok">similaridade: 60%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>b137</td>
+<td><img src="/images/catalog/products/bebidas/agua-mineral-1-5l-15l.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Agua Mineral 1.5L</td>
+<td>bebidas<br><small>Agua</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 38%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>b138</td>
+<td><img src="/images/catalog/products/bebidas/agua-com-gas-500ml.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Agua com Gas 500ml</td>
+<td>bebidas<br><small>Agua</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Água Alcalina Ayla Com Gás 500ml<br><span class="score-ok">similaridade: 65%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>b139</td>
+<td><img src="/images/catalog/products/bebidas/agua-mineral-6un-6x500ml.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Agua Mineral 6un</td>
+<td>bebidas<br><small>Agua</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 38%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>b140</td>
+<td><img src="/images/catalog/products/bebidas/refrigerante-cola-2l.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Refrigerante Cola 2L</td>
+<td>bebidas<br><small>Refrigerantes</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Refrigerante Golé Cola 2L<br><span class="score-ok">similaridade: 92%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>b141</td>
+<td><img src="/images/catalog/products/bebidas/refrigerante-guarana-2l.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Refrigerante Guarana 2L</td>
+<td>bebidas<br><small>Refrigerantes</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Refrigerante Xereta Guaraná 2L<br><span class="score-ok">similaridade: 85%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>b142</td>
+<td><img src="/images/catalog/products/bebidas/refrigerante-laranja-2l.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Refrigerante Laranja 2L</td>
+<td>bebidas<br><small>Refrigerantes</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Refrigerante Bizu Laranja 2L<br><span class="score-ok">similaridade: 91%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>b143</td>
+<td><img src="/images/catalog/products/bebidas/refrigerante-cola-lata-350ml.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Refrigerante Cola Lata</td>
+<td>bebidas<br><small>Refrigerantes</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Refrigerante Fys Cola 350ml<br><span class="score-ok">similaridade: 77%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>b144</td>
+<td><img src="/images/catalog/products/bebidas/refrigerante-zero-cola-2l.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Refrigerante Zero Cola 2L</td>
+<td>bebidas<br><small>Refrigerantes</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Refrigerante Dore Zero Cola 2L<br><span class="score-ok">similaridade: 92%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>b145</td>
+<td><img src="/images/catalog/products/bebidas/refrigerante-guarana-6un-6x350ml.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Refrigerante Guarana 6un</td>
+<td>bebidas<br><small>Refrigerantes</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Refrigerante Fruki Guaraná 269ml<br><span class="score-ok">similaridade: 76%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>b146</td>
+<td><img src="/images/catalog/products/bebidas/suco-de-uva-integral-1l.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Suco de Uva Integral 1L</td>
+<td>bebidas<br><small>Sucos</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Suco de Uva Yummy Integral 1L<br><span class="score-ok">similaridade: 88%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>b147</td>
+<td><img src="/images/catalog/products/bebidas/suco-de-laranja-1l.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Suco de Laranja 1L</td>
+<td>bebidas<br><small>Sucos</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Suco de Laranja OQ Integral 1L<br><span class="score-ok">similaridade: 75%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="openverse">
+<td>b148</td>
+<td><img src="/images/catalog/products/bebidas/suco-de-manga-1l.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Suco de Manga 1L</td>
+<td>bebidas<br><small>Sucos</small></td>
+<td><span class="badge badge-openverse">openverse</span></td>
+<td>orange & mango juice<br><span class="score-low">similaridade: 41%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>b149</td>
+<td><img src="/images/catalog/products/bebidas/nectar-de-pessego-1l.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Nectar de Pessego 1L</td>
+<td>bebidas<br><small>Sucos</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Suco Néctar Del Valle Pêssego 1L<br><span class="score-ok">similaridade: 71%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>b150</td>
+<td><img src="/images/catalog/products/bebidas/suco-integral-caixa-6un-6x200ml.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Suco Integral Caixa 6un</td>
+<td>bebidas<br><small>Sucos</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Suco De Uva Integral Juq 200ml Caixa C/24 Un<br><span class="score-ok">similaridade: 69%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>b151</td>
+<td><img src="/images/catalog/products/bebidas/suco-de-maca-1l.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Suco de Maca 1L</td>
+<td>bebidas<br><small>Sucos</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 8%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>b152</td>
+<td><img src="/images/catalog/products/bebidas/cha-gelado-limao-1-5l-15l.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Cha Gelado Limao 1.5L</td>
+<td>bebidas<br><small>Chas</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Mix De Chá Gelado Lipton Sem Açúcar, Limão Preto, Pacote De 56 Qt<br><span class="score-low">similaridade: 44%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>b153</td>
+<td><img src="/images/catalog/products/bebidas/cha-gelado-pessego-1-5l-15l.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Cha Gelado Pessego 1.5L</td>
+<td>bebidas<br><small>Chas</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Cha gelado de pessego - 500 ml<br><span class="score-ok">similaridade: 86%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>b154</td>
+<td><img src="/images/catalog/products/bebidas/cha-verde-1-5l-15l.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Cha Verde 1.5L</td>
+<td>bebidas<br><small>Chas</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Chá Verde Feel Good 1L<br><span class="score-ok">similaridade: 64%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>b155</td>
+<td><img src="/images/catalog/products/bebidas/energetico-350ml.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Energetico 350ml</td>
+<td>bebidas<br><small>Energeticos</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 37%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>b156</td>
+<td><img src="/images/catalog/products/bebidas/energetico-2l.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Energetico 2L</td>
+<td>bebidas<br><small>Energeticos</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Energético 3D 2L<br><span class="score-ok">similaridade: 88%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>b157</td>
+<td><img src="/images/catalog/products/bebidas/energetico-zero-350ml.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Energetico Zero 350ml</td>
+<td>bebidas<br><small>Energeticos</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 32%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>b158</td>
+<td><img src="/images/catalog/products/bebidas/isotonico-500ml.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Isotonico 500ml</td>
+<td>bebidas<br><small>Isotonicos</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Isotônico TNT Uva 500ml<br><span class="score-ok">similaridade: 79%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>b159</td>
+<td><img src="/images/catalog/products/bebidas/isotonico-1-5l-15l.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Isotonico 1.5L</td>
+<td>bebidas<br><small>Isotonicos</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 17%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>b160</td>
+<td><img src="/images/catalog/products/bebidas/isotonico-4un-4x400ml.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Isotonico 4un</td>
+<td>bebidas<br><small>Isotonicos</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Isotônico Jungle Uva 500ml<br><span class="score-low">similaridade: 59%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>b161</td>
+<td><img src="/images/catalog/products/bebidas/leite-de-amendoas-1l.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Leite de Amendoas 1L</td>
+<td>bebidas<br><small>Bebidas vegetais</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 28%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>b162</td>
+<td><img src="/images/catalog/products/bebidas/leite-de-coco-1l.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Leite de Coco 1L</td>
+<td>bebidas<br><small>Bebidas vegetais</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 32%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>b163</td>
+<td><img src="/images/catalog/products/bebidas/leite-de-soja-1l.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Leite de Soja 1L</td>
+<td>bebidas<br><small>Bebidas vegetais</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Alimento Purity À Base de Soja Original 1L<br><span class="score-low">similaridade: 55%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>b164</td>
+<td><img src="/images/catalog/products/bebidas/leite-de-aveia-1l.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Leite de Aveia 1L</td>
+<td>bebidas<br><small>Bebidas vegetais</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 31%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>b165</td>
+<td><img src="/images/catalog/products/bebidas/cafe-gelado-300ml.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Cafe Gelado 300ml</td>
+<td>bebidas<br><small>Cafe pronto</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 30%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>b166</td>
+<td><img src="/images/catalog/products/bebidas/cafe-pronto-1l.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Cafe Pronto 1L</td>
+<td>bebidas<br><small>Cafe pronto</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Suco Pronto Subello Uva 1L<br><span class="score-low">similaridade: 53%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>b167</td>
+<td><img src="/images/catalog/products/bebidas/refrigerante-cola-6un-2l-6x2l.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Refrigerante Cola 6un 2L</td>
+<td>bebidas<br><small>Refrigerantes</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Refrigerante It! Cola 2L<br><span class="score-ok">similaridade: 88%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>b168</td>
+<td><img src="/images/catalog/products/bebidas/refrigerante-guarana-zero-2l.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Refrigerante Guarana Zero 2L</td>
+<td>bebidas<br><small>Refrigerantes</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Refrigerante It! Guaraná Zero 2L<br><span class="score-ok">similaridade: 94%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>b169</td>
+<td><img src="/images/catalog/products/bebidas/refrigerante-tonica-350ml.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Refrigerante Tonica 350ml</td>
+<td>bebidas<br><small>Refrigerantes</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Refrigerante Schweppes Tônica 350ml<br><span class="score-ok">similaridade: 81%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>b170</td>
+<td><img src="/images/catalog/products/bebidas/suco-de-maracuja-1l.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Suco de Maracuja 1L</td>
+<td>bebidas<br><small>Sucos</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Suco Orgânico De Maracujá Native 1l<br><span class="score-ok">similaridade: 73%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>b171</td>
+<td><img src="/images/catalog/products/bebidas/suco-de-acerola-1l.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Suco de Acerola 1L</td>
+<td>bebidas<br><small>Sucos</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 30%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>b172</td>
+<td><img src="/images/catalog/products/bebidas/suco-detox-300ml.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Suco Detox 300ml</td>
+<td>bebidas<br><small>Sucos</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Suco Pet com 300ml<br><span class="score-ok">similaridade: 83%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>b173</td>
+<td><img src="/images/catalog/products/bebidas/suco-de-uva-1-5l-15l.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Suco de Uva 1.5L</td>
+<td>bebidas<br><small>Sucos</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Suco Integral De Uva Branco Aurora 1.5l<br><span class="score-low">similaridade: 55%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>b174</td>
+<td><img src="/images/catalog/products/bebidas/agua-mineral-5l.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Agua Mineral 5L</td>
+<td>bebidas<br><small>Agua</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Água Mineral Polar 5L<br><span class="score-ok">similaridade: 80%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>b175</td>
+<td><img src="/images/catalog/products/bebidas/agua-com-gas-1l.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Agua com Gas 1L</td>
+<td>bebidas<br><small>Agua</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Água Mineral Bulnez Com Gás 510ml<br><span class="score-low">similaridade: 53%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>b176</td>
+<td><img src="/images/catalog/products/bebidas/cha-gelado-mate-2l.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Cha Gelado Mate 2L</td>
+<td>bebidas<br><small>Chas</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Chá Rei do Mate Limão 1,5L<br><span class="score-ok">similaridade: 61%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>b177</td>
+<td><img src="/images/catalog/products/bebidas/cha-gelado-frutas-vermelhas-1-5l-15l.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Cha Gelado Frutas Vermelhas 1.5L</td>
+<td>bebidas<br><small>Chas</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Chá Verde Yaí Frutas vermelhas 1L<br><span class="score-ok">similaridade: 75%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>b178</td>
+<td><img src="/images/catalog/products/bebidas/energetico-473ml.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Energetico 473ml</td>
+<td>bebidas<br><small>Energeticos</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Energético Baly Tadala 473ml<br><span class="score-ok">similaridade: 72%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>b179</td>
+<td><img src="/images/catalog/products/bebidas/isotonico-laranja-500ml.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Isotonico Laranja 500ml</td>
+<td>bebidas<br><small>Isotonicos</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Isotônico TNT Laranja 500ml<br><span class="score-ok">similaridade: 91%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>b180</td>
+<td><img src="/images/catalog/products/bebidas/leite-de-castanha-1l.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Leite de Castanha 1L</td>
+<td>bebidas<br><small>Bebidas vegetais</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Bebida de Castanha Cajueiro Água e Só 1L<br><span class="score-low">similaridade: 58%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>b181</td>
+<td><img src="/images/catalog/products/bebidas/cafe-gelado-6un-6x300ml.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Cafe Gelado 6un</td>
+<td>bebidas<br><small>Cafe pronto</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 32%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>m182</td>
+<td><img src="/images/catalog/products/mercearia/arroz-branco-tipo-1-5kg.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Arroz Branco Tipo 1 5kg</td>
+<td>mercearia<br><small>Arroz</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Arroz Branco Camil Tipo 1 5kg<br><span class="score-ok">similaridade: 88%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>m183</td>
+<td><img src="/images/catalog/products/mercearia/feijao-carioca-1kg.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Feijao Carioca 1kg</td>
+<td>mercearia<br><small>Feijao</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Feijão Carioca Zaeli 1kg<br><span class="score-ok">similaridade: 83%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>m184</td>
+<td><img src="/images/catalog/products/mercearia/macarrao-espaguete-500g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Macarrao Espaguete 500g</td>
+<td>mercearia<br><small>Massas</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Macarrão com Ovos Camil Espaguete 500g<br><span class="score-ok">similaridade: 75%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>m185</td>
+<td><img src="/images/catalog/products/mercearia/oleo-de-soja-900ml.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Oleo de Soja 900ml</td>
+<td>mercearia<br><small>Oleos</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Óleo de Soja ABC 900ml<br><span class="score-ok">similaridade: 88%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>m186</td>
+<td><img src="/images/catalog/products/mercearia/cafe-torrado-500g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Cafe Torrado 500g</td>
+<td>mercearia<br><small>Cafe</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Café Torrado em Grão Melitta Spresso 500g<br><span class="score-low">similaridade: 58%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>m187</td>
+<td><img src="/images/catalog/products/mercearia/acucar-refinado-1kg.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Acucar Refinado 1kg</td>
+<td>mercearia<br><small>Acucar</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Açúcar Rei Refinado 1kg<br><span class="score-ok">similaridade: 86%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>m188</td>
+<td><img src="/images/catalog/products/mercearia/biscoito-recheado-150g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Biscoito Recheado 150g</td>
+<td>mercearia<br><small>Biscoitos</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 25%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>m189</td>
+<td><img src="/images/catalog/products/mercearia/arroz-parboilizado-5kg.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Arroz Parboilizado 5kg</td>
+<td>mercearia<br><small>Arroz</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Arroz Safra Parboilizado 5kg<br><span class="score-ok">similaridade: 89%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>m190</td>
+<td><img src="/images/catalog/products/mercearia/arroz-integral-1kg.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Arroz Integral 1kg</td>
+<td>mercearia<br><small>Arroz</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Arroz Camil Integral 1kg<br><span class="score-ok">similaridade: 86%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>m191</td>
+<td><img src="/images/catalog/products/mercearia/feijao-preto-1kg.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Feijao Preto 1kg</td>
+<td>mercearia<br><small>Feijao</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Feijão Preto Nico Tipo 1 1kg<br><span class="score-ok">similaridade: 72%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>m192</td>
+<td><img src="/images/catalog/products/mercearia/feijao-carioca-5kg.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Feijao Carioca 5kg</td>
+<td>mercearia<br><small>Feijao</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Feijão Carioca 500g<br><span class="score-ok">similaridade: 88%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>m193</td>
+<td><img src="/images/catalog/products/mercearia/macarrao-penne-500g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Macarrao Penne 500g</td>
+<td>mercearia<br><small>Massas</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Macarrão com Ovos Camil Penne 500g<br><span class="score-ok">similaridade: 71%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>m194</td>
+<td><img src="/images/catalog/products/mercearia/macarrao-integral-500g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Macarrao Integral 500g</td>
+<td>mercearia<br><small>Massas</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Macarrão Penne Integral Paganini 500g<br><span class="score-ok">similaridade: 73%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>m195</td>
+<td><img src="/images/catalog/products/mercearia/macarrao-parafuso-500g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Macarrao Parafuso 500g</td>
+<td>mercearia<br><small>Massas</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Macarrão com Ovos Camil Parafuso 500g<br><span class="score-ok">similaridade: 75%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>m196</td>
+<td><img src="/images/catalog/products/mercearia/oleo-de-girassol-900ml.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Oleo de Girassol 900ml</td>
+<td>mercearia<br><small>Oleos</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Óleo de Girassol Soya 900ml<br><span class="score-ok">similaridade: 88%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>m197</td>
+<td><img src="/images/catalog/products/mercearia/azeite-de-oliva-500ml.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Azeite de Oliva 500ml</td>
+<td>mercearia<br><small>Oleos</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Azeite de Oliva Gallo 500ml<br><span class="score-ok">similaridade: 88%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>m198</td>
+<td><img src="/images/catalog/products/mercearia/azeite-extra-virgem-750ml.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Azeite Extra Virgem 750ml</td>
+<td>mercearia<br><small>Oleos</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Azeite de Oliva Terras de Camões Extra Virgem 750ml<br><span class="score-ok">similaridade: 69%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>m199</td>
+<td><img src="/images/catalog/products/mercearia/cafe-moido-1kg.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Cafe Moido 1kg</td>
+<td>mercearia<br><small>Cafe</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Café Cimo Cappuccino 1kg<br><span class="score-ok">similaridade: 62%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>m200</td>
+<td><img src="/images/catalog/products/mercearia/cafe-premium-250g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Cafe Premium 250g</td>
+<td>mercearia<br><small>Cafe</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Café Ouro Verde Premium 250g<br><span class="score-ok">similaridade: 79%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>m201</td>
+<td><img src="/images/catalog/products/mercearia/cafe-solivel-100g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Cafe Solivel 100g</td>
+<td>mercearia<br><small>Cafe</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Café Pelé Solúvel 100g<br><span class="score-ok">similaridade: 90%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>m202</td>
+<td><img src="/images/catalog/products/mercearia/acucar-cristal-1kg.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Acucar Cristal 1kg</td>
+<td>mercearia<br><small>Acucar</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Açúcar Cristal 1kg<br><span class="score-ok">similaridade: 93%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>m203</td>
+<td><img src="/images/catalog/products/mercearia/acucar-demerara-1kg.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Acucar Demerara 1kg</td>
+<td>mercearia<br><small>Acucar</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Açúcar Vida Demerara 1kg<br><span class="score-ok">similaridade: 83%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>m204</td>
+<td><img src="/images/catalog/products/mercearia/farinha-de-trigo-1kg.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Farinha de Trigo 1kg</td>
+<td>mercearia<br><small>Farinha</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Farinha de Trigo Zaire 1kg<br><span class="score-ok">similaridade: 87%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>m205</td>
+<td><img src="/images/catalog/products/mercearia/farinha-de-trigo-5kg.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Farinha de Trigo 5kg</td>
+<td>mercearia<br><small>Farinha</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Farinha de Trigo Mona 5kg<br><span class="score-ok">similaridade: 89%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>m206</td>
+<td><img src="/images/catalog/products/mercearia/fuba-de-milho-1kg.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Fuba de Milho 1kg</td>
+<td>mercearia<br><small>Farinha</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Fubá de Milho Campo Largo Branco 1kg<br><span class="score-ok">similaridade: 60%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>m207</td>
+<td><img src="/images/catalog/products/mercearia/polvilho-doce-500g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Polvilho Doce 500g</td>
+<td>mercearia<br><small>Farinha</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Polvilho Doce Yoki 500g<br><span class="score-ok">similaridade: 89%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>m208</td>
+<td><img src="/images/catalog/products/mercearia/sal-refinado-1kg.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Sal Refinado 1kg</td>
+<td>mercearia<br><small>Temperos</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Sal Lebre Refinado 1kg<br><span class="score-ok">similaridade: 85%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>m209</td>
+<td><img src="/images/catalog/products/mercearia/sal-grosso-1kg.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Sal Grosso 1kg</td>
+<td>mercearia<br><small>Temperos</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Sal Grosso Com Alho 1kg Alta Qualidade<br><span class="score-low">similaridade: 55%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>m210</td>
+<td><img src="/images/catalog/products/mercearia/pimenta-do-reino-50g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Pimenta do Reino 50g</td>
+<td>mercearia<br><small>Temperos</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Pimenta do Reino Quero 50g<br><span class="score-ok">similaridade: 87%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>m211</td>
+<td><img src="/images/catalog/products/mercearia/tempero-pronto-100g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Tempero Pronto 100g</td>
+<td>mercearia<br><small>Temperos</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Tempero Ajinomoto 100g<br><span class="score-ok">similaridade: 76%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>m212</td>
+<td><img src="/images/catalog/products/mercearia/molho-de-tomate-340g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Molho de Tomate 340g</td>
+<td>mercearia<br><small>Molhos</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Molho de Tomate Primor 340g<br><span class="score-ok">similaridade: 85%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>m213</td>
+<td><img src="/images/catalog/products/mercearia/extrato-de-tomate-140g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Extrato de Tomate 140g</td>
+<td>mercearia<br><small>Molhos</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 32%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>m214</td>
+<td><img src="/images/catalog/products/mercearia/ketchup-350g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Ketchup 350g</td>
+<td>mercearia<br><small>Molhos</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Ketchup Elefante Squeeze 350g<br><span class="score-low">similaridade: 59%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>m215</td>
+<td><img src="/images/catalog/products/mercearia/maionese-200g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Maionese 200g</td>
+<td>mercearia<br><small>Molhos</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Maionese Soya 200g<br><span class="score-ok">similaridade: 86%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>m216</td>
+<td><img src="/images/catalog/products/mercearia/mostarda-200g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Mostarda 200g</td>
+<td>mercearia<br><small>Molhos</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Mostarda Em Grão 200g<br><span class="score-ok">similaridade: 83%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>m217</td>
+<td><img src="/images/catalog/products/mercearia/cereal-matinal-300g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Cereal Matinal 300g</td>
+<td>mercearia<br><small>Matinais</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Cereal Matinal Moça Flakes Nestlé 230g<br><span class="score-ok">similaridade: 67%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>m218</td>
+<td><img src="/images/catalog/products/mercearia/granola-300g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Granola 300g</td>
+<td>mercearia<br><small>Matinais</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Granola Australia Keto Hart's 300g<br><span class="score-low">similaridade: 55%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>m219</td>
+<td><img src="/images/catalog/products/mercearia/aveia-em-flocos-300g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Aveia em Flocos 300g</td>
+<td>mercearia<br><small>Matinais</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 14%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>m220</td>
+<td><img src="/images/catalog/products/mercearia/cereal-bar-6un-6x25g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Cereal Bar 6un</td>
+<td>mercearia<br><small>Matinais</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 25%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>m221</td>
+<td><img src="/images/catalog/products/mercearia/biscoito-cream-cracker-200g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Biscoito Cream Cracker 200g</td>
+<td>mercearia<br><small>Biscoitos</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 28%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>m222</td>
+<td><img src="/images/catalog/products/mercearia/biscoito-agua-e-sal-200g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Biscoito Agua e Sal 200g</td>
+<td>mercearia<br><small>Biscoitos</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Coração De Alcachofra Com Água E Sal La Pastina 280g<br><span class="score-low">similaridade: 47%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>m223</td>
+<td><img src="/images/catalog/products/mercearia/biscoito-de-polvilho-200g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Biscoito de Polvilho 200g</td>
+<td>mercearia<br><small>Biscoitos</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 12%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>m224</td>
+<td><img src="/images/catalog/products/mercearia/bolacha-recheada-130g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Bolacha Recheada 130g</td>
+<td>mercearia<br><small>Biscoitos</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 19%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>m225</td>
+<td><img src="/images/catalog/products/mercearia/wafer-150g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Wafer 150g</td>
+<td>mercearia<br><small>Biscoitos</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Torrone Wafer 150g - Guimarães<br><span class="score-ok">similaridade: 100%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>m226</td>
+<td><img src="/images/catalog/products/mercearia/chocolate-ao-leite-90g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Chocolate ao Leite 90g</td>
+<td>mercearia<br><small>Doces</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Chocolate Milka Ao Leite 90g<br><span class="score-ok">similaridade: 88%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>m227</td>
+<td><img src="/images/catalog/products/mercearia/chocolate-meio-amargo-100g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Chocolate Meio Amargo 100g</td>
+<td>mercearia<br><small>Doces</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Chocolate Garoto Meio Amargo 100g<br><span class="score-ok">similaridade: 88%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>m228</td>
+<td><img src="/images/catalog/products/mercearia/doce-de-leite-400g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Doce de Leite 400g</td>
+<td>mercearia<br><small>Doces</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Doce de Leite Aviação 400g<br><span class="score-ok">similaridade: 86%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>m229</td>
+<td><img src="/images/catalog/products/mercearia/geleia-de-morango-350g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Geleia de Morango 350g</td>
+<td>mercearia<br><small>Doces</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Geleia De Morango Linea Zero Açúcar 230g<br><span class="score-ok">similaridade: 71%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>m230</td>
+<td><img src="/images/catalog/products/mercearia/mel-400g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Mel 400g</td>
+<td>mercearia<br><small>Doces</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Molho Cepêra Mostarda com Mel 400g<br><span class="score-ok">similaridade: 100%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>m231</td>
+<td><img src="/images/catalog/products/mercearia/pipoca-de-microondas-100g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Pipoca de Microondas 100g</td>
+<td>mercearia<br><small>Snacks</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Milho para Pipoca de Micro-ondas Pachá Natural 100g<br><span class="score-ok">similaridade: 69%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>m232</td>
+<td><img src="/images/catalog/products/mercearia/batata-frita-100g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Batata Frita 100g</td>
+<td>mercearia<br><small>Snacks</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Tempero Heinz Batata Frita 70g<br><span class="score-ok">similaridade: 63%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>m233</td>
+<td><img src="/images/catalog/products/mercearia/amendoim-torrado-200g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Amendoim Torrado 200g</td>
+<td>mercearia<br><small>Snacks</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Amendoim Torrado E Salgado Saddi 200g<br><span class="score-ok">similaridade: 75%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>m234</td>
+<td><img src="/images/catalog/products/mercearia/castanha-de-caju-100g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Castanha de Caju 100g</td>
+<td>mercearia<br><small>Snacks</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Farinha De Castanha De Caju Nutrisanti 100g<br><span class="score-ok">similaridade: 65%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>m235</td>
+<td><img src="/images/catalog/products/mercearia/milho-verde-em-lata-120g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Milho Verde em Lata 120g</td>
+<td>mercearia<br><small>Conservas</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Milho Verde Bulnez Lata com 170g<br><span class="score-ok">similaridade: 77%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>m236</td>
+<td><img src="/images/catalog/products/mercearia/ervilha-em-lata-120g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Ervilha em Lata 120g</td>
+<td>mercearia<br><small>Conservas</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Ervilha Quero Lata 170g<br><span class="score-ok">similaridade: 81%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>m237</td>
+<td><img src="/images/catalog/products/mercearia/sardinha-em-lata-125g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Sardinha em Lata 125g</td>
+<td>mercearia<br><small>Enlatados</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Sardinha Com Óleo Coqueiro Lata 125g<br><span class="score-ok">similaridade: 71%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>m238</td>
+<td><img src="/images/catalog/products/mercearia/atum-em-lata-120g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Atum em Lata 120g</td>
+<td>mercearia<br><small>Enlatados</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Atum Sólido Gomes Da Costa Lata 120g<br><span class="score-ok">similaridade: 60%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>m239</td>
+<td><img src="/images/catalog/products/mercearia/seleta-de-legumes-300g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Seleta de Legumes 300g</td>
+<td>mercearia<br><small>Conservas</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Seleta de Legumes Dez+ 200g<br><span class="score-ok">similaridade: 88%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>m240</td>
+<td><img src="/images/catalog/products/mercearia/palmito-em-lata-300g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Palmito em Lata 300g</td>
+<td>mercearia<br><small>Conservas</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Ameixa em Calda Olé 300g<br><span class="score-low">similaridade: 44%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>m241</td>
+<td><img src="/images/catalog/products/mercearia/azeitona-verde-300g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Azeitona Verde 300g</td>
+<td>mercearia<br><small>Conservas</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Azeitona Verde Bahh 300g<br><span class="score-ok">similaridade: 89%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>m242</td>
+<td><img src="/images/catalog/products/mercearia/lentilha-500g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Lentilha 500g</td>
+<td>mercearia<br><small>Cereais</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Lentilha 500g<br><span class="score-ok">similaridade: 100%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>m243</td>
+<td><img src="/images/catalog/products/mercearia/grao-de-bico-500g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Grao de Bico 500g</td>
+<td>mercearia<br><small>Cereais</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Grão de Bico Mika 500g<br><span class="score-ok">similaridade: 84%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>m244</td>
+<td><img src="/images/catalog/products/mercearia/linhaca-250g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Linhaca 250g</td>
+<td>mercearia<br><small>Cereais</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Linhaça Escura 250g<br><span class="score-ok">similaridade: 81%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>m245</td>
+<td><img src="/images/catalog/products/mercearia/chia-250g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Chia 250g</td>
+<td>mercearia<br><small>Cereais</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Farinha De Chia 250g<br><span class="score-ok">similaridade: 100%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>m246</td>
+<td><img src="/images/catalog/products/mercearia/cuscuz-500g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Cuscuz 500g</td>
+<td>mercearia<br><small>Cereais</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Cuscuz Sinhá Tradicional 500g<br><span class="score-low">similaridade: 57%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>m247</td>
+<td><img src="/images/catalog/products/mercearia/coco-ralado-100g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Coco Ralado 100g</td>
+<td>mercearia<br><small>Doces</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Coco Ralado Bahia 100g<br><span class="score-ok">similaridade: 85%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>m248</td>
+<td><img src="/images/catalog/products/mercearia/gelatina-50g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Gelatina 50g</td>
+<td>mercearia<br><small>Doces</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Bala de Gelatina Haribo Beijos 50g<br><span class="score-low">similaridade: 55%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>m249</td>
+<td><img src="/images/catalog/products/mercearia/pudim-70g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Pudim 70g</td>
+<td>mercearia<br><small>Doces</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Pudim Apti Coco 50g<br><span class="score-low">similaridade: 58%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>m250</td>
+<td><img src="/images/catalog/products/mercearia/achocolatado-400g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Achocolatado 400g</td>
+<td>mercearia<br><small>Matinais</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Achocolatado Chocoteen Apti 400g<br><span class="score-ok">similaridade: 71%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>m251</td>
+<td><img src="/images/catalog/products/mercearia/margarina-mercearia-500g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Margarina Mercearia 500g</td>
+<td>mercearia<br><small>Matinais</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Mercearia Hathi Masala Achar Pickle Masala 500g Natural Sem Ogm<br><span class="score-low">similaridade: 34%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>m252</td>
+<td><img src="/images/catalog/products/mercearia/macarrao-lasanha-500g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Macarrao Lasanha 500g</td>
+<td>mercearia<br><small>Massas</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Macarrão La Molisana Spaguetti 500g<br><span class="score-ok">similaridade: 69%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>m253</td>
+<td><img src="/images/catalog/products/mercearia/macarrao-talharim-500g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Macarrao Talharim 500g</td>
+<td>mercearia<br><small>Massas</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Macarrão de Sêmola Adria Caseiro Talharim 400g<br><span class="score-ok">similaridade: 66%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>c254</td>
+<td><img src="/images/catalog/products/congelados/pizza-margherita-400g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Pizza Margherita 400g</td>
+<td>congelados<br><small>Pizzas</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Pizza Gourmet Seara Margherita 450g<br><span class="score-ok">similaridade: 72%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>c255</td>
+<td><img src="/images/catalog/products/congelados/hamburguer-angus-400g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Hamburguer Angus 400g</td>
+<td>congelados<br><small>Hamburgueres</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 26%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>c256</td>
+<td><img src="/images/catalog/products/congelados/sorvete-de-chocolate-1l.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Sorvete de Chocolate 1L</td>
+<td>congelados<br><small>Sorvetes</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Sorvete Maioca Chocolate 1L<br><span class="score-ok">similaridade: 82%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>c257</td>
+<td><img src="/images/catalog/products/congelados/pizza-calabresa-400g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Pizza Calabresa 400g</td>
+<td>congelados<br><small>Pizzas</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Pizza Beni Calabresa 400g<br><span class="score-ok">similaridade: 90%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>c258</td>
+<td><img src="/images/catalog/products/congelados/pizza-quatro-queijos-400g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Pizza Quatro Queijos 400g</td>
+<td>congelados<br><small>Pizzas</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Requeijão Canto de Minas Quatro queijos 400g<br><span class="score-ok">similaridade: 64%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>c259</td>
+<td><img src="/images/catalog/products/congelados/lasanha-bolonhesa-1kg.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Lasanha Bolonhesa 1kg</td>
+<td>congelados<br><small>Lasanhas</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Lasanha Perdigão Bolonhesa 1kg<br><span class="score-ok">similaridade: 84%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>c260</td>
+<td><img src="/images/catalog/products/congelados/lasanha-de-frango-1kg.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Lasanha de Frango 1kg</td>
+<td>congelados<br><small>Lasanhas</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Lasanha de Frango OrganicMix 350g<br><span class="score-ok">similaridade: 68%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>c261</td>
+<td><img src="/images/catalog/products/congelados/batata-frita-congelada-1kg.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Batata Frita Congelada 1kg</td>
+<td>congelados<br><small>Batatas</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Batata Pré Frita McCain Congelada Smile 1,050kg<br><span class="score-ok">similaridade: 74%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>c262</td>
+<td><img src="/images/catalog/products/congelados/batata-rustica-1kg.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Batata Rustica 1kg</td>
+<td>congelados<br><small>Batatas</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Batata Rústica Copacol Congelada 1,1kg<br><span class="score-ok">similaridade: 62%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>c263</td>
+<td><img src="/images/catalog/products/congelados/nuggets-de-frango-500g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Nuggets de Frango 500g</td>
+<td>congelados<br><small>Nuggets</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Nuggets de Frango Sadia Queijo 300g<br><span class="score-ok">similaridade: 73%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>c264</td>
+<td><img src="/images/catalog/products/congelados/nuggets-1kg.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Nuggets 1kg</td>
+<td>congelados<br><small>Nuggets</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Pop Nuggets Sadia 275g<br><span class="score-low">similaridade: 55%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>c265</td>
+<td><img src="/images/catalog/products/congelados/hamburguer-de-frango-400g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Hamburguer de Frango 400g</td>
+<td>congelados<br><small>Hamburgueres</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Hambúrguer de Frango Sadia Empanado 900g<br><span class="score-ok">similaridade: 71%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>c266</td>
+<td><img src="/images/catalog/products/congelados/hamburguer-vegano-400g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Hamburguer Vegano 400g</td>
+<td>congelados<br><small>Hamburgueres</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 25%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>c267</td>
+<td><img src="/images/catalog/products/congelados/sorvete-de-baunilha-1l.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Sorvete de Baunilha 1L</td>
+<td>congelados<br><small>Sorvetes</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Bombom de Sorvete Garoto Baunilha 82,5g<br><span class="score-low">similaridade: 58%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>c268</td>
+<td><img src="/images/catalog/products/congelados/sorvete-de-morango-1l.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Sorvete de Morango 1L</td>
+<td>congelados<br><small>Sorvetes</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Sorvete Bulnez Morango com Nata 1L<br><span class="score-ok">similaridade: 72%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>c269</td>
+<td><img src="/images/catalog/products/congelados/sorvete-creme-2l.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Sorvete Creme 2L</td>
+<td>congelados<br><small>Sorvetes</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Sorvete Guri Creme 2L<br><span class="score-ok">similaridade: 88%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>c270</td>
+<td><img src="/images/catalog/products/congelados/picole-de-chocolate-6un-6x60ml.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Picole de Chocolate 6un</td>
+<td>congelados<br><small>Sorvetes</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Picolé de Baunilha com Cobertura de Chocolate Recheatto Perfetto 396g<br><span class="score-low">similaridade: 46%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>c271</td>
+<td><img src="/images/catalog/products/congelados/vegetais-congelados-500g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Vegetais Congelados 500g</td>
+<td>congelados<br><small>Vegetais</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 29%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>c272</td>
+<td><img src="/images/catalog/products/congelados/ervilhas-congeladas-500g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Ervilhas Congeladas 500g</td>
+<td>congelados<br><small>Vegetais</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 29%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>c273</td>
+<td><img src="/images/catalog/products/congelados/milho-congelado-500g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Milho Congelado 500g</td>
+<td>congelados<br><small>Vegetais</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Açaí Nutynho Congelado 500g<br><span class="score-ok">similaridade: 75%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>c274</td>
+<td><img src="/images/catalog/products/congelados/risoto-pronto-300g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Risoto Pronto 300g</td>
+<td>congelados<br><small>Pratos prontos</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Macarrão Pronto Mac & Cheese Seara Tradicional 300g<br><span class="score-low">similaridade: 41%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>c275</td>
+<td><img src="/images/catalog/products/congelados/strogonoff-pronto-300g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Strogonoff Pronto 300g</td>
+<td>congelados<br><small>Pratos prontos</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Strogonoff de Frango Swift 300g<br><span class="score-ok">similaridade: 72%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>c276</td>
+<td><img src="/images/catalog/products/congelados/feijoada-pronta-400g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Feijoada Pronta 400g</td>
+<td>congelados<br><small>Pratos prontos</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 20%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>c277</td>
+<td><img src="/images/catalog/products/congelados/esfiha-congelada-500g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Esfiha Congelada 500g</td>
+<td>congelados<br><small>Pratos prontos</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Almôndega Friboi Congelada 500g<br><span class="score-ok">similaridade: 70%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>c278</td>
+<td><img src="/images/catalog/products/congelados/pao-de-queijo-congelado-1kg.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Pao de Queijo Congelado 1kg</td>
+<td>congelados<br><small>Pratos prontos</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Pão de Queijo Duduxo Congelado Lanche 1kg<br><span class="score-ok">similaridade: 77%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>c279</td>
+<td><img src="/images/catalog/products/congelados/pizza-portuguesa-400g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Pizza Portuguesa 400g</td>
+<td>congelados<br><small>Pizzas</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Pizza Sadia Portuguesa 460g<br><span class="score-ok">similaridade: 84%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>c280</td>
+<td><img src="/images/catalog/products/congelados/sorvete-napolitano-2l.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Sorvete Napolitano 2L</td>
+<td>congelados<br><small>Sorvetes</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Sorvete Toya Napolitano 2L<br><span class="score-ok">similaridade: 90%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>c281</td>
+<td><img src="/images/catalog/products/congelados/mini-pizza-4un-4x200g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Mini Pizza 4un</td>
+<td>congelados<br><small>Pizzas</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Mini Pizza Karacá Presunto 420g<br><span class="score-low">similaridade: 58%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>cl282</td>
+<td><img src="/images/catalog/products/limpeza/detergente-loucas-500ml.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Detergente Loucas 500ml</td>
+<td>limpeza<br><small>Detergente</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Detergente Marilux Maçã 500ml<br><span class="score-ok">similaridade: 80%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>cl283</td>
+<td><img src="/images/catalog/products/limpeza/sabao-em-po-1kg.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Sabao em Po 1kg</td>
+<td>limpeza<br><small>Sabao</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 17%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>cl284</td>
+<td><img src="/images/catalog/products/limpeza/amaciante-2l.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Amaciante 2L</td>
+<td>limpeza<br><small>Amaciante</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Amaciante de Roupa Comfort 2L<br><span class="score-ok">similaridade: 61%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>cl285</td>
+<td><img src="/images/catalog/products/limpeza/agua-sanitaria-2l.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Agua Sanitaria 2L</td>
+<td>limpeza<br><small>Agua sanitaria</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Água Sanitária Ypê 2L<br><span class="score-ok">similaridade: 87%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>cl286</td>
+<td><img src="/images/catalog/products/limpeza/detergente-6un-6x500ml.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Detergente 6un</td>
+<td>limpeza<br><small>Detergente</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Detergente Urca Neutro 5L<br><span class="score-ok">similaridade: 69%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>cl287</td>
+<td><img src="/images/catalog/products/limpeza/sabao-em-po-2kg.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Sabao em Po 2kg</td>
+<td>limpeza<br><small>Sabao</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 17%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>cl288</td>
+<td><img src="/images/catalog/products/limpeza/sabao-liquido-2l.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Sabao Liquido 2L</td>
+<td>limpeza<br><small>Sabao</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Sabão Líquido Tixan Power Act 3L<br><span class="score-low">similaridade: 56%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>cl289</td>
+<td><img src="/images/catalog/products/limpeza/amaciante-5l.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Amaciante 5L</td>
+<td>limpeza<br><small>Amaciante</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Amaciante Ypê Ultra Intenso 5L<br><span class="score-ok">similaridade: 61%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>cl290</td>
+<td><img src="/images/catalog/products/limpeza/desinfetante-2l.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Desinfetante 2L</td>
+<td>limpeza<br><small>Desinfetante</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Desinfetante Kalipto 2L<br><span class="score-ok">similaridade: 80%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>cl291</td>
+<td><img src="/images/catalog/products/limpeza/desinfetante-pinho-2l.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Desinfetante Pinho 2L</td>
+<td>limpeza<br><small>Desinfetante</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Desinfetante Lisa Pinho 2L<br><span class="score-ok">similaridade: 90%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>cl292</td>
+<td><img src="/images/catalog/products/limpeza/multiuso-500ml.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Multiuso 500ml</td>
+<td>limpeza<br><small>Multiuso</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Limpador Cif Multiuso 500ml<br><span class="score-ok">similaridade: 100%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>cl293</td>
+<td><img src="/images/catalog/products/limpeza/multiuso-2l.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Multiuso 2L</td>
+<td>limpeza<br><small>Multiuso</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Limpador Brinort Multiuso 2L<br><span class="score-ok">similaridade: 100%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>cl294</td>
+<td><img src="/images/catalog/products/limpeza/limpador-de-banheiro-500ml.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Limpador de Banheiro 500ml</td>
+<td>limpeza<br><small>Limpeza de banheiro</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Limpador Veja X-14 Banheiro 500ml<br><span class="score-ok">similaridade: 86%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>cl295</td>
+<td><img src="/images/catalog/products/limpeza/limpador-de-banheiro-2l.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Limpador de Banheiro 2L</td>
+<td>limpeza<br><small>Limpeza de banheiro</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Limpador Perfumado Veja Água de Coco e Melão 2L<br><span class="score-low">similaridade: 49%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>cl296</td>
+<td><img src="/images/catalog/products/limpeza/limpador-de-cozinha-500ml.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Limpador de Cozinha 500ml</td>
+<td>limpeza<br><small>Limpeza de cozinha</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Cleaner Limpador De Uso Geral 500ml<br><span class="score-ok">similaridade: 65%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>cl297</td>
+<td><img src="/images/catalog/products/limpeza/lustra-moveis-300ml.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Lustra Moveis 300ml</td>
+<td>limpeza<br><small>Multiuso</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Lustra Móveis Becker 200ml<br><span class="score-ok">similaridade: 77%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>cl298</td>
+<td><img src="/images/catalog/products/limpeza/papel-higienico-folha-dupla-12un.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Papel Higienico Folha Dupla 12un</td>
+<td>limpeza<br><small>Papel</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 30%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>cl299</td>
+<td><img src="/images/catalog/products/limpeza/papel-higienico-folha-simples-24un.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Papel Higienico Folha Simples 24un</td>
+<td>limpeza<br><small>Papel</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 29%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>cl300</td>
+<td><img src="/images/catalog/products/limpeza/papel-toalha-2un.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Papel Toalha 2un</td>
+<td>limpeza<br><small>Papel</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 23%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>cl301</td>
+<td><img src="/images/catalog/products/limpeza/papel-toalha-6un.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Papel Toalha 6un</td>
+<td>limpeza<br><small>Papel</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 23%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>cl302</td>
+<td><img src="/images/catalog/products/limpeza/guardanapo-100un.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Guardanapo 100un</td>
+<td>limpeza<br><small>Papel</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 22%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>cl303</td>
+<td><img src="/images/catalog/products/limpeza/saco-de-lixo-30un.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Saco de Lixo 30un</td>
+<td>limpeza<br><small>Sacos de lixo</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 15%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>cl304</td>
+<td><img src="/images/catalog/products/limpeza/saco-de-lixo-grande-20un.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Saco de Lixo Grande 20un</td>
+<td>limpeza<br><small>Sacos de lixo</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 25%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>cl305</td>
+<td><img src="/images/catalog/products/limpeza/saco-de-lixo-biodegradavel-20un.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Saco de Lixo Biodegradavel 20un</td>
+<td>limpeza<br><small>Sacos de lixo</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 26%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>cl306</td>
+<td><img src="/images/catalog/products/limpeza/esponja-de-cozinha-3un.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Esponja de Cozinha 3un</td>
+<td>limpeza<br><small>Esponjas</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Esponja De Limpeza Mágica Da Cozinha (tamanho Único)<br><span class="score-low">similaridade: 57%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>cl307</td>
+<td><img src="/images/catalog/products/limpeza/esponja-de-aco-8un.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Esponja de Aco 8un</td>
+<td>limpeza<br><small>Esponjas</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Esponja De Aço Assolan 45g Pct C/ 8un Esponja De Aco Pct C/08 Un 45gr Assolan As<br><span class="score-low">similaridade: 37%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>cl308</td>
+<td><img src="/images/catalog/products/limpeza/vassoura-1un.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Vassoura</td>
+<td>limpeza<br><small>Multiuso</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Vassoura  Multiuso Popular Sem Cabo<br><span class="score-ok">similaridade: 100%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>cl309</td>
+<td><img src="/images/catalog/products/limpeza/rodo-1un.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Rodo</td>
+<td>limpeza<br><small>Multiuso</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Rodo De Limpeza Eva Multiuso 30cm Condor 1124<br><span class="score-ok">similaridade: 100%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>cl310</td>
+<td><img src="/images/catalog/products/limpeza/pano-de-chao-1un.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Pano de Chao</td>
+<td>limpeza<br><small>Multiuso</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Pano De Chão Esfregão 40x60 Para Limpeza Pesada<br><span class="score-low">similaridade: 38%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>cl311</td>
+<td><img src="/images/catalog/products/limpeza/escova-de-vaso-1un.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Escova de Vaso</td>
+<td>limpeza<br><small>Limpeza de banheiro</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Escova De Limpeza Multiuso Para Banheiro<br><span class="score-low">similaridade: 47%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>cl312</td>
+<td><img src="/images/catalog/products/limpeza/saponaceo-500g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Saponaceo 500g</td>
+<td>limpeza<br><small>Limpeza de banheiro</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Saponáceo Em Pasta Cristal Rosa 500g<br><span class="score-low">similaridade: 56%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>cl313</td>
+<td><img src="/images/catalog/products/limpeza/sabao-em-pedra-5un-5x200g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Sabao em Pedra 5un</td>
+<td>limpeza<br><small>Sabao</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Sabão Em Pedra Neutro Multiuso Razzo Glicerina<br><span class="score-low">similaridade: 48%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>cl314</td>
+<td><img src="/images/catalog/products/limpeza/tira-manchas-500g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Tira Manchas 500g</td>
+<td>limpeza<br><small>Sabao</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Tira Manchas Washing O2 500g<br><span class="score-ok">similaridade: 77%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>cl315</td>
+<td><img src="/images/catalog/products/limpeza/limpador-de-forno-300ml.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Limpador de Forno 300ml</td>
+<td>limpeza<br><small>Limpeza de cozinha</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Limpador De Forno Easy Off Heavy Duty Spray 680ml<br><span class="score-low">similaridade: 59%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>cl316</td>
+<td><img src="/images/catalog/products/limpeza/desentupidor-1l.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Desentupidor 1L</td>
+<td>limpeza<br><small>Limpeza de banheiro</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Desentupidor Líquido Diabo Verde 1L<br><span class="score-ok">similaridade: 64%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>cl317</td>
+<td><img src="/images/catalog/products/limpeza/pano-multiuso-3un.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Pano Multiuso 3un</td>
+<td>limpeza<br><small>Multiuso</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Pano Multiuso Em Rolo 600u 20x40 Inoven<br><span class="score-low">similaridade: 58%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>cl318</td>
+<td><img src="/images/catalog/products/limpeza/detergente-neutro-500ml.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Detergente Neutro 500ml</td>
+<td>limpeza<br><small>Detergente</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Detergente Marilux Neutro 500ml<br><span class="score-ok">similaridade: 86%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>cl319</td>
+<td><img src="/images/catalog/products/limpeza/sabao-em-po-5kg.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Sabao em Po 5kg</td>
+<td>limpeza<br><small>Sabao</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Sabão em Pedaço Razzo Coco 750g<br><span class="score-low">similaridade: 56%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>hg320</td>
+<td><img src="/images/catalog/products/higiene/shampoo-350ml.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Shampoo 350ml</td>
+<td>higiene<br><small>Shampoo</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Shampoo Darling Tília 350ml<br><span class="score-ok">similaridade: 69%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>hg321</td>
+<td><img src="/images/catalog/products/higiene/sabonete-em-barra-85g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Sabonete em Barra 85g</td>
+<td>higiene<br><small>Sabonete</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Sabonete Protex Baby 85g<br><span class="score-ok">similaridade: 72%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>hg322</td>
+<td><img src="/images/catalog/products/higiene/papel-higienico-30un.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Papel Higienico 30un</td>
+<td>higiene<br><small>Papel higienico</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Papel Higiênico Magé 300m 8 rolos<br><span class="score-ok">similaridade: 68%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>hg323</td>
+<td><img src="/images/catalog/products/higiene/creme-dental-90g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Creme Dental 90g</td>
+<td>higiene<br><small>Creme dental</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Creme Dental Cariax Gengival 90g<br><span class="score-ok">similaridade: 67%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>hg324</td>
+<td><img src="/images/catalog/products/higiene/condicionador-350ml.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Condicionador 350ml</td>
+<td>higiene<br><small>Condicionador</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Condicionador Darling Tília 350ml<br><span class="score-ok">similaridade: 77%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>hg325</td>
+<td><img src="/images/catalog/products/higiene/desodorante-aerosol-150ml.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Desodorante Aerosol 150ml</td>
+<td>higiene<br><small>Desodorante</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Desodorante Rexona Aerosol Men V8 150ml<br><span class="score-ok">similaridade: 81%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>hg326</td>
+<td><img src="/images/catalog/products/higiene/desodorante-roll-on-50ml.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Desodorante Roll-on 50ml</td>
+<td>higiene<br><small>Desodorante</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Desodorante Roll-On Rexona Bamboo 50ml<br><span class="score-ok">similaridade: 78%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>hg327</td>
+<td><img src="/images/catalog/products/higiene/escova-de-dente-1un.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Escova de Dente</td>
+<td>higiene<br><small>Escova dental</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Escova de dente Colgate 2un Sensitive<br><span class="score-ok">similaridade: 100%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>hg328</td>
+<td><img src="/images/catalog/products/higiene/absorvente-com-asa-14un.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Absorvente com Asa 14un</td>
+<td>higiene<br><small>Absorventes</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 25%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>hg329</td>
+<td><img src="/images/catalog/products/higiene/absorvente-noturno-10un.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Absorvente Noturno 10un</td>
+<td>higiene<br><small>Absorventes</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Absorvente Modess Noturno Com Abas 8un<br><span class="score-ok">similaridade: 70%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>hg330</td>
+<td><img src="/images/catalog/products/higiene/lamina-de-barbear-4un.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Lamina de Barbear 4un</td>
+<td>higiene<br><small>Barbear</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Aparelho de Barbear Gillette Prestobarba 3 Carbono 4un<br><span class="score-low">similaridade: 40%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>hg331</td>
+<td><img src="/images/catalog/products/higiene/creme-de-barbear-150g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Creme de Barbear 150g</td>
+<td>higiene<br><small>Barbear</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Creme de Barbear Bozzano Aloe e Vera 65g<br><span class="score-ok">similaridade: 63%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>hg332</td>
+<td><img src="/images/catalog/products/higiene/shampoo-anticaspa-350ml.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Shampoo Anticaspa 350ml</td>
+<td>higiene<br><small>Shampoo</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Palmindaya Shampoo Anticaspa Vitaminado 350ml<br><span class="score-ok">similaridade: 68%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>hg333</td>
+<td><img src="/images/catalog/products/higiene/shampoo-2em1-350ml.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Shampoo 2em1 350ml</td>
+<td>higiene<br><small>Shampoo</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Shampoo Darling Detox 350ml<br><span class="score-ok">similaridade: 65%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>hg334</td>
+<td><img src="/images/catalog/products/higiene/sabonete-liquido-400ml.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Sabonete Liquido 400ml</td>
+<td>higiene<br><small>Sabonete</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Sabonete Líquido Protex Baby 400ml<br><span class="score-ok">similaridade: 78%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>hg335</td>
+<td><img src="/images/catalog/products/higiene/cotonete-75un.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Cotonete 75un</td>
+<td>higiene<br><small>Cuidados pessoais</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Hastes Flexiveis Cotonetes 75un<br><span class="score-ok">similaridade: 60%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>hg336</td>
+<td><img src="/images/catalog/products/higiene/lenco-umedecido-72un.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Lenco Umedecido 72un</td>
+<td>higiene<br><small>Cuidados pessoais</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Lenço Umedecido Bebê Love 40 un<br><span class="score-ok">similaridade: 71%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>hg337</td>
+<td><img src="/images/catalog/products/higiene/hidratante-corporal-400ml.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Hidratante Corporal 400ml</td>
+<td>higiene<br><small>Cuidados pessoais</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Loção Hidratante Corporal Hidratei 400ml<br><span class="score-ok">similaridade: 81%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>hg338</td>
+<td><img src="/images/catalog/products/higiene/protetor-solar-fps50-120ml.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Protetor Solar FPS50 120ml</td>
+<td>higiene<br><small>Cuidados pessoais</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Protetor Solar Helioderm Econômico Fps50 200ml + Fps50 120ml<br><span class="score-ok">similaridade: 63%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>hg339</td>
+<td><img src="/images/catalog/products/higiene/shampoo-premium-300ml.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Shampoo Premium 300ml</td>
+<td>higiene<br><small>Shampoo</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Shampoo Baixaria 300ml<br><span class="score-ok">similaridade: 72%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>hg340</td>
+<td><img src="/images/catalog/products/higiene/condicionador-premium-300ml.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Condicionador Premium 300ml</td>
+<td>higiene<br><small>Condicionador</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Condicionador Revive 300ml<br><span class="score-ok">similaridade: 86%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>hg341</td>
+<td><img src="/images/catalog/products/higiene/mascara-de-cabelo-250g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Mascara de Cabelo 250g</td>
+<td>higiene<br><small>Cuidados pessoais</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Azenka Biotina - Máscara De Crescimento 250g<br><span class="score-low">similaridade: 55%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>hg342</td>
+<td><img src="/images/catalog/products/higiene/oleo-de-banho-200ml.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Oleo de Banho 200ml</td>
+<td>higiene<br><small>Cuidados pessoais</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 14%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>hg343</td>
+<td><img src="/images/catalog/products/higiene/sabonete-premium-100g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Sabonete Premium 100g</td>
+<td>higiene<br><small>Sabonete</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Sabonete Phebo Limão Siciliano 100g<br><span class="score-ok">similaridade: 65%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>hg344</td>
+<td><img src="/images/catalog/products/higiene/creme-dental-whitening-90g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Creme Dental Whitening 90g</td>
+<td>higiene<br><small>Creme dental</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Creme Dental Colgate Total Whitening 90g<br><span class="score-ok">similaridade: 79%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>hg345</td>
+<td><img src="/images/catalog/products/higiene/enxague-bucal-500ml.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Enxague Bucal 500ml</td>
+<td>higiene<br><small>Creme dental</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Enxaguante Bucal Oral B Menta 500ml<br><span class="score-ok">similaridade: 72%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>hg346</td>
+<td><img src="/images/catalog/products/higiene/fio-dental-50m.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Fio Dental 50m</td>
+<td>higiene<br><small>Escova dental</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Fio Dental Colgate 50m un<br><span class="score-ok">similaridade: 73%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>hg347</td>
+<td><img src="/images/catalog/products/higiene/absorvente-diario-30un.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Absorvente Diario 30un</td>
+<td>higiene<br><small>Absorventes</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Absorvente Sym Protetor Diário Com Perfume Embalagem Com 60 Unidades<br><span class="score-low">similaridade: 46%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>hg348</td>
+<td><img src="/images/catalog/products/higiene/lenco-de-mao-6un.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Lenco de Mao 6un</td>
+<td>higiene<br><small>Cuidados pessoais</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 24%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>hg349</td>
+<td><img src="/images/catalog/products/higiene/papel-higienico-folha-dupla-30un.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Papel Higienico Folha Dupla 30un</td>
+<td>higiene<br><small>Papel higienico</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Papel Higiênico Neve Folha Dupla 30m 4 rolos<br><span class="score-ok">similaridade: 78%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>hg350</td>
+<td><img src="/images/catalog/products/higiene/shampoo-kids-250ml.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Shampoo Kids 250ml</td>
+<td>higiene<br><small>Shampoo</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Shampoo Acqua Kids Lisos E Finos 250ml<br><span class="score-ok">similaridade: 67%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>hg351</td>
+<td><img src="/images/catalog/products/higiene/condicionador-kids-250ml.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Condicionador Kids 250ml</td>
+<td>higiene<br><small>Condicionador</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Condicionador Infantil Acqua Kids Cabelos Lisos E Finos Com 250ml<br><span class="score-low">similaridade: 56%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>hg352</td>
+<td><img src="/images/catalog/products/higiene/sabonete-kids-85g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Sabonete Kids 85g</td>
+<td>higiene<br><small>Sabonete</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Sabonete Palmolive kids 85g<br><span class="score-ok">similaridade: 77%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>hg353</td>
+<td><img src="/images/catalog/products/higiene/desodorante-feminino-150ml.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Desodorante Feminino 150ml</td>
+<td>higiene<br><small>Desodorante</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Desodorante Aerossol Suave Invisible Feminino 150ml<br><span class="score-ok">similaridade: 69%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>hg354</td>
+<td><img src="/images/catalog/products/higiene/creme-para-maos-60g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Creme para Maos 60g</td>
+<td>higiene<br><small>Cuidados pessoais</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Creme Hidratante Para Mãos E Unhas Farmax Com Óleos De Amêndoas 60g Farmax<br><span class="score-low">similaridade: 43%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>hg355</td>
+<td><img src="/images/catalog/products/higiene/escova-de-cabelo-1un.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Escova de Cabelo</td>
+<td>higiene<br><small>Cuidados pessoais</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Escova de Cabelo Julia Condor un<br><span class="score-ok">similaridade: 100%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>hg356</td>
+<td><img src="/images/catalog/products/higiene/algodao-100g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Algodao 100g</td>
+<td>higiene<br><small>Cuidados pessoais</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Algodão Nathy Bola 100g<br><span class="score-ok">similaridade: 73%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="atacadao">
+<td>hg357</td>
+<td><img src="/images/catalog/products/higiene/lenco-umedecido-baby-72un.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Lenco Umedecido Baby 72un</td>
+<td>higiene<br><small>Cuidados pessoais</small></td>
+<td><span class="badge badge-atacadao">atacadao</span></td>
+<td>Lenço Umedecido Baby Wipes 48 un<br><span class="score-ok">similaridade: 79%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>bb358</td>
+<td><img src="/images/catalog/products/bebe/fraldas-tamanho-m-30un.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Fraldas Tamanho M 30un</td>
+<td>bebe<br><small>Fraldas</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Fralda Descartável Mió Baby Tamanho M com 32 Fraldas<br><span class="score-low">similaridade: 52%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>bb359</td>
+<td><img src="/images/catalog/products/bebe/fraldas-tamanho-p-36un.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Fraldas Tamanho P 36un</td>
+<td>bebe<br><small>Fraldas</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Fralda Personal Baby Protect &amp; Sec Tamanho P 44 Fraldas Descartáveis<br><span class="score-low">similaridade: 38%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>bb360</td>
+<td><img src="/images/catalog/products/bebe/fraldas-tamanho-g-26un.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Fraldas Tamanho G 26un</td>
+<td>bebe<br><small>Fraldas</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Fralda Descartável Mió Baby Tamanho G Com 28 Fraldas<br><span class="score-low">similaridade: 52%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>bb361</td>
+<td><img src="/images/catalog/products/bebe/fraldas-tamanho-xg-22un.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Fraldas Tamanho XG 22un</td>
+<td>bebe<br><small>Fraldas</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Fralda Descartável Mió Baby Tamanho Xg Com 24 Fraldas<br><span class="score-low">similaridade: 54%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>bb362</td>
+<td><img src="/images/catalog/products/bebe/lencos-umedecidos-bebe-72un.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Lencos Umedecidos Bebe 72un</td>
+<td>bebe<br><small>Lencos</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Granado Lenços Umedecidos Bebê Calêndula Pct 50unid<br><span class="score-ok">similaridade: 61%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>bb363</td>
+<td><img src="/images/catalog/products/bebe/formula-infantil-400g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Formula Infantil 400g</td>
+<td>bebe<br><small>Alimentacao</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Neocate Lcp Fórmula Infantil 400g<br><span class="score-ok">similaridade: 77%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>bb364</td>
+<td><img src="/images/catalog/products/bebe/formula-infantil-800g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Formula Infantil 800g</td>
+<td>bebe<br><small>Alimentacao</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Fórmula Infantil Aptanutri Soja 3 800G<br><span class="score-ok">similaridade: 71%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>bb365</td>
+<td><img src="/images/catalog/products/bebe/papa-de-cereais-200g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Papa de Cereais 200g</td>
+<td>bebe<br><small>Alimentacao</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 34%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>bb366</td>
+<td><img src="/images/catalog/products/bebe/mamadeira-250ml-1un.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Mamadeira 250ml</td>
+<td>bebe<br><small>Mamadeiras</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Mamadeira Baby 250ml Multikids<br><span class="score-ok">similaridade: 68%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>bb367</td>
+<td><img src="/images/catalog/products/bebe/mamadeira-anti-colica-260ml-1un.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Mamadeira Anti-Colica 260ml</td>
+<td>bebe<br><small>Mamadeiras</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Mamadeira  Easy Start 260ml - Mam - Verde<br><span class="score-ok">similaridade: 62%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>bb368</td>
+<td><img src="/images/catalog/products/bebe/chupeta-silicone-0-6m-1un.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Chupeta Silicone 0-6m</td>
+<td>bebe<br><small>Acessorios</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Chupeta Comfort 0-6m 2un Urso Estrela - Buba<br><span class="score-low">similaridade: 45%</span></td>
+<td></td>
+</tr>
+<tr class="suspicious" data-source="carrefour">
+<td>bb369</td>
+<td><img src="/images/catalog/products/bebe/bico-silicone-2un.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Bico Silicone 2un</td>
+<td>bebe<br><small>Acessorios</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Bico X 2un Para Mamadeira Fluxo Super Rápido 6m+ - Mam<br><span class="score-low">similaridade: 25%</span></td>
+<td>Nome muito diferente da fonte (25%): Bico X 2un Para Mamadeira Fluxo Super Rápido 6m+ - Mam</td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>bb370</td>
+<td><img src="/images/catalog/products/bebe/shampoo-bebe-200ml.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Shampoo Bebe 200ml</td>
+<td>bebe<br><small>Higiene</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Shampoo Skalinha Bebê Camomila 200ml<br><span class="score-ok">similaridade: 64%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>bb371</td>
+<td><img src="/images/catalog/products/bebe/sabonete-bebe-85g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Sabonete Bebe 85g</td>
+<td>bebe<br><small>Higiene</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Sabonete Líquido Granado Glicerina Bebê 500ml<br><span class="score-low">similaridade: 45%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>bb372</td>
+<td><img src="/images/catalog/products/bebe/oleo-bebe-200ml.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Oleo Bebe 200ml</td>
+<td>bebe<br><small>Higiene</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 24%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>bb373</td>
+<td><img src="/images/catalog/products/bebe/creme-preventivo-50g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Creme Preventivo 50g</td>
+<td>bebe<br><small>Higiene</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Creme Preventivo De Assaduras Cimed João E Maria 40g<br><span class="score-low">similaridade: 56%</span></td>
+<td></td>
+</tr>
+<tr class="suspicious" data-source="carrefour">
+<td>bb374</td>
+<td><img src="/images/catalog/products/bebe/suco-bebe-200ml.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Suco Bebe 200ml</td>
+<td>bebe<br><small>Alimentacao</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Copinho Bebe Infantil Crianças Água Suco Transição<br><span class="score-low">similaridade: 26%</span></td>
+<td>Nome muito diferente da fonte (26%): Copinho Bebe Infantil Crianças Água Suco Transição</td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>bb375</td>
+<td><img src="/images/catalog/products/bebe/papa-de-frutas-100g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Papa de Frutas 100g</td>
+<td>bebe<br><small>Alimentacao</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 21%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>bb376</td>
+<td><img src="/images/catalog/products/bebe/babador-3un.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Babador 3un</td>
+<td>bebe<br><small>Acessorios</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Babador Unissex Com Estampa<br><span class="score-low">similaridade: 53%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>bb377</td>
+<td><img src="/images/catalog/products/bebe/toalha-umedecida-bebe-6un.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Toalha Umedecida Bebe 6un</td>
+<td>bebe<br><small>Lencos</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Toalha Umedecida Bebê Limpinho Premium 90 Unidades<br><span class="score-ok">similaridade: 65%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>bb378</td>
+<td><img src="/images/catalog/products/bebe/escova-de-dente-bebe-2un.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Escova de Dente Bebe 2un</td>
+<td>bebe<br><small>Higiene</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Escova De Dente Infantil Gum Baby Patrulha Canina Para Bebê 3 A 24 Meses Azul<br><span class="score-low">similaridade: 44%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>bb379</td>
+<td><img src="/images/catalog/products/bebe/pote-para-papinha-3un.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Pote para Papinha 3un</td>
+<td>bebe<br><small>Acessorios</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 20%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>pt380</td>
+<td><img src="/images/catalog/products/pet/racao-cachorro-adultos-10kg.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Racao Cachorro Adultos 10kg</td>
+<td>pet<br><small>Racoes</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Ração Cachorro Adultos Quatree Select Rmg Raças Medias<br><span class="score-low">similaridade: 56%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>pt381</td>
+<td><img src="/images/catalog/products/pet/racao-gatos-adultos-3kg.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Racao Gatos Adultos 3kg</td>
+<td>pet<br><small>Racoes</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Ração Fabene Gatos Adultos 3kg<br><span class="score-ok">similaridade: 82%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>pt382</td>
+<td><img src="/images/catalog/products/pet/racao-cachorro-filhotes-3kg.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Racao Cachorro Filhotes 3kg</td>
+<td>pet<br><small>Racoes</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Ração Finotrato Prime Para Gatos Filhotes - 3kg<br><span class="score-low">similaridade: 56%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>pt383</td>
+<td><img src="/images/catalog/products/pet/racao-gatos-castrados-3kg.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Racao Gatos Castrados 3kg</td>
+<td>pet<br><small>Racoes</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Ração Special Cat Gatos Castrados 3kg<br><span class="score-ok">similaridade: 81%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>pt384</td>
+<td><img src="/images/catalog/products/pet/racao-cachorro-premium-10kg.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Racao Cachorro Premium 10kg</td>
+<td>pet<br><small>Racoes</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Ração Special Dog Cachorro Adulto Pequeno Porte Premium 15kg<br><span class="score-ok">similaridade: 62%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>pt385</td>
+<td><img src="/images/catalog/products/pet/racao-gatos-premium-3kg.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Racao Gatos Premium 3kg</td>
+<td>pet<br><small>Racoes</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Ração Special Cat para Gatos Premium Adultos Castrados - 3kg<br><span class="score-low">similaridade: 56%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>pt386</td>
+<td><img src="/images/catalog/products/pet/petisco-cachorro-500g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Petisco Cachorro 500g</td>
+<td>pet<br><small>Petiscos</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 19%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>pt387</td>
+<td><img src="/images/catalog/products/pet/petisco-gato-60g.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Petisco Gato 60g</td>
+<td>pet<br><small>Petiscos</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 31%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>pt388</td>
+<td><img src="/images/catalog/products/pet/petisco-bifinho-10un.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Petisco Bifinho 10un</td>
+<td>pet<br><small>Petiscos</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Petisco Doguitos Cães Bifinho De Carne 65g<br><span class="score-low">similaridade: 57%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>pt389</td>
+<td><img src="/images/catalog/products/pet/areia-sanitaria-gatos-4kg.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Areia Sanitaria Gatos 4kg</td>
+<td>pet<br><small>Areia</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Areia Sanitária Kelco Pipicat Ultra Control Para Gatos 4kg<br><span class="score-low">similaridade: 59%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>pt390</td>
+<td><img src="/images/catalog/products/pet/areia-sanitaria-premium-4kg.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Areia Sanitaria Premium 4kg</td>
+<td>pet<br><small>Areia</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Areia Sanitária Kets Para Gatos E Macotes 4kg<br><span class="score-ok">similaridade: 66%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>pt391</td>
+<td><img src="/images/catalog/products/pet/areia-sanitaria-10kg.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Areia Sanitaria 10kg</td>
+<td>pet<br><small>Areia</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Areia Sanitária Pipicat Classicl 12 KG<br><span class="score-ok">similaridade: 64%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>pt392</td>
+<td><img src="/images/catalog/products/pet/shampoo-cachorro-500ml.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Shampoo Cachorro 500ml</td>
+<td>pet<br><small>Higiene</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Shampoo Para Cachorro Rex Anti Pulgas Sarna E Carrapatos - 500ml - Lookfarm<br><span class="score-low">similaridade: 49%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>pt393</td>
+<td><img src="/images/catalog/products/pet/shampoo-gato-300ml.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Shampoo Gato 300ml</td>
+<td>pet<br><small>Higiene</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Shampoo Pet Neutro 500ml Bicho De Patas - Cachorro E Gato<br><span class="score-low">similaridade: 35%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>pt394</td>
+<td><img src="/images/catalog/products/pet/condicionador-pet-300ml.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Condicionador Pet 300ml</td>
+<td>pet<br><small>Higiene</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Condicionador Dolce Pet Topázio Cereja E Avelã Para Cães E Gatos - 300ml<br><span class="score-low">similaridade: 55%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>pt395</td>
+<td><img src="/images/catalog/products/pet/coleira-cachorro-m-1un.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Coleira Cachorro M</td>
+<td>pet<br><small>Acessorios</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Coleira Passeio Para Pet Cachorro Gato 5 Metros<br><span class="score-low">similaridade: 57%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>pt396</td>
+<td><img src="/images/catalog/products/pet/coleira-gato-1un.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Coleira Gato</td>
+<td>pet<br><small>Acessorios</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Coleira gato Smooty Pet<br><span class="score-ok">similaridade: 100%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>pt397</td>
+<td><img src="/images/catalog/products/pet/guia-retratil-5m-1un.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Guia Retratil 5m</td>
+<td>pet<br><small>Acessorios</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Guia Retrátil Pet 5m Conforto Garantido<br><span class="score-low">similaridade: 55%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>pt398</td>
+<td><img src="/images/catalog/products/pet/brinquedo-mordedor-1un.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Brinquedo Mordedor</td>
+<td>pet<br><small>Acessorios</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 21%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="chatgpt">
+<td>pt399</td>
+<td><img src="/images/catalog/products/pet/brinquedo-gato-varinha-1un.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Brinquedo Gato Varinha</td>
+<td>pet<br><small>Acessorios</small></td>
+<td><span class="badge badge-chatgpt">chatgpt</span></td>
+<td>GPT generated<br><span class="score-low">similaridade: 19%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>pt400</td>
+<td><img src="/images/catalog/products/pet/racao-cachorro-senior-10kg.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Racao Cachorro Senior 10kg</td>
+<td>pet<br><small>Racoes</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Racao Cachorro Senior Porte Mini/peq Fórmula Nat Life 15kg<br><span class="score-ok">similaridade: 62%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>pt401</td>
+<td><img src="/images/catalog/products/pet/racao-gatos-filhotes-1kg.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Racao Gatos Filhotes 1kg</td>
+<td>pet<br><small>Racoes</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Ração Para Gatos Special Cat Filhotes 1kg<br><span class="score-ok">similaridade: 70%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>pt402</td>
+<td><img src="/images/catalog/products/pet/petisco-osso-5un.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Petisco Osso 5un</td>
+<td>pet<br><small>Petiscos</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Petisco Osso Nó 3/4 Mastig 2un<br><span class="score-ok">similaridade: 70%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>pt403</td>
+<td><img src="/images/catalog/products/pet/areia-sanitaria-bentonita-4kg.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Areia Sanitaria Bentonita 4kg</td>
+<td>pet<br><small>Areia</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Areia Sanitária Kets para Gatos Talco - 4kg<br><span class="score-ok">similaridade: 70%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>pt404</td>
+<td><img src="/images/catalog/products/pet/coleira-antipulgas-1un.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Coleira Antipulgas</td>
+<td>pet<br><small>Higiene</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Coleira Antipulgas Coveli Bullcat<br><span class="score-ok">similaridade: 100%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>pt405</td>
+<td><img src="/images/catalog/products/pet/pente-para-pelos-1un.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Pente para Pelos</td>
+<td>pet<br><small>Higiene</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Pente Para Pets Removedor De Pelos Escova Para Gatos<br><span class="score-low">similaridade: 48%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>pt406</td>
+<td><img src="/images/catalog/products/pet/tigela-dupla-pet-1un.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Tigela Dupla Pet</td>
+<td>pet<br><small>Acessorios</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Tigela Pequena Pet Dupla De Inox Com Base Lilás Cães E Gato<br><span class="score-low">similaridade: 43%</span></td>
+<td></td>
+</tr>
+<tr class="" data-source="carrefour">
+<td>pt407</td>
+<td><img src="/images/catalog/products/pet/tapete-higienico-30un.webp" class="img-thumb" onerror="this.style.display='none'"></td>
+<td>Tapete Higienico 30un</td>
+<td>pet<br><small>Higiene</small></td>
+<td><span class="badge badge-carrefour">carrefour</span></td>
+<td>Tapete Higiênico Primore Slim 60x60 30un<br><span class="score-ok">similaridade: 68%</span></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

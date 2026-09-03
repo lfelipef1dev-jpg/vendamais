@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QA - Revisao Açougue (STAGING)</title>
+<style>
+body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
+h1 { color: #333; }
+.stats { background: white; padding: 15px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+.subcat { background: #e0e7ff; padding: 10px 15px; border-radius: 6px; margin: 25px 0 15px 0; font-size: 20px; font-weight: bold; color: #3730a3; }
+.product { background: white; border-radius: 8px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+.product h3 { margin-top: 0; color: #2563eb; font-size: 16px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; }
+.candidate { border: 2px solid #ddd; border-radius: 8px; padding: 8px; text-align: center; }
+.candidate img { width: 100%; height: 160px; object-fit: contain; background: #f9f9f9; border-radius: 4px; }
+.candidate.best { border-color: #16a34a; background: #f0fdf4; }
+.candidate .meta { font-size: 10px; color: #666; margin-top: 5px; line-height: 1.4; }
+.missing { background: #fef2f2; border: 2px solid #ef4444; color: #ef4444; padding: 12px; border-radius: 8px; font-weight: bold; }
+.status { display: inline-block; padding: 3px 10px; border-radius: 4px; font-size: 12px; font-weight: bold; margin-left: 10px; }
+.status-found { background: #dcfce7; color: #166534; }
+.status-missing { background: #fee2e2; color: #991b1b; }
+.subcat-link { display: inline-block; margin-right: 10px; margin-bottom: 10px; padding: 8px 15px; background: #2563eb; color: white; text-decoration: none; border-radius: 5px; }
+</style>
+</head>
+<body>
+<h1>Revisão de Imagens - Açougue (STAGING)</h1>
+<p>Imagens organizadas em pastas por subcategoria. Me diga os códigos dos produtos com imagem errada que eu gero no ChatGPT.</p>
+<div style="margin: 15px 0;"><a class="subcat-link" href="#bovinos">Bovinos (10/10)</a><a class="subcat-link" href="#frango">Frango (6/6)</a><a class="subcat-link" href="#linguicas">Linguicas (3/3)</a><a class="subcat-link" href="#peixes">Peixes (3/4)</a><a class="subcat-link" href="#suinos">Suinos (5/5)</a></div><div class="stats">
+<strong>Total:</strong> 28 produtos | 
+<strong>Encontrados:</strong> 27 | 
+<strong>Faltando:</strong> 1
+</div><div class="subcat" id="bovinos">BOVINOS</div><div class="product" id="a036">
+<h3>a036 - Picanha Bovina <span class="status status-found">OK</span></h3>
+<div class="grid">
+<div class="candidate best">
+<img src="review/acougue-staging/bovinos/picanha-bovina-2.webp" alt="Picanha Bovina">
+<div class="meta">picanha-bovina-2.webp<br>400x400</div>
+</div>
+<div class="candidate">
+<img src="review/acougue-staging/bovinos/picanha-bovina-3.webp" alt="Picanha Bovina">
+<div class="meta">picanha-bovina-3.webp<br>400x400</div>
+</div>
+<div class="candidate">
+<img src="review/acougue-staging/bovinos/picanha-bovina.webp" alt="Picanha Bovina">
+<div class="meta">picanha-bovina.webp<br>400x400</div>
+</div>
+</div>
+</div>
+<div class="product" id="a037">
+<h3>a037 - Contrafile <span class="status status-found">OK</span></h3>
+<div class="grid">
+<div class="candidate best">
+<img src="review/acougue-staging/bovinos/contrafile-2.webp" alt="Contrafile">
+<div class="meta">contrafile-2.webp<br>400x400</div>
+</div>
+<div class="candidate">
+<img src="review/acougue-staging/bovinos/contrafile-3.webp" alt="Contrafile">
+<div class="meta">contrafile-3.webp<br>400x400</div>
+</div>
+<div class="candidate">
+<img src="review/acougue-staging/bovinos/contrafile.webp" alt="Contrafile">
+<div class="meta">contrafile.webp<br>400x400</div>
+</div>
+</div>
+</div>
+<div class="product" id="a038">
+<h3>a038 - Maminha <span class="status status-found">OK</span></h3>
+<div class="grid">
+<div class="candidate best">
+<img src="review/acougue-staging/bovinos/maminha-2.webp" alt="Maminha">
+<div class="meta">maminha-2.webp<br>400x400</div>
+</div>
+<div class="candidate">
+<img src="review/acougue-staging/bovinos/maminha-3.webp" alt="Maminha">
+<div class="meta">maminha-3.webp<br>400x400</div>
+</div>
+<div class="candidate">
+<img src="review/acougue-staging/bovinos/maminha.webp" alt="Maminha">
+<div class="meta">maminha.webp<br>400x400</div>
+</div>
+</div>
+</div>
+<div class="product" id="a039">
+<h3>a039 - Alcatra <span class="status status-found">OK</span></h3>
+<div class="grid">
+<div class="candidate best">
+<img src="review/acougue-staging/bovinos/alcatra-2.webp" alt="Alcatra">
+<div class="meta">alcatra-2.webp<br>400x400</div>
+</div>
+<div class="candidate">
+<img src="review/acougue-staging/bovinos/alcatra-3.webp" alt="Alcatra">
+<div class="meta">alcatra-3.webp<br>400x400</div>
+</div>
+<div class="candidate">
+<img src="review/acougue-staging/bovinos/alcatra.webp" alt="Alcatra">
+<div class="meta">alcatra.webp<br>400x400</div>
+</div>
+</div>
+</div>
+<div class="product" id="a040">
+<h3>a040 - Acem <span class="status status-found">OK</span></h3>
+<div class="grid">
+<div class="candidate best">
+<img src="review/acougue-staging/bovinos/acem-2.webp" alt="Acem">
+<div class="meta">acem-2.webp<br>400x400</div>
+</div>
+<div class="candidate">
+<img src="review/acougue-staging/bovinos/acem-3.webp" alt="Acem">
+<div class="meta">acem-3.webp<br>400x400</div>
+</div>
+<div class="candidate">
+<img src="review/acougue-staging/bovinos/acem.webp" alt="Acem">
+<div class="meta">acem.webp<br>400x400</div>
+</div>
+</div>
+</div>
+<div class="product" id="a041">
+<h3>a041 - Patinho <span class="status status-found">OK</span></h3>
+<div class="grid">
+<div class="candidate best">
+<img src="review/acougue-staging/bovinos/patinho-2.webp" alt="Patinho">
+<div class="meta">patinho-2.webp<br>400x400</div>
+</div>
+<div class="candidate">
+<img src="review/acougue-staging/bovinos/patinho-3.webp" alt="Patinho">
+<div class="meta">patinho-3.webp<br>400x400</div>
+</div>
+<div class="candidate">
+<img src="review/acougue-staging/bovinos/patinho.webp" alt="Patinho">
+<div class="meta">patinho.webp<br>400x400</div>
+</div>
+</div>
+</div>
+<div class="product" id="a042">
+<h3>a042 - Cupim <span class="status status-found">OK</span></h3>
+<div class="grid">
+<div class="candidate best">
+<img src="review/acougue-staging/bovinos/cupim-2.webp" alt="Cupim">
+<div class="meta">cupim-2.webp<br>400x400</div>
+</div>
+<div class="candidate">
+<img src="review/acougue-staging/bovinos/cupim-3.webp" alt="Cupim">
+<div class="meta">cupim-3.webp<br>400x400</div>
+</div>
+<div class="candidate">
+<img src="review/acougue-staging/bovinos/cupim.webp" alt="Cupim">
+<div class="meta">cupim.webp<br>400x400</div>
+</div>
+</div>
+</div>
+<div class="product" id="a043">
+<h3>a043 - Costela Bovina <span class="status status-found">OK</span></h3>
+<div class="grid">
+<div class="candidate best">
+<img src="review/acougue-staging/bovinos/costela-bovina-2.webp" alt="Costela Bovina">
+<div class="meta">costela-bovina-2.webp<br>400x400</div>
+</div>
+<div class="candidate">
+<img src="review/acougue-staging/bovinos/costela-bovina-3.webp" alt="Costela Bovina">
+<div class="meta">costela-bovina-3.webp<br>400x400</div>
+</div>
+<div class="candidate">
+<img src="review/acougue-staging/bovinos/costela-bovina.webp" alt="Costela Bovina">
+<div class="meta">costela-bovina.webp<br>400x400</div>
+</div>
+</div>
+</div>
+<div class="product" id="a060">
+<h3>a060 - Hamburguer Bovino 120g <span class="status status-found">OK</span></h3>
+<div class="grid">
+<div class="candidate best">
+<img src="review/acougue-staging/bovinos/hamburguer-bovino-120g-4un480g-2.webp" alt="Hamburguer Bovino 120g">
+<div class="meta">hamburguer-bovino-120g-4un480g-2.webp<br>400x400</div>
+</div>
+<div class="candidate">
+<img src="review/acougue-staging/bovinos/hamburguer-bovino-120g-4un480g-3.webp" alt="Hamburguer Bovino 120g">
+<div class="meta">hamburguer-bovino-120g-4un480g-3.webp<br>400x400</div>
+</div>
+<div class="candidate">
+<img src="review/acougue-staging/bovinos/hamburguer-bovino-120g-4un480g.webp" alt="Hamburguer Bovino 120g">
+<div class="meta">hamburguer-bovino-120g-4un480g.webp<br>400x400</div>
+</div>
+</div>
+</div>
+<div class="product" id="a061">
+<h3>a061 - Carne Moida Bovina <span class="status status-found">OK</span></h3>
+<div class="grid">
+<div class="candidate best">
+<img src="review/acougue-staging/bovinos/carne-moida-bovina-2.webp" alt="Carne Moida Bovina">
+<div class="meta">carne-moida-bovina-2.webp<br>400x400</div>
+</div>
+<div class="candidate">
+<img src="review/acougue-staging/bovinos/carne-moida-bovina-3.webp" alt="Carne Moida Bovina">
+<div class="meta">carne-moida-bovina-3.webp<br>400x400</div>
+</div>
+<div class="candidate">
+<img src="review/acougue-staging/bovinos/carne-moida-bovina.webp" alt="Carne Moida Bovina">
+<div class="meta">carne-moida-bovina.webp<br>400x400</div>
+</div>
+</div>
+</div>
+<div class="subcat" id="frango">FRANGO</div><div class="product" id="a049">
+<h3>a049 - Frango Inteiro Caipira <span class="status status-found">OK</span></h3>
+<div class="grid">
+<div class="candidate best">
+<img src="review/acougue-staging/frango/frango-inteiro-caipira-2.webp" alt="Frango Inteiro Caipira">
+<div class="meta">frango-inteiro-caipira-2.webp<br>400x400</div>
+</div>
+<div class="candidate">
+<img src="review/acougue-staging/frango/frango-inteiro-caipira-3.webp" alt="Frango Inteiro Caipira">
+<div class="meta">frango-inteiro-caipira-3.webp<br>400x400</div>
+</div>
+<div class="candidate">
+<img src="review/acougue-staging/frango/frango-inteiro-caipira.webp" alt="Frango Inteiro Caipira">
+<div class="meta">frango-inteiro-caipira.webp<br>400x400</div>
+</div>
+</div>
+</div>
+<div class="product" id="a050">
+<h3>a050 - Peito de Frango <span class="status status-found">OK</span></h3>
+<div class="grid">
+<div class="candidate best">
+<img src="review/acougue-staging/frango/peito-de-frango-2.webp" alt="Peito de Frango">
+<div class="meta">peito-de-frango-2.webp<br>400x400</div>
+</div>
+<div class="candidate">
+<img src="review/acougue-staging/frango/peito-de-frango-3.webp" alt="Peito de Frango">
+<div class="meta">peito-de-frango-3.webp<br>400x400</div>
+</div>
+<div class="candidate">
+<img src="review/acougue-staging/frango/peito-de-frango.webp" alt="Peito de Frango">
+<div class="meta">peito-de-frango.webp<br>400x400</div>
+</div>
+</div>
+</div>
+<div class="product" id="a051">
+<h3>a051 - Coxa de Frango <span class="status status-found">OK</span></h3>
+<div class="grid">
+<div class="candidate best">
+<img src="review/acougue-staging/frango/coxa-de-frango-2.webp" alt="Coxa de Frango">
+<div class="meta">coxa-de-frango-2.webp<br>400x400</div>
+</div>
+<div class="candidate">
+<img src="review/acougue-staging/frango/coxa-de-frango-3.webp" alt="Coxa de Frango">
+<div class="meta">coxa-de-frango-3.webp<br>400x400</div>
+</div>
+<div class="candidate">
+<img src="review/acougue-staging/frango/coxa-de-frango.webp" alt="Coxa de Frango">
+<div class="meta">coxa-de-frango.webp<br>400x400</div>
+</div>
+</div>
+</div>
+<div class="product" id="a052">
+<h3>a052 - Sobrecoxa de Frango <span class="status status-found">OK</span></h3>
+<div class="grid">
+<div class="candidate best">
+<img src="review/acougue-staging/frango/sobrecoxa-de-frango-2.webp" alt="Sobrecoxa de Frango">
+<div class="meta">sobrecoxa-de-frango-2.webp<br>400x400</div>
+</div>
+<div class="candidate">
+<img src="review/acougue-staging/frango/sobrecoxa-de-frango-3.webp" alt="Sobrecoxa de Frango">
+<div class="meta">sobrecoxa-de-frango-3.webp<br>400x400</div>
+</div>
+<div class="candidate">
+<img src="review/acougue-staging/frango/sobrecoxa-de-frango.webp" alt="Sobrecoxa de Frango">
+<div class="meta">sobrecoxa-de-frango.webp<br>400x400</div>
+</div>
+</div>
+</div>
+<div class="product" id="a053">
+<h3>a053 - Asa de Frango <span class="status status-found">OK</span></h3>
+<div class="grid">
+<div class="candidate best">
+<img src="review/acougue-staging/frango/asa-de-frango-2.webp" alt="Asa de Frango">
+<div class="meta">asa-de-frango-2.webp<br>400x400</div>
+</div>
+<div class="candidate">
+<img src="review/acougue-staging/frango/asa-de-frango-3.webp" alt="Asa de Frango">
+<div class="meta">asa-de-frango-3.webp<br>400x400</div>
+</div>
+<div class="candidate">
+<img src="review/acougue-staging/frango/asa-de-frango.webp" alt="Asa de Frango">
+<div class="meta">asa-de-frango.webp<br>400x400</div>
+</div>
+</div>
+</div>
+<div class="product" id="a054">
+<h3>a054 - File de Frango <span class="status status-found">OK</span></h3>
+<div class="grid">
+<div class="candidate best">
+<img src="review/acougue-staging/frango/file-de-frango-2.webp" alt="File de Frango">
+<div class="meta">file-de-frango-2.webp<br>400x400</div>
+</div>
+<div class="candidate">
+<img src="review/acougue-staging/frango/file-de-frango-3.webp" alt="File de Frango">
+<div class="meta">file-de-frango-3.webp<br>400x400</div>
+</div>
+<div class="candidate">
+<img src="review/acougue-staging/frango/file-de-frango.webp" alt="File de Frango">
+<div class="meta">file-de-frango.webp<br>400x400</div>
+</div>
+</div>
+</div>
+<div class="subcat" id="linguicas">LINGUICAS</div><div class="product" id="a044">
+<h3>a044 - Linguica Toscana <span class="status status-found">OK</span></h3>
+<div class="grid">
+<div class="candidate best">
+<img src="review/acougue-staging/linguicas/linguica-toscana-2.webp" alt="Linguica Toscana">
+<div class="meta">linguica-toscana-2.webp<br>400x400</div>
+</div>
+<div class="candidate">
+<img src="review/acougue-staging/linguicas/linguica-toscana-3.webp" alt="Linguica Toscana">
+<div class="meta">linguica-toscana-3.webp<br>400x400</div>
+</div>
+<div class="candidate">
+<img src="review/acougue-staging/linguicas/linguica-toscana.webp" alt="Linguica Toscana">
+<div class="meta">linguica-toscana.webp<br>400x400</div>
+</div>
+</div>
+</div>
+<div class="product" id="a045">
+<h3>a045 - Linguica Calabresa <span class="status status-found">OK</span></h3>
+<div class="grid">
+<div class="candidate best">
+<img src="review/acougue-staging/linguicas/linguica-calabresa-2.webp" alt="Linguica Calabresa">
+<div class="meta">linguica-calabresa-2.webp<br>400x400</div>
+</div>
+<div class="candidate">
+<img src="review/acougue-staging/linguicas/linguica-calabresa-3.webp" alt="Linguica Calabresa">
+<div class="meta">linguica-calabresa-3.webp<br>400x400</div>
+</div>
+<div class="candidate">
+<img src="review/acougue-staging/linguicas/linguica-calabresa.webp" alt="Linguica Calabresa">
+<div class="meta">linguica-calabresa.webp<br>400x400</div>
+</div>
+</div>
+</div>
+<div class="product" id="a059">
+<h3>a059 - Linguica de Frango <span class="status status-found">OK</span></h3>
+<div class="grid">
+<div class="candidate best">
+<img src="review/acougue-staging/linguicas/linguica-de-frango-2.webp" alt="Linguica de Frango">
+<div class="meta">linguica-de-frango-2.webp<br>400x400</div>
+</div>
+<div class="candidate">
+<img src="review/acougue-staging/linguicas/linguica-de-frango-3.webp" alt="Linguica de Frango">
+<div class="meta">linguica-de-frango-3.webp<br>400x400</div>
+</div>
+<div class="candidate">
+<img src="review/acougue-staging/linguicas/linguica-de-frango.webp" alt="Linguica de Frango">
+<div class="meta">linguica-de-frango.webp<br>400x400</div>
+</div>
+</div>
+</div>
+<div class="subcat" id="peixes">PEIXES</div><div class="product" id="a055">
+<h3>a055 - File de Tilapia <span class="status status-found">OK</span></h3>
+<div class="grid">
+<div class="candidate best">
+<img src="review/acougue-staging/peixes/file-de-tilapia-2.webp" alt="File de Tilapia">
+<div class="meta">file-de-tilapia-2.webp<br>400x400</div>
+</div>
+<div class="candidate">
+<img src="review/acougue-staging/peixes/file-de-tilapia-3.webp" alt="File de Tilapia">
+<div class="meta">file-de-tilapia-3.webp<br>400x400</div>
+</div>
+<div class="candidate">
+<img src="review/acougue-staging/peixes/file-de-tilapia.webp" alt="File de Tilapia">
+<div class="meta">file-de-tilapia.webp<br>400x400</div>
+</div>
+</div>
+</div>
+<div class="product" id="a056">
+<h3>a056 - File de Salmao <span class="status status-found">OK</span></h3>
+<div class="grid">
+<div class="candidate best">
+<img src="review/acougue-staging/peixes/file-de-salmao-2.webp" alt="File de Salmao">
+<div class="meta">file-de-salmao-2.webp<br>400x400</div>
+</div>
+<div class="candidate">
+<img src="review/acougue-staging/peixes/file-de-salmao-3.webp" alt="File de Salmao">
+<div class="meta">file-de-salmao-3.webp<br>400x400</div>
+</div>
+<div class="candidate">
+<img src="review/acougue-staging/peixes/file-de-salmao.webp" alt="File de Salmao">
+<div class="meta">file-de-salmao.webp<br>400x400</div>
+</div>
+</div>
+</div>
+<div class="product" id="a057">
+<h3>a057 - Atum Fresco <span class="status status-found">OK</span></h3>
+<div class="grid">
+<div class="candidate best">
+<img src="review/acougue-staging/peixes/atum-fresco-2.webp" alt="Atum Fresco">
+<div class="meta">atum-fresco-2.webp<br>400x400</div>
+</div>
+<div class="candidate">
+<img src="review/acougue-staging/peixes/atum-fresco.webp" alt="Atum Fresco">
+<div class="meta">atum-fresco.webp<br>400x400</div>
+</div>
+</div>
+</div>
+<div class="product" id="a058">
+<h3>a058 - Sardinha Fresca <span class="status status-missing">FALTANDO</span></h3>
+<div class="missing">Nenhuma imagem encontrada. Pasta: C:\PROJETOS\EXPOSTACKER\vendamais\assets\source\acougue-staging/peixes/sardinha-fresca</div>
+</div>
+<div class="subcat" id="suinos">SUINOS</div><div class="product" id="a046">
+<h3>a046 - Barriga Suina <span class="status status-found">OK</span></h3>
+<div class="grid">
+<div class="candidate best">
+<img src="review/acougue-staging/suinos/barriga-suina-2.webp" alt="Barriga Suina">
+<div class="meta">barriga-suina-2.webp<br>400x400</div>
+</div>
+<div class="candidate">
+<img src="review/acougue-staging/suinos/barriga-suina-3.webp" alt="Barriga Suina">
+<div class="meta">barriga-suina-3.webp<br>400x400</div>
+</div>
+<div class="candidate">
+<img src="review/acougue-staging/suinos/barriga-suina.webp" alt="Barriga Suina">
+<div class="meta">barriga-suina.webp<br>400x400</div>
+</div>
+</div>
+</div>
+<div class="product" id="a047">
+<h3>a047 - Lombo Suino <span class="status status-found">OK</span></h3>
+<div class="grid">
+<div class="candidate best">
+<img src="review/acougue-staging/suinos/lombo-suino-2.webp" alt="Lombo Suino">
+<div class="meta">lombo-suino-2.webp<br>400x400</div>
+</div>
+<div class="candidate">
+<img src="review/acougue-staging/suinos/lombo-suino-3.webp" alt="Lombo Suino">
+<div class="meta">lombo-suino-3.webp<br>400x400</div>
+</div>
+<div class="candidate">
+<img src="review/acougue-staging/suinos/lombo-suino.webp" alt="Lombo Suino">
+<div class="meta">lombo-suino.webp<br>400x400</div>
+</div>
+</div>
+</div>
+<div class="product" id="a048">
+<h3>a048 - Costelinha Suina <span class="status status-found">OK</span></h3>
+<div class="grid">
+<div class="candidate best">
+<img src="review/acougue-staging/suinos/costelinha-suina-2.webp" alt="Costelinha Suina">
+<div class="meta">costelinha-suina-2.webp<br>400x400</div>
+</div>
+<div class="candidate">
+<img src="review/acougue-staging/suinos/costelinha-suina-3.webp" alt="Costelinha Suina">
+<div class="meta">costelinha-suina-3.webp<br>400x400</div>
+</div>
+<div class="candidate">
+<img src="review/acougue-staging/suinos/costelinha-suina.webp" alt="Costelinha Suina">
+<div class="meta">costelinha-suina.webp<br>400x400</div>
+</div>
+</div>
+</div>
+<div class="product" id="a062">
+<h3>a062 - Pernil Suino <span class="status status-found">OK</span></h3>
+<div class="grid">
+<div class="candidate best">
+<img src="review/acougue-staging/suinos/pernil-suino-2.webp" alt="Pernil Suino">
+<div class="meta">pernil-suino-2.webp<br>400x400</div>
+</div>
+<div class="candidate">
+<img src="review/acougue-staging/suinos/pernil-suino-3.webp" alt="Pernil Suino">
+<div class="meta">pernil-suino-3.webp<br>400x400</div>
+</div>
+<div class="candidate">
+<img src="review/acougue-staging/suinos/pernil-suino.webp" alt="Pernil Suino">
+<div class="meta">pernil-suino.webp<br>400x400</div>
+</div>
+</div>
+</div>
+<div class="product" id="a063">
+<h3>a063 - Bacon Defumado <span class="status status-found">OK</span></h3>
+<div class="grid">
+<div class="candidate best">
+<img src="review/acougue-staging/suinos/bacon-defumado-2.webp" alt="Bacon Defumado">
+<div class="meta">bacon-defumado-2.webp<br>400x400</div>
+</div>
+<div class="candidate">
+<img src="review/acougue-staging/suinos/bacon-defumado-3.webp" alt="Bacon Defumado">
+<div class="meta">bacon-defumado-3.webp<br>400x400</div>
+</div>
+<div class="candidate">
+<img src="review/acougue-staging/suinos/bacon-defumado.webp" alt="Bacon Defumado">
+<div class="meta">bacon-defumado.webp<br>400x400</div>
+</div>
+</div>
+</div>
+</body></html>
