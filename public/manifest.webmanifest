@@ -1,0 +1,15 @@
+{
+  "name": "VendaMais — Hipermercado Digital",
+  "short_name": "VendaMais",
+  "description": "Seu hipermercado completo, onde você estiver.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#e11d48",
+  "lang": "pt-BR",
+  "icons": [
+    { "src": "/favicon-32.png", "sizes": "32x32", "type": "image/png" },
+    { "src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

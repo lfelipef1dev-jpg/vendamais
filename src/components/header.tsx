@@ -84,8 +84,14 @@ export function Header() {
 
           {/* Logo */}
           <Link href="/" className="flex items-center gap-1 flex-shrink-0" aria-label="VendaMais — Início">
-            <span className="text-2xl font-black tracking-tight text-[#e11d48]">Venda</span>
-            <span className="text-2xl font-black tracking-tight text-[#16a34a]">Mais</span>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/logo-header.webp"
+              alt="VendaMais"
+              width={120}
+              height={40}
+              className="h-8 w-auto sm:h-9"
+            />
           </Link>
 
           {/* CEP — protagonista */}

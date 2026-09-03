@@ -33,8 +33,14 @@ export function Footer() {
           {/* Brand */}
           <div className="col-span-2 lg:col-span-1">
             <Link href="/" className="flex items-center gap-1" aria-label="VendaMais">
-              <span className="text-xl font-black text-[#e11d48]">Venda</span>
-              <span className="text-xl font-black text-[#16a34a]">Mais</span>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/logo-header.webp"
+                alt="VendaMais"
+                width={120}
+                height={40}
+                className="h-8 w-auto"
+              />
             </Link>
             <p className="mt-3 text-sm text-[#475569] max-w-xs">
               Seu hipermercado completo, onde você estiver. Tudo que sua casa precisa em um só lugar.

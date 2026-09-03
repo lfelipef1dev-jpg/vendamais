@@ -10,8 +10,10 @@ const inter = Inter({
   adjustFontFallback: true,
 });
 
+const SITE_URL = "https://vendamais.expostacker.com.br";
+
 export const metadata: Metadata = {
-  metadataBase: new URL("https://vendamais.expostacker.com.br"),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "VendaMais | Seu hipermercado completo, onde você estiver",
     template: "%s | VendaMais",
@@ -23,16 +25,49 @@ export const metadata: Metadata = {
     "padaria", "bebidas", "mercearia", "delivery", "VendaMais",
   ],
   authors: [{ name: "VendaMais" }],
+  creator: "VendaMais",
+  publisher: "VendaMais",
   alternates: { canonical: "/" },
+  icons: {
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon-32.png", type: "image/png", sizes: "32x32" },
+    ],
+    apple: [
+      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+    ],
+    shortcut: ["/favicon-32.png"],
+  },
   openGraph: {
     title: "VendaMais | Seu hipermercado completo",
     description: "Frescor, economia e conveniência. Tudo que sua casa precisa em um só lugar.",
     type: "website",
     locale: "pt_BR",
     siteName: "VendaMais",
-    url: "https://vendamais.expostacker.com.br",
+    url: SITE_URL,
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "VendaMais — Seu hipermercado completo, onde você estiver",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "VendaMais | Seu hipermercado completo",
+    description: "Frescor, economia e conveniência. Tudo que sua casa precisa em um só lugar.",
+    images: ["/og-image.png"],
   },
   robots: { index: true, follow: true },
+  manifest: "/manifest.webmanifest",
+};
+
+export const viewport = {
+  themeColor: "#e11d48",
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
