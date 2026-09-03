@@ -31,8 +31,13 @@ export function ProductCard({ product }: { product: Product }) {
           </span>
         )}
         {product.byWeight && (
-          <span className="rounded-md bg-[#f59e0b] px-2 py-0.5 text-xs font-bold text-white shadow-sm">
+          <span className="rounded-md bg-[#f59e0b] px-2 py-0.5 text-[10px] font-bold text-white shadow-sm">
             Por kg
+          </span>
+        )}
+        {product.tags?.includes("premium") && (
+          <span className="rounded-md bg-[#0f172a] px-2 py-0.5 text-[10px] font-bold text-white shadow-sm">
+            Seleção
           </span>
         )}
       </div>
@@ -58,6 +63,8 @@ export function ProductCard({ product }: { product: Product }) {
           alt={product.name}
           loading="lazy"
           decoding="async"
+          width={400}
+          height={400}
           className={cn(
             "h-full w-full object-cover transition-transform duration-300 group-hover:scale-105",
             outOfStock && "opacity-50 grayscale"
@@ -74,34 +81,38 @@ export function ProductCard({ product }: { product: Product }) {
 
       {/* Conteúdo */}
       <div className="flex flex-1 flex-col p-3">
-        <p className="text-xs font-medium text-[#94a3b8] uppercase tracking-wide">{product.brand}</p>
-        <h3 className="mt-1 line-clamp-2 text-sm font-semibold text-[#0f172a] leading-snug min-h-[2.5rem]">
+        <p className="text-[11px] font-medium text-[#94a3b8] uppercase tracking-wide">{product.brand}</p>
+        <h3 className="mt-0.5 line-clamp-2 text-sm font-semibold text-[#0f172a] leading-snug min-h-[2.5rem]">
           {product.name}
         </h3>
 
-        {/* Peso / tipo de venda */}
+        {/* Peso / volume */}
         <p className="mt-1 text-xs text-[#94a3b8]">{product.weight}</p>
 
         {/* Preço */}
         {product.previousPrice && (
-          <p className="mt-2 text-xs text-[#94a3b8] line-through">{formatBRL(product.previousPrice)}</p>
+          <p className="mt-1.5 text-xs text-[#94a3b8] line-through">{formatBRL(product.previousPrice)}</p>
         )}
-        <div className="flex items-baseline gap-1">
-          <span className={cn("text-lg font-bold", discount > 0 ? "text-[#e11d48]" : "text-[#0f172a]")}>
-            {formatBRL(product.price)}
-          </span>
-        </div>
-        {/* Preço por kg — separado do preço total */}
+
+        {/* Produto por peso — preço/kg em destaque, valor estimado separado */}
         {product.byWeight && product.pricePerKg ? (
-          <p className="text-xs text-[#16a34a] font-medium">
-            Preço por kg: {formatBRL(product.pricePerKg)}
-          </p>
+          <div className="mt-1 space-y-0.5">
+            <p className="text-sm font-bold text-[#e11d48]">{formatBRL(product.pricePerKg)}/kg</p>
+            <p className="text-xs text-[#475569]">
+              Estimado: <span className="font-semibold">{formatBRL(product.price)}</span>
+            </p>
+          </div>
         ) : (
-          <p className="text-xs text-[#475569] font-medium">{product.unitPrice}</p>
+          <div className="mt-1.5">
+            <p className={cn("text-lg font-bold", discount > 0 ? "text-[#e11d48]" : "text-[#0f172a]")}>
+              {formatBRL(product.price)}
+            </p>
+            <p className="text-xs text-[#475569] font-medium">{product.unitPrice}</p>
+          </div>
         )}
 
         {/* Controles */}
-        <div className="mt-3 flex-1" />
+        <div className="mt-2 flex-1" />
 
         {cartItem ? (
           <div className="flex items-center justify-between rounded-lg border border-[#e2e8f0] bg-[#f8fafc] p-1">
