@@ -1,4 +1,4 @@
-"""Gera imagens via ChatGPT conectando no Chrome ja logado via CDP."""
+"""Gera imagens via ChatGPT - versao lenta e cuidadosa."""
 import os, re, json, time, asyncio, sys
 from playwright.async_api import async_playwright
 from PIL import Image
@@ -9,7 +9,7 @@ sys.stdout.reconfigure(encoding='utf-8', errors='replace')
 ROOT = r"C:\PROJETOS\EXPOSTACKER\vendamais"
 PRODUCT_DIR = os.path.join(ROOT, "public", "images", "catalog", "products")
 MANIFEST = os.path.join(ROOT, "data", "catalog-image-manifest.json")
-MISSING = os.path.join(ROOT, "data", "missing-skus.json")
+MISSING = os.path.join(ROOT, "data", "still-missing.json")
 DOWNLOAD_DIR = os.path.join(ROOT, "assets", "source", "gpt-images")
 HD_DIR = os.path.join(ROOT, "assets", "source", "gpt-images-hd")
 SCREENSHOTS = os.path.join(ROOT, "assets", "screenshots")
@@ -24,7 +24,7 @@ Product: {name}
 Category: {category}
 
 Requirements:
-- Maximum resolution (1024x1024)
+- Maximum resolution (1024x1024 or higher)
 - Square format (1:1)
 - Pure white or very light gray background
 - Product centered and well-lit (studio lighting)
@@ -82,6 +82,96 @@ def process_image(img_bytes, product):
     img_sq.resize((400, 400), Image.LANCZOS).save(frontend_path, "WEBP", quality=92)
     return frontend_path
 
+async def wait_for_generation(page, timeout=180):
+    """Espera ate que o ChatGPT termine de gerar (sem loading spinner)."""
+    start = time.time()
+    while time.time() - start < timeout:
+        # Verificar se ainda tem loading/generating
+        try:
+            # Botao de stop aparece durante geracao
+            stop_btns = await page.query_selector_all('[data-testid="stop-button"], button[aria-label="Stop"]')
+            if stop_btns and len(stop_btns) > 0:
+                # Ainda gerando
+                await asyncio.sleep(3)
+                continue
+        except:
+            pass
+        
+        # Verificar se tem streaming indicator
+        try:
+            streaming = await page.query_selector_all('[class*="streaming"], [class*="loading"], [class*="generating"]')
+            visible_streaming = 0
+            for s in streaming:
+                if await s.is_visible():
+                    visible_streaming += 1
+            if visible_streaming > 0:
+                await asyncio.sleep(3)
+                continue
+        except:
+            pass
+        
+        # Sem loading = terminou
+        return True
+    
+    return False  # timeout
+
+async def find_generated_image(page, context):
+    """Procura a imagem gerada na pagina - varios metodos."""
+    
+    # Metodo 1: img tags com URLs do OpenAI
+    all_imgs = await page.query_selector_all('img')
+    candidates = []
+    for img_el in all_imgs:
+        try:
+            src = await img_el.get_attribute("src")
+            if not src:
+                continue
+            # Filtrar avatares/icones/logos
+            if any(x in src.lower() for x in ["avatar", "favicon", "logo", "auth0", "icon"]):
+                continue
+            # URLs de imagem gerada
+            if any(x in src for x in ["oaiusercontent", "files.oai", "openai", "oai", "generated", "cdn"]):
+                # Verificar tamanho
+                box = await img_el.bounding_box()
+                if box and box["width"] > 100 and box["height"] > 100:
+                    candidates.append((img_el, src, box["width"] * box["height"]))
+        except:
+            continue
+    
+    # Metodo 2: se nao encontrou, pegar todas as imagens grandes
+    if not candidates:
+        for img_el in all_imgs:
+            try:
+                src = await img_el.get_attribute("src")
+                if not src:
+                    continue
+                if any(x in src.lower() for x in ["avatar", "favicon", "logo", "auth0", "icon"]):
+                    continue
+                box = await img_el.bounding_box()
+                if box and box["width"] > 200 and box["height"] > 200:
+                    candidates.append((img_el, src, box["width"] * box["height"]))
+            except:
+                continue
+    
+    if not candidates:
+        return None, None
+    
+    # Pegar a maior imagem
+    candidates.sort(key=lambda x: x[2], reverse=True)
+    img_el, src, _ = candidates[0]
+    
+    # Baixar
+    try:
+        response = await context.request.get(src, timeout=30000)
+        if response.ok:
+            img_bytes = await response.body()
+            if len(img_bytes) > 5000:
+                return src, img_bytes
+    except:
+        pass
+    
+    return None, None
+
 async def generate_images():
     with open(MISSING, "r", encoding="utf-8") as f:
         missing = json.load(f)
@@ -92,6 +182,11 @@ async def generate_images():
     if os.path.exists(MANIFEST):
         with open(MANIFEST, "r", encoding="utf-8") as f:
             manifest = json.load(f)
+    
+    # Filtrar SKUs que ja temos
+    have_slugs = {m["slug"] for m in manifest}
+    missing = [p for p in missing if p["slug"] not in have_slugs]
+    print(f"Faltando gerar: {len(missing)}", flush=True)
     
     async with async_playwright() as p:
         print("Conectando Chrome (porta 9223)...", flush=True)
@@ -115,6 +210,8 @@ async def generate_images():
             await page.wait_for_timeout(5000)
         
         print(f"\nIniciando geracao de {len(missing)} imagens...", flush=True)
+        print(f"Tempo por imagem: ate 180s", flush=True)
+        print(f"Pausa entre imagens: 10s", flush=True)
         
         generated = 0
         for i, product in enumerate(missing):
@@ -126,7 +223,7 @@ async def generate_images():
                 # Nova conversa
                 if i > 0:
                     await page.goto("https://chatgpt.com", wait_until="domcontentloaded", timeout=30000)
-                    await page.wait_for_timeout(3000)
+                    await page.wait_for_timeout(5000)
                 
                 # Encontrar input
                 input_el = None
@@ -150,135 +247,68 @@ async def generate_images():
                 
                 # Digitar e enviar
                 await input_el.click()
-                await page.wait_for_timeout(300)
+                await page.wait_for_timeout(500)
                 await page.keyboard.press("Control+a")
                 await page.keyboard.press("Delete")
-                await page.wait_for_timeout(200)
-                await input_el.type(prompt, delay=10)
-                await page.wait_for_timeout(500)
+                await page.wait_for_timeout(300)
+                await input_el.type(prompt, delay=15)
+                await page.wait_for_timeout(1000)
                 await page.keyboard.press("Enter")
-                print(f"  Prompt enviado!", flush=True)
+                print(f"  Prompt enviado! Aguardando geracao...", flush=True)
                 
-                # Aguardar imagem (ate 120s)
-                img_found = False
-                for attempt in range(24):
-                    await page.wait_for_timeout(5000)
-                    
-                    # Tentar varios seletores de imagem gerada
-                    all_imgs = await page.query_selector_all('img')
-                    for img_el in all_imgs:
-                        src = await img_el.get_attribute("src")
-                        if not src:
-                            continue
-                        # Filtrar imagens geradas (nao avatares/icones)
-                        if any(x in src for x in ["oaiusercontent", "files.oai", "openai.com", "oai", "generated"]):
-                            if "avatar" in src or "favicon" in src or "logo" in src:
-                                continue
-                            w = await img_el.get_attribute("width")
-                            if w and int(w) < 100:
-                                continue
-                            print(f"  Imagem encontrada: {src[:80]}...", flush=True)
-                            
-                            try:
-                                response = await context.request.get(src, timeout=30000)
-                                if response.ok:
-                                    img_bytes = await response.body()
-                                    
-                                    if len(img_bytes) < 5000:
-                                        print(f"  Imagem muito pequena ({len(img_bytes)} bytes), ignorando", flush=True)
-                                        continue
-                                    
-                                    orig_path = os.path.join(DOWNLOAD_DIR, f"{product['slug']}.png")
-                                    with open(orig_path, "wb") as f:
-                                        f.write(img_bytes)
-                                    
-                                    frontend_path = process_image(img_bytes, product)
-                                    if frontend_path:
-                                        print(f"  OK site: {frontend_path}", flush=True)
-                                        
-                                        manifest.append({
-                                            "sku": product["id"],
-                                            "slug": product["slug"],
-                                            "name": product["name"],
-                                            "category": product["category"],
-                                            "subcategory": "",
-                                            "localPath": f"/images/catalog/products/{product['category']}/{product['slug']}.webp",
-                                            "source": "chatgpt",
-                                            "sourceUrl": src,
-                                            "sourceProduct": "GPT generated",
-                                            "sourceBrand": "OpenAI",
-                                            "imageUrl": src,
-                                            "matchScore": 100,
-                                            "status": "approved",
-                                        })
-                                        
-                                        with open(MANIFEST, "w", encoding="utf-8") as f:
-                                            json.dump(manifest, f, indent=2, ensure_ascii=False)
-                                        
-                                        generated += 1
-                                        img_found = True
-                                        break
-                            except Exception as e:
-                                print(f"  Erro download: {e}", flush=True)
-                    
-                    if img_found:
-                        break
-                    
-                    # Debug: no primeiro timeout, listar todas as imagens
-                    if attempt == 3:
-                        print(f"  DEBUG - Imagens na pagina:", flush=True)
-                        for img_el in all_imgs[:10]:
-                            s = await img_el.get_attribute("src")
-                            if s:
-                                print(f"    {s[:100]}", flush=True)
-                            
-                            try:
-                                response = await context.request.get(src, timeout=30000)
-                                if response.ok:
-                                    img_bytes = await response.body()
-                                    
-                                    orig_path = os.path.join(DOWNLOAD_DIR, f"{product['slug']}.png")
-                                    with open(orig_path, "wb") as f:
-                                        f.write(img_bytes)
-                                    
-                                    frontend_path = process_image(img_bytes, product)
-                                    if frontend_path:
-                                        print(f"  OK site: {frontend_path}", flush=True)
-                                        
-                                        manifest.append({
-                                            "sku": product["id"],
-                                            "slug": product["slug"],
-                                            "name": product["name"],
-                                            "category": product["category"],
-                                            "subcategory": "",
-                                            "localPath": f"/images/catalog/products/{product['category']}/{product['slug']}.webp",
-                                            "source": "chatgpt",
-                                            "sourceUrl": src,
-                                            "sourceProduct": "GPT generated",
-                                            "sourceBrand": "OpenAI",
-                                            "imageUrl": src,
-                                            "matchScore": 100,
-                                            "status": "approved",
-                                        })
-                                        
-                                        with open(MANIFEST, "w", encoding="utf-8") as f:
-                                            json.dump(manifest, f, indent=2, ensure_ascii=False)
-                                        
-                                        generated += 1
-                                        img_found = True
-                                        break
-                            except Exception as e:
-                                print(f"  Erro download: {e}", flush=True)
-                    
-                    if attempt % 4 == 0:
-                        print(f"  Aguardando... ({(attempt+1)*5}s)", flush=True)
+                # Esperar terminar de gerar (ate 180s)
+                print(f"  Aguardando conclusao da geracao...", flush=True)
+                done = await wait_for_generation(page, timeout=180)
                 
-                if not img_found:
+                if not done:
+                    print(f"  TIMEOUT na geracao", flush=True)
                     ss = os.path.join(SCREENSHOTS, f"timeout-{product['slug']}.png")
                     await page.screenshot(path=ss)
-                    print(f"  TIMEOUT. Screenshot: {ss}", flush=True)
+                    continue
                 
-                await page.wait_for_timeout(2000)
+                print(f"  Geracao concluida. Procurando imagem...", flush=True)
+                
+                # Procurar imagem
+                src, img_bytes = await find_generated_image(page, context)
+                
+                if src and img_bytes:
+                    orig_path = os.path.join(DOWNLOAD_DIR, f"{product['slug']}.png")
+                    with open(orig_path, "wb") as f:
+                        f.write(img_bytes)
+                    
+                    frontend_path = process_image(img_bytes, product)
+                    if frontend_path:
+                        print(f"  OK site: {frontend_path}", flush=True)
+                        
+                        manifest.append({
+                            "sku": product["id"],
+                            "slug": product["slug"],
+                            "name": product["name"],
+                            "category": product["category"],
+                            "subcategory": "",
+                            "localPath": f"/images/catalog/products/{product['category']}/{product['slug']}.webp",
+                            "source": "chatgpt",
+                            "sourceUrl": src,
+                            "sourceProduct": "GPT generated",
+                            "sourceBrand": "OpenAI",
+                            "imageUrl": src,
+                            "matchScore": 100,
+                            "status": "approved",
+                        })
+                        
+                        with open(MANIFEST, "w", encoding="utf-8") as f:
+                            json.dump(manifest, f, indent=2, ensure_ascii=False)
+                        
+                        generated += 1
+                else:
+                    print(f"  Imagem nao encontrada na pagina", flush=True)
+                    ss = os.path.join(SCREENSHOTS, f"no-img-{product['slug']}.png")
+                    await page.screenshot(path=ss)
+                    print(f"  Screenshot: {ss}", flush=True)
+                
+                # Pausa entre imagens
+                print(f"  Pausa de 10s...", flush=True)
+                await page.wait_for_timeout(10000)
                 
             except Exception as e:
                 print(f"  ERRO: {e}", flush=True)
