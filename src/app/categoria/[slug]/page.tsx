@@ -42,7 +42,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
   return (
     <SiteLayout>
       {/* Hero da categoria */}
-      <section className="relative h-40 sm:h-56 overflow-hidden" aria-label={cat.name}>
+      <section className="relative aspect-[16/9] sm:aspect-[3/1] overflow-hidden" aria-label={cat.name}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={cat.image} alt="" className="h-full w-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-black/20" />
