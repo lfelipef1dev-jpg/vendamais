@@ -39,7 +39,7 @@ export function Footer() {
                 alt="VendaMais"
                 width={120}
                 height={40}
-                className="h-8 w-auto"
+                className="h-14 w-auto"
               />
             </Link>
             <p className="mt-3 text-sm text-[#475569] max-w-xs">
