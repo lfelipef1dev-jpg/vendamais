@@ -231,11 +231,11 @@ export function Header() {
 
         {/* Category nav (desktop) — SVG icons */}
         <nav className="hidden lg:block border-t border-[#e2e8f0] bg-white" aria-label="Categorias">
-          <div className="mx-auto flex max-w-7xl items-center gap-1 px-8 overflow-x-auto no-scrollbar">
+          <div className="mx-auto flex max-w-7xl items-center justify-between gap-0.5 px-4 lg:px-6">
             <Link
               href="/ofertas"
               className={cn(
-                "flex items-center gap-1.5 whitespace-nowrap px-3 py-2.5 text-sm font-bold transition-colors hover:text-[#e11d48]",
+                "flex items-center gap-1 whitespace-nowrap px-2 py-2.5 text-xs font-bold transition-colors hover:text-[#e11d48] flex-shrink-0",
                 isActive("/ofertas") ? "text-[#e11d48]" : "text-[#e11d48]"
               )}
             >
@@ -246,11 +246,11 @@ export function Header() {
                 key={cat.id}
                 href={`/categoria/${cat.slug}`}
                 className={cn(
-                  "flex items-center gap-1.5 whitespace-nowrap px-3 py-2.5 text-sm font-medium transition-colors hover:text-[#e11d48]",
+                  "flex items-center gap-1 whitespace-nowrap px-2 py-2.5 text-xs font-medium transition-colors hover:text-[#e11d48] flex-shrink-0",
                   isActive(`/categoria/${cat.slug}`) ? "text-[#e11d48]" : "text-[#475569]"
                 )}
               >
-                <CategoryIcon name={cat.iconName} className="h-4 w-4" />
+                <CategoryIcon name={cat.iconName} className="h-3.5 w-3.5" />
                 {cat.name}
               </Link>
             ))}
