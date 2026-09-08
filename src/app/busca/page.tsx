@@ -24,13 +24,12 @@ function setQueryInUrl(q: string) {
 }
 
 export default function BuscaPage() {
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState(getQueryFromUrl);
   const [mounted, setMounted] = useState(false);
   const results = query.trim() ? searchProducts(query) : [];
 
   useEffect(() => {
     setMounted(true);
-    setQuery(getQueryFromUrl());
   }, []);
 
   useEffect(() => {
