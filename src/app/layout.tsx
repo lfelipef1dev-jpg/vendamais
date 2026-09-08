@@ -30,7 +30,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/" },
   icons: {
     icon: [
-      { url: "/favicon.svg?v=2", type: "image/svg+xml", sizes: "any" },
+      { url: "/favicon.png", type: "image/png" },
     ],
   },
   openGraph: {
