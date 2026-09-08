@@ -30,13 +30,8 @@ export const metadata: Metadata = {
   alternates: { canonical: "/" },
   icons: {
     icon: [
-      { url: "/favicon.svg", type: "image/svg+xml" },
-      { url: "/favicon-32.png", type: "image/png", sizes: "32x32" },
+      { url: "/favicon.svg?v=2", type: "image/svg+xml", sizes: "any" },
     ],
-    apple: [
-      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
-    ],
-    shortcut: ["/favicon-32.png"],
   },
   openGraph: {
     title: "VendaMais | Seu hipermercado completo",
@@ -61,7 +56,6 @@ export const metadata: Metadata = {
     images: ["/og-image.png"],
   },
   robots: { index: true, follow: true },
-  manifest: "/manifest.webmanifest",
 };
 
 export const viewport = {
