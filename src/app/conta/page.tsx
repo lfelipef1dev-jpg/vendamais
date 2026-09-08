@@ -11,13 +11,13 @@ export const metadata: Metadata = {
 };
 
 const menu = [
-  { href: "/conta/pedidos", icon: Package, label: "Meus pedidos", desc: "Acompanhe e compre novamente" },
-  { href: "/favoritos", icon: Heart, label: "Favoritos", desc: "Seus produtos salvos" },
-  { href: "/conta/enderecos", icon: MapPin, label: "Endereços", desc: "Cadastre e gerencie endereços" },
-  { href: "/conta", icon: CreditCard, label: "Pagamentos", desc: "Cartões e métodos de pagamento" },
-  { href: "/conta", icon: Tag, label: "Cupons", desc: "Seus cupons e descontos" },
-  { href: "/conta", icon: Settings, label: "Preferências", desc: "Notificações e preferências" },
-  { href: "/conta", icon: Shield, label: "Privacidade", desc: "Dados e privacidade" },
+  { href: "/conta/pedidos", icon: Package, label: "Meus pedidos", desc: "Acompanhe e compre novamente", available: true },
+  { href: "/favoritos", icon: Heart, label: "Favoritos", desc: "Seus produtos salvos", available: true },
+  { href: "/conta/enderecos", icon: MapPin, label: "Endereços", desc: "Cadastre e gerencie endereços", available: true },
+  { href: "/privacidade", icon: Shield, label: "Privacidade", desc: "Dados e privacidade", available: true },
+  { href: undefined, icon: CreditCard, label: "Pagamentos", desc: "Cartões e métodos de pagamento — em breve", available: false },
+  { href: undefined, icon: Tag, label: "Cupons", desc: "Seus cupons e descontos — em breve", available: false },
+  { href: undefined, icon: Settings, label: "Preferências", desc: "Notificações e preferências — em breve", available: false },
 ];
 
 export default function ContaPage() {
@@ -35,21 +35,36 @@ export default function ContaPage() {
         </div>
 
         <div className="mt-8 grid gap-3 sm:grid-cols-2">
-          {menu.map((item) => (
-            <Link
-              key={item.label}
-              href={item.href}
-              className="flex items-center gap-4 rounded-xl border border-[#e2e8f0] bg-white p-4 transition-all hover:border-[#e11d48] hover:shadow-md"
-            >
-              <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-lg bg-[#f8fafc]">
-                <item.icon className="h-5 w-5 text-[#e11d48]" />
+          {menu.map((item) =>
+            item.available ? (
+              <Link
+                key={item.label}
+                href={item.href!}
+                className="flex items-center gap-4 rounded-xl border border-[#e2e8f0] bg-white p-4 transition-all hover:border-[#e11d48] hover:shadow-md"
+              >
+                <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-lg bg-[#f8fafc]">
+                  <item.icon className="h-5 w-5 text-[#e11d48]" />
+                </div>
+                <div>
+                  <p className="font-semibold text-[#0f172a]">{item.label}</p>
+                  <p className="text-xs text-[#94a3b8]">{item.desc}</p>
+                </div>
+              </Link>
+            ) : (
+              <div
+                key={item.label}
+                className="flex items-center gap-4 rounded-xl border border-[#e2e8f0] bg-white p-4 opacity-70 cursor-not-allowed"
+              >
+                <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-lg bg-[#f8fafc]">
+                  <item.icon className="h-5 w-5 text-[#e11d48]" />
+                </div>
+                <div>
+                  <p className="font-semibold text-[#0f172a]">{item.label}</p>
+                  <p className="text-xs text-[#94a3b8]">{item.desc}</p>
+                </div>
               </div>
-              <div>
-                <p className="font-semibold text-[#0f172a]">{item.label}</p>
-                <p className="text-xs text-[#94a3b8]">{item.desc}</p>
-              </div>
-            </Link>
-          ))}
+            )
+          )}
         </div>
 
         <div className="mt-8 rounded-xl border-2 border-dashed border-[#f59e0b] bg-[#fef9f0] p-4 text-center">

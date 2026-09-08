@@ -26,7 +26,7 @@ export default function SobrePage() {
             do hortifruti ao pet, da mercearia à higiene.
           </p>
           <p>
-            <strong className="text-[#0f172a]">Economia.</strong> Ofertas reais e preços justos em todo o sortimento,
+            <strong className="text-[#0f172a]">Economia.</strong> Ofertas e preços competitivos na experiência simulada,
             com o programa de fidelidade Venda+ para quem compra com a gente.
           </p>
           <p>

@@ -19,6 +19,9 @@ export default function HomePage() {
   const acougue = getProductsByCategory("acougue").filter((p) => !offerIds.has(p.id)).slice(0, 6);
   const mercearia = getProductsByCategory("mercearia").filter((p) => !offerIds.has(p.id)).slice(0, 6);
   const bebidas = getProductsByCategory("bebidas").filter((p) => !offerIds.has(p.id)).slice(0, 6);
+  const padaria = getProductsByCategory("padaria").filter((p) => !offerIds.has(p.id)).slice(0, 6);
+  const frios = getProductsByCategory("frios").filter((p) => !offerIds.has(p.id)).slice(0, 6);
+  const pet = getProductsByCategory("pet").filter((p) => !offerIds.has(p.id)).slice(0, 6);
 
   return (
     <>
@@ -96,6 +99,42 @@ export default function HomePage() {
                 subtitle="Refrigerantes, sucos e águas"
               />
               <ProductRail products={bebidas} />
+            </section>
+          )}
+
+          {/* Padaria — rail */}
+          {padaria.length > 0 && (
+            <section aria-labelledby="padaria-heading">
+              <SectionHeader
+                title="Padaria"
+                href="/categoria/padaria"
+                subtitle="Pães, bolos e salgados frescos"
+              />
+              <ProductRail products={padaria} />
+            </section>
+          )}
+
+          {/* Frios — rail */}
+          {frios.length > 0 && (
+            <section aria-labelledby="frios-heading">
+              <SectionHeader
+                title="Frios"
+                href="/categoria/frios"
+                subtitle="Queijos, presuntos e fatiados"
+              />
+              <ProductRail products={frios} />
+            </section>
+          )}
+
+          {/* Pet — rail */}
+          {pet.length > 0 && (
+            <section aria-labelledby="pet-heading">
+              <SectionHeader
+                title="Pet"
+                href="/categoria/pet"
+                subtitle="Rações, higiene e acessórios"
+              />
+              <ProductRail products={pet} />
             </section>
           )}
 

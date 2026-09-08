@@ -2,11 +2,9 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { SiteLayout } from "@/components/site-layout";
-import { ProductGrid } from "@/components/section";
-import { CategoryIcon } from "@/components/category-icon";
 import { categories, getProductsByCategory, getOffers } from "@/lib/catalog";
 import { ChevronRight } from "lucide-react";
-import { CategoryFilters } from "./category-filters";
+import { CategoryContent } from "./category-content";
 
 export function generateStaticParams() {
   return categories.map((c) => ({ slug: c.slug }));
@@ -32,13 +30,6 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
   const offers = getOffers().filter((p) => p.category === cat.id);
   const subcategories = cat.subcategories;
 
-  // Agrupar por subcategoria
-  const bySubcat: Record<string, typeof products> = {};
-  for (const p of products) {
-    if (!bySubcat[p.subcategory]) bySubcat[p.subcategory] = [];
-    bySubcat[p.subcategory].push(p);
-  }
-
   return (
     <SiteLayout>
       {/* Hero da categoria */}
@@ -63,57 +54,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
         </div>
       </section>
 
-      {/* Subcategorias — pills */}
-      <div className="border-b border-[#e2e8f0] bg-white sticky top-[calc(1.75rem+4rem+2.75rem)] z-30">
-        <div className="mx-auto max-w-7xl px-4 lg:px-8">
-          <div className="flex flex-wrap items-center gap-1.5 py-2.5">
-            <span className="text-[11px] font-bold uppercase tracking-wide text-[#94a3b8] flex-shrink-0">
-              <CategoryIcon name={cat.iconName} className="inline h-3.5 w-3.5 mr-1" />
-              {cat.name}:
-            </span>
-            {subcategories.map((sub) => (
-              <a
-                key={sub}
-                href={`#sub-${sub.toLowerCase().replace(/\s/g, "-")}`}
-                className="flex-shrink-0 rounded-full bg-[#f8fafc] px-2.5 py-1 text-xs font-medium text-[#475569] transition-colors hover:bg-[#fef9f0] hover:text-[#e11d48]"
-              >
-                {sub}
-              </a>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <div className="mx-auto max-w-7xl px-4 py-8 lg:px-8">
-        {/* Ofertas da categoria */}
-        {offers.length > 0 && (
-          <section className="mb-10" aria-label="Ofertas da categoria">
-            <h2 className="mb-4 text-xl font-bold text-[#e11d48]">Ofertas em {cat.name}</h2>
-            <ProductGrid products={offers} />
-          </section>
-        )}
-
-        {/* Produtos por subcategoria */}
-        {subcategories.map((sub) => {
-          const subProducts = bySubcat[sub];
-          if (!subProducts || subProducts.length === 0) return null;
-          const anchor = `sub-${sub.toLowerCase().replace(/\s/g, "-")}`;
-          return (
-            <section key={sub} id={anchor} className="mb-10 scroll-mt-32" aria-label={sub}>
-              <div className="mb-4 flex items-end justify-between">
-                <div>
-                  <h2 className="text-xl font-bold text-[#0f172a]">{sub}</h2>
-                  <p className="text-sm text-[#94a3b8]">{subProducts.length} produto(s)</p>
-                </div>
-              </div>
-              <ProductGrid products={subProducts} />
-            </section>
-          );
-        })}
-
-        {/* Filtros (client component) */}
-        <CategoryFilters products={products} />
-      </div>
+      <CategoryContent products={products} offers={offers} subcategories={subcategories} categoryName={cat.name} />
     </SiteLayout>
   );
 }

@@ -89,26 +89,33 @@ export function ProductCard({ product }: { product: Product }) {
         {/* Peso / volume */}
         <p className="mt-1 text-xs text-[#94a3b8]">{product.weight}</p>
 
-        {/* Preço */}
-        {product.previousPrice && (
-          <p className="mt-1.5 text-xs text-[#94a3b8] line-through">{formatBRL(product.previousPrice)}</p>
-        )}
-
         {/* Produto por peso — preço/kg em destaque, valor estimado separado */}
         {product.byWeight && product.pricePerKg ? (
-          <div className="mt-1 space-y-0.5">
+          <div className="mt-1.5 space-y-0.5">
+            {product.previousPrice && product.approxWeight ? (
+              <p className="text-xs text-[#94a3b8] line-through">
+                {formatBRL(product.previousPrice / product.approxWeight)}/kg
+              </p>
+            ) : product.previousPrice ? (
+              <p className="text-xs text-[#94a3b8] line-through">{formatBRL(product.previousPrice)}</p>
+            ) : null}
             <p className="text-sm font-bold text-[#e11d48]">{formatBRL(product.pricePerKg)}/kg</p>
             <p className="text-xs text-[#475569]">
               Estimado: <span className="font-semibold">{formatBRL(product.price)}</span>
             </p>
           </div>
         ) : (
-          <div className="mt-1.5">
-            <p className={cn("text-lg font-bold", discount > 0 ? "text-[#e11d48]" : "text-[#0f172a]")}>
-              {formatBRL(product.price)}
-            </p>
-            <p className="text-xs text-[#475569] font-medium">{product.unitPrice}</p>
-          </div>
+          <>
+            {product.previousPrice && (
+              <p className="mt-1.5 text-xs text-[#94a3b8] line-through">{formatBRL(product.previousPrice)}</p>
+            )}
+            <div className="mt-1.5">
+              <p className={cn("text-lg font-bold", discount > 0 ? "text-[#e11d48]" : "text-[#0f172a]")}>
+                {formatBRL(product.price)}
+              </p>
+              <p className="text-xs text-[#475569] font-medium">{product.unitPrice}</p>
+            </div>
+          </>
         )}
 
         {/* Controles */}
