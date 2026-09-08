@@ -67,33 +67,45 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
 
             {/* Price block */}
             <div className="mt-4 rounded-xl bg-[#fef9f0] p-4">
-              {product.previousPrice && (
-                <p className="text-sm text-[#94a3b8] line-through">{formatBRL(product.previousPrice)}</p>
-              )}
-              {/* Preço principal */}
-              <div className="flex items-baseline gap-2">
-                <span className="text-3xl font-black text-[#e11d48]">{formatBRL(product.price)}</span>
-                {discount > 0 && <span className="text-sm font-bold text-[#e11d48]">-{discount}%</span>}
-              </div>
-
               {/* Produto por peso — separar preço/kg de valor estimado */}
               {product.byWeight && product.pricePerKg ? (
-                <div className="mt-2 space-y-1">
-                  <p className="text-sm font-medium text-[#16a34a]">
-                    Preço por kg: {formatBRL(product.pricePerKg)}
-                  </p>
-                  {product.approxWeight && (
-                    <p className="text-xs text-[#475569]">
-                      Peso aproximado: {product.approxWeight} kg · Valor estimado: {formatBRL(product.price)}
-                    </p>
-                  )}
+                <div className="space-y-1.5">
+                  <div className="flex flex-wrap items-baseline gap-2">
+                    {product.previousPrice && product.approxWeight ? (
+                      <p className="text-sm text-[#94a3b8]">
+                        <span className="line-through">De {formatBRL(product.previousPrice / product.approxWeight)}/kg</span>
+                      </p>
+                    ) : product.previousPrice ? (
+                      <p className="text-sm text-[#94a3b8]">
+                        <span className="line-through">De {formatBRL(product.previousPrice)}</span>
+                      </p>
+                    ) : null}
+                    {discount > 0 && <span className="text-sm font-bold text-[#e11d48]">-{discount}%</span>}
+                  </div>
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-3xl font-black text-[#e11d48]">{formatBRL(product.pricePerKg)}/kg</span>
+                    {product.approxWeight && (
+                      <span className="text-sm text-[#475569]">· Estimado do pacote ~{product.approxWeight} kg: {formatBRL(product.price)}</span>
+                    )}
+                  </div>
                   <p className="mt-2 flex items-start gap-1.5 text-xs text-[#94a3b8]">
                     <Scale className="h-3.5 w-3.5 mt-0.5 flex-shrink-0" />
                     O valor final pode variar conforme o peso efetivamente separado para você.
                   </p>
                 </div>
               ) : (
-                <p className="mt-1 text-sm font-medium text-[#475569]">{product.unitPrice}</p>
+                <>
+                  {product.previousPrice && (
+                    <p className="text-sm text-[#94a3b8]">
+                      <span className="line-through">De {formatBRL(product.previousPrice)}</span>
+                    </p>
+                  )}
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-3xl font-black text-[#e11d48]">{formatBRL(product.price)}</span>
+                    {discount > 0 && <span className="text-sm font-bold text-[#e11d48]">-{discount}%</span>}
+                  </div>
+                  <p className="mt-1 text-sm font-medium text-[#475569]">{product.unitPrice}</p>
+                </>
               )}
             </div>
 
