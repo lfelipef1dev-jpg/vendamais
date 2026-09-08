@@ -1,14 +1,41 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { SiteLayout } from "@/components/site-layout";
 import { ProductGrid } from "@/components/section";
 import { searchProducts } from "@/lib/catalog";
 import { Search } from "lucide-react";
 
+function getQueryFromUrl(): string {
+  if (typeof window === "undefined") return "";
+  const params = new URLSearchParams(window.location.search);
+  return params.get("q") ?? "";
+}
+
+function setQueryInUrl(q: string) {
+  if (typeof window === "undefined") return;
+  const url = new URL(window.location.href);
+  if (q.trim()) {
+    url.searchParams.set("q", q.trim());
+  } else {
+    url.searchParams.delete("q");
+  }
+  window.history.replaceState(null, "", url.toString());
+}
+
 export default function BuscaPage() {
   const [query, setQuery] = useState("");
+  const [mounted, setMounted] = useState(false);
   const results = query.trim() ? searchProducts(query) : [];
+
+  useEffect(() => {
+    setMounted(true);
+    setQuery(getQueryFromUrl());
+  }, []);
+
+  useEffect(() => {
+    if (mounted) setQueryInUrl(query);
+  }, [query, mounted]);
 
   return (
     <SiteLayout>
