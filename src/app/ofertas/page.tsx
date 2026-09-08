@@ -17,7 +17,7 @@ export default function OfertasPage() {
         <div className="mx-auto max-w-7xl px-4 text-center lg:px-8">
           <h1 className="text-3xl font-black text-white sm:text-4xl md:text-5xl">Ofertas VendaMais</h1>
           <p className="mt-2 text-white/90 max-w-xl mx-auto">
-            Economize em tudo que sua casa precisa. Ofertas por tempo limitado.
+            Economize em tudo que sua casa precisa. Seleção de produtos com preços reduzidos.
           </p>
         </div>
       </section>

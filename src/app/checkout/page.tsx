@@ -28,7 +28,7 @@ export default function CheckoutPage() {
           </div>
           <h1 className="mt-6 text-3xl font-black text-[#0f172a]">Pedido confirmado!</h1>
           <p className="mt-2 text-[#475569]">
-            Seu pedido foi recebido. Em breve você receberá a confirmação por e-mail.
+            Seu pedido foi recebido no ambiente demonstrativo.
           </p>
           <p className="mt-4 text-2xl font-bold text-[#e11d48]">{formatBRL(total)}</p>
           <p className="mt-3 text-xs text-[#94a3b8]">
@@ -62,6 +62,9 @@ export default function CheckoutPage() {
     <SiteLayout>
       <div className="mx-auto max-w-5xl px-4 py-8 lg:px-8">
         <h1 className="text-2xl font-bold text-[#0f172a]">Checkout</h1>
+        <p className="mt-2 rounded-lg bg-amber-50 border border-amber-200 px-3 py-2 text-xs text-amber-800">
+          Ambiente demonstrativo — nenhum pagamento, entrega ou pedido real será processado.
+        </p>
 
         {/* Steps */}
         <div className="mt-6 flex items-center gap-2">
@@ -102,14 +105,14 @@ export default function CheckoutPage() {
                     <Truck className="h-6 w-6 text-[#16a34a]" />
                     <div>
                       <p className="font-semibold text-[#0f172a]">Entrega em casa</p>
-                      <p className="text-xs text-[#94a3b8]">Em até 2h ou agende</p>
+                      <p className="text-xs text-[#94a3b8]">Agende o horário (demo)</p>
                     </div>
                   </button>
                   <button onClick={() => setDelivery("retirada")} className={`flex items-center gap-3 rounded-xl border-2 p-4 text-left transition-colors ${delivery === "retirada" ? "border-[#e11d48] bg-[#fef2f2]" : "border-[#e2e8f0] hover:border-[#cbd5e1]"}`}>
                     <Store className="h-6 w-6 text-[#e11d48]" />
                     <div>
                       <p className="font-semibold text-[#0f172a]">Retirada na loja</p>
-                      <p className="text-xs text-[#94a3b8]">Pronto em 1h</p>
+                      <p className="text-xs text-[#94a3b8]">Retire quando pronto (demo)</p>
                     </div>
                   </button>
                 </div>
@@ -127,13 +130,13 @@ export default function CheckoutPage() {
                   <button onClick={() => setPayment("pix")} className={`flex items-center justify-between rounded-xl border-2 p-4 transition-colors ${payment === "pix" ? "border-[#e11d48] bg-[#fef2f2]" : "border-[#e2e8f0] hover:border-[#cbd5e1]"}`}>
                     <div className="flex items-center gap-3">
                       <span className="text-xl">⚡</span>
-                      <div><p className="font-semibold text-[#0f172a]">PIX — 5% de desconto <span className="text-xs font-normal text-[#94a3b8]">(demo)</span></p><p className="text-xs text-[#94a3b8]">Aprovação imediata</p></div>
+                      <div><p className="font-semibold text-[#0f172a]">PIX — 5% de desconto <span className="text-xs font-normal text-[#94a3b8]">(demo)</span></p><p className="text-xs text-[#94a3b8]">Confirmação simulada</p></div>
                     </div>
                     <span className="font-bold text-[#16a34a]">-{formatBRL(pixDiscount)}</span>
                   </button>
                   <button onClick={() => setPayment("cartao")} className={`flex items-center gap-3 rounded-xl border-2 p-4 transition-colors ${payment === "cartao" ? "border-[#e11d48] bg-[#fef2f2]" : "border-[#e2e8f0] hover:border-[#cbd5e1]"}`}>
                     <CreditCard className="h-6 w-6 text-[#1e40af]" />
-                    <div><p className="font-semibold text-[#0f172a]">Cartão de crédito <span className="text-xs font-normal text-[#94a3b8]">(demo)</span></p><p className="text-xs text-[#94a3b8]">Em até 12x sem juros</p></div>
+                    <div><p className="font-semibold text-[#0f172a]">Cartão de crédito <span className="text-xs font-normal text-[#94a3b8]">(demo)</span></p><p className="text-xs text-[#94a3b8]">Parcelamento simulado</p></div>
                   </button>
                 </div>
                 <div className="flex gap-3">
@@ -148,7 +151,7 @@ export default function CheckoutPage() {
                 <h2 className="text-lg font-bold text-[#0f172a]">Revisar pedido</h2>
                 <div className="space-y-2 text-sm">
                   <p><strong>Modalidade:</strong> {delivery === "entrega" ? "Entrega em casa" : "Retirada na loja"}</p>
-                  <p><strong>Pagamento:</strong> {payment === "pix" ? "PIX (5% off)" : "Cartão em 12x"}</p>
+                  <p><strong>Pagamento:</strong> {payment === "pix" ? "PIX (5% off, demo)" : "Cartão (demo)"}</p>
                   <p><strong>Itens:</strong> {items.length}</p>
                 </div>
                 <ul className="space-y-2 max-h-48 overflow-y-auto">
@@ -176,7 +179,7 @@ export default function CheckoutPage() {
               <div className="flex justify-between text-sm"><span className="text-[#475569]">Frete</span><span className="font-semibold">{shipping === 0 ? "Grátis" : formatBRL(shipping)}</span></div>
               {pixDiscount > 0 && <div className="flex justify-between text-sm"><span className="text-[#16a34a]">Desconto PIX</span><span className="font-semibold text-[#16a34a]">-{formatBRL(pixDiscount)}</span></div>}
               <div className="border-t border-[#e2e8f0] pt-3 flex justify-between"><span className="font-bold text-[#0f172a]">Total</span><span className="text-xl font-black text-[#e11d48]">{formatBRL(total)}</span></div>
-              <div className="flex items-center gap-2 text-xs text-[#94a3b8] pt-2"><Shield className="h-4 w-4" /> Compra 100% segura</div>
+              <div className="flex items-center gap-2 text-xs text-[#94a3b8] pt-2"><Shield className="h-4 w-4" /> Ambiente demonstrativo</div>
             </div>
           </aside>
         </div>

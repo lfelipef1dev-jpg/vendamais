@@ -20,9 +20,9 @@ export default function EnderecosPage() {
           <p className="mt-1 text-sm text-[#94a3b8] max-w-sm">
             Cadastre um endereço para acelerar suas compras e verificar disponibilidade de entrega.
           </p>
-          <button className="mt-6 inline-flex h-11 items-center gap-2 rounded-xl bg-[#e11d48] px-6 text-sm font-bold text-white hover:bg-[#be123c]">
-            + Adicionar endereço
-          </button>
+          <p className="mt-4 text-xs text-[#94a3b8]">
+            Ambiente demonstrativo — o cadastro de endereço não está disponível.
+          </p>
         </div>
       </div>
     </SiteLayout>

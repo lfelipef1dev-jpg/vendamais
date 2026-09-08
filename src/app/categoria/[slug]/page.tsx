@@ -5,7 +5,7 @@ import { SiteLayout } from "@/components/site-layout";
 import { ProductGrid } from "@/components/section";
 import { CategoryIcon } from "@/components/category-icon";
 import { categories, getProductsByCategory, getOffers } from "@/lib/catalog";
-import { ChevronRight, SlidersHorizontal } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import { CategoryFilters } from "./category-filters";
 
 export function generateStaticParams() {

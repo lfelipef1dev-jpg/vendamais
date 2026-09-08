@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { X, Plus, Minus, Trash2, ShoppingBag, Truck, Tag } from "lucide-react";
-import { useCartStore, cn } from "@/lib/store";
+import { useCartStore } from "@/lib/store";
 import { formatBRL } from "@/lib/catalog";
 
 export function CartDrawer() {
@@ -101,6 +101,9 @@ export function CartDrawer() {
                   <span className="font-semibold text-[#16a34a]">Você ganhou frete grátis! 🎉</span>
                 )}
               </div>
+              <p className="mt-1 text-[11px] text-[#94a3b8]">
+                Frete grátis demonstrativo acima de {formatBRL(freeShippingThreshold)}.
+              </p>
               <div className="mt-2 h-2 overflow-hidden rounded-full bg-[#e2e8f0]">
                 <div
                   className="h-full rounded-full bg-[#16a34a] transition-all duration-500"
@@ -192,7 +195,7 @@ export function CartDrawer() {
                 <span className="text-xl font-black text-[#0f172a]">{formatBRL(subtotal)}</span>
               </div>
               <p className="text-xs text-[#94a3b8]">
-                Ou em até 12x de {formatBRL(subtotal / 12)} sem juros
+                Frete e impostos calculados no checkout
               </p>
               <Link
                 href="/checkout"

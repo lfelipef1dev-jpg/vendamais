@@ -4,11 +4,10 @@ import { Footer } from "@/components/footer";
 import { HeroCarousel } from "@/components/hero-carousel";
 import { CartDrawer } from "@/components/cart-drawer";
 import { SectionHeader, ProductRail, CategoryCard } from "@/components/section";
-import { CategoryIcon } from "@/components/category-icon";
 import {
-  categories, getOffers, getProductsByCategory, products,
+  categories, getOffers, getProductsByCategory,
 } from "@/lib/catalog";
-import { Truck, Store, Smartphone, Tag } from "lucide-react";
+import { Truck, Store, Smartphone } from "lucide-react";
 
 export default function HomePage() {
   // Seleções editoriais — sem repetição entre seções
@@ -47,7 +46,7 @@ export default function HomePage() {
               title="Ofertas do dia"
               emoji="🔥"
               href="/ofertas"
-              subtitle="Ofertas por tempo limitado"
+              subtitle="Seleção com preços reduzidos"
             />
             <ProductRail products={offers} />
           </section>
@@ -127,7 +126,7 @@ export default function HomePage() {
               </div>
               <div>
                 <h3 className="font-bold text-[#0f172a]">Entrega</h3>
-                <p className="text-sm text-[#475569]">Receba em casa no horário que preferir</p>
+                <p className="text-sm text-[#475569]">Receba em casa (demo)</p>
               </div>
             </div>
             <div className="flex items-center gap-4 rounded-2xl border border-[#e2e8f0] bg-white p-6">

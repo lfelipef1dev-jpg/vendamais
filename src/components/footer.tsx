@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Truck, Shield, RefreshCw, CreditCard, Phone, Mail, MapPin } from "lucide-react";
+import { Truck, Shield, RefreshCw, CreditCard } from "lucide-react";
 import { categories } from "@/lib/catalog";
 
 export function Footer() {
@@ -45,14 +45,9 @@ export function Footer() {
             <p className="mt-3 text-sm text-[#475569] max-w-xs">
               Seu hipermercado completo, onde você estiver. Tudo que sua casa precisa em um só lugar.
             </p>
-            <div className="mt-4 space-y-2 text-sm">
-              <p className="flex items-center gap-2 text-[#475569]">
-                <Phone className="h-4 w-4" /> (13) 3333-4444
-              </p>
-              <p className="flex items-center gap-2 text-[#475569]">
-                <Mail className="h-4 w-4" /> contato@vendamais.com.br
-              </p>
-            </div>
+            <p className="mt-4 text-xs text-[#94a3b8]">
+              Ambiente demonstrativo — projeto de portfólio.
+            </p>
           </div>
 
           {/* Categorias */}
@@ -106,12 +101,10 @@ export function Footer() {
       {/* Bottom bar */}
       <div className="border-t border-[#e2e8f0] bg-[#f8fafc]">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 py-4 text-xs text-[#94a3b8] sm:flex-row lg:px-8">
-          <p>© {new Date().getFullYear()} VendaMais · CNPJ 00.000.000/0001-00</p>
+          <p>© {new Date().getFullYear()} VendaMais · Projeto demonstrativo</p>
           <div className="flex items-center gap-3">
             <span>PIX</span>
-            <span>Visa</span>
-            <span>Mastercard</span>
-            <span>Elo</span>
+            <span>Cartão</span>
           </div>
         </div>
       </div>

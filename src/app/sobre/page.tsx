@@ -37,7 +37,7 @@ export default function SobrePage() {
         <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
           {[
             { n: "12", l: "Categorias" },
-            { n: "48", l: "Produtos" },
+            { n: "400+", l: "Produtos" },
             { n: "2", l: "Modalidades" },
             { n: "100%", l: "Online" },
           ].map((s) => (

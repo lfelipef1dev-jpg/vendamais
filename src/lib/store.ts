@@ -109,8 +109,8 @@ export const useCartStore = create<CartState>()(
 
       getSavings: () => {
         return get().items.reduce((sum, i) => {
-          const prev = i.product.previousPrice ?? i.product.price;
-          return sum + (prev - i.product.price) * i.quantity;
+          if (!i.product.previousPrice || i.product.previousPrice <= i.product.price) return sum;
+          return sum + (i.product.previousPrice - i.product.price) * i.quantity;
         }, 0);
       },
 
@@ -118,7 +118,10 @@ export const useCartStore = create<CartState>()(
         return get().items.reduce((sum, i) => sum + i.quantity, 0);
       },
     }),
-    { name: "vendamais-cart" }
+    {
+      name: "vendamais-cart",
+      partialize: (s) => ({ items: s.items, favorites: s.favorites, cep: s.cep, address: s.address }),
+    }
   )
 );
 

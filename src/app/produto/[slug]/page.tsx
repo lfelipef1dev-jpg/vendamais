@@ -3,8 +3,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { SiteLayout } from "@/components/site-layout";
 import { ProductCard } from "@/components/product-card";
-import { products, getProductBySlug, getProductsByCategory, formatBRL, calcDiscount } from "@/lib/catalog";
-import { ChevronRight, Heart, ShoppingCart, Truck, Store, Shield, Scale } from "lucide-react";
+import { products, getProductBySlug, getProductsByCategory, getCategoryBySlug, formatBRL, calcDiscount } from "@/lib/catalog";
+import { ChevronRight, Truck, Store, Shield, Scale } from "lucide-react";
 import { ProductActions } from "./product-actions";
 
 export function generateStaticParams() {
@@ -30,6 +30,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   if (!product) notFound();
   const related = getProductsByCategory(product.category).filter((p) => p.id !== product.id).slice(0, 6);
   const discount = calcDiscount(product.price, product.previousPrice);
+  const category = getCategoryBySlug(product.category);
 
   return (
     <SiteLayout>
@@ -39,7 +40,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
           <ol className="flex flex-wrap items-center gap-2 text-xs text-[#94a3b8]">
             <li><Link href="/" className="hover:text-[#e11d48]">Início</Link></li>
             <li aria-hidden="true"><ChevronRight className="h-3 w-3" /></li>
-            <li><Link href={`/categoria/${product.category}`} className="hover:text-[#e11d48] capitalize">{product.category}</Link></li>
+            <li><Link href={`/categoria/${product.category}`} className="hover:text-[#e11d48]">{category?.name ?? product.category}</Link></li>
             <li aria-hidden="true"><ChevronRight className="h-3 w-3" /></li>
             <li aria-current="page" className="text-[#0f172a] font-medium truncate">{product.name}</li>
           </ol>
@@ -129,7 +130,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
         {/* Related */}
         {related.length > 0 && (
           <section className="mt-12" aria-label="Produtos relacionados">
-            <h2 className="mb-4 text-xl font-bold text-[#0f172a]">Quem comprou, também levou</h2>
+            <h2 className="mb-4 text-xl font-bold text-[#0f172a]">Produtos relacionados</h2>
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
               {related.map((p) => <ProductCard key={p.id} product={p} />)}
             </div>
