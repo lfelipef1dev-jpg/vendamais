@@ -66,16 +66,16 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
       {/* Subcategorias — pills */}
       <div className="border-b border-[#e2e8f0] bg-white sticky top-[calc(1.75rem+4rem+2.75rem)] z-30">
         <div className="mx-auto max-w-7xl px-4 lg:px-8">
-          <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-3">
-            <span className="text-xs font-bold uppercase tracking-wide text-[#94a3b8] flex-shrink-0">
-              <CategoryIcon name={cat.iconName} className="inline h-4 w-4 mr-1" />
+          <div className="flex flex-wrap items-center gap-1.5 py-2.5">
+            <span className="text-[11px] font-bold uppercase tracking-wide text-[#94a3b8] flex-shrink-0">
+              <CategoryIcon name={cat.iconName} className="inline h-3.5 w-3.5 mr-1" />
               {cat.name}:
             </span>
             {subcategories.map((sub) => (
               <a
                 key={sub}
                 href={`#sub-${sub.toLowerCase().replace(/\s/g, "-")}`}
-                className="flex-shrink-0 rounded-full bg-[#f8fafc] px-3 py-1.5 text-sm font-medium text-[#475569] transition-colors hover:bg-[#fef9f0] hover:text-[#e11d48]"
+                className="flex-shrink-0 rounded-full bg-[#f8fafc] px-2.5 py-1 text-xs font-medium text-[#475569] transition-colors hover:bg-[#fef9f0] hover:text-[#e11d48]"
               >
                 {sub}
               </a>
